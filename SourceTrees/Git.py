@@ -66,8 +66,12 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 		if self.branch != "master":
 			os.chdir(self.local_path.fullpath)
 			command = "git checkout -b " + self.branch + " origin/" + self.branch
-			self.shell.execute(command)
-		
+			try:
+				self.shell.execute(command)
+			except slib.Commands.CommandError, e:
+				print "Unable to switch to branch %s: %s" % (self.branch, e)
+
+			self.shell.captureOutput = False
 		os.chdir(currentDirectory)
 
 	# End checkout
@@ -154,6 +158,7 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			command = "git branch -a"
 			self.shell.captureOutput = True
 			o = self.shell.execute(command)
+			self.shell.captureOutput = False
 			os.chdir(currentDirectory)
 			branches = [ self.__massageBranchName(branch) for branch in o.split('\n') ]
 			return branches
@@ -171,6 +176,7 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			command = "git branch"
 			self.shell.captureOutput = True
 			o = self.shell.execute(command)
+			self.shell.captureOutput = False
 			os.chdir(currentDirectory)
 			for branch in o.split('\n'):
 				if re.match(r'^\*',branch):
@@ -192,7 +198,7 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 	# End makeNewBranchFromRemote
 
 	
-	def makeNewBranchFromRemoteAndSwitch(self,branch,remote):
+	def makeNewBranchFromRemoteAndSwitch(self,branch,remote="origin"):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.fullpath)
@@ -204,6 +210,31 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 
 	# End makeNewBranchFromRemoteAndSwitch
 	
+
+	@property
+	def tags(self):
+		if self.local_path.exists:
+			currentDirectory = os.getcwd()
+			os.chdir(self.local_path.fullpath)
+		
+			command = "git tag"
+			self.shell.captureOutput = True
+			o = self.shell.execute(command)
+			self.shell.captureOutput = False
+			os.chdir(currentDirectory)
+			tags = [ tag for tag in o.split('\n') ]
+			return tags
+		return []
+
+	# End tags
+
+
+	def remove(self):
+		if self.local_path.exists:
+			slib.FileSystems.Directories.RemoveDirectory(str(self.local_path))
+
+	# End remove
+
 
 	def __repr__(self):
 		
