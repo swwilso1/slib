@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import slib.Object
+import slib.Objects
 
 
 class Error(slib.Objects.Object,Exception):
