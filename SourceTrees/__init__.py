@@ -99,6 +99,18 @@ class SourceTreeBaseObject(slib.Objects.Object):
 	# End branches
 	
 	
+	@property
+	def tags(self):
+		pass
+
+	# End tags
+
+	def remove(self):
+		pass
+
+	# End remove
+	
+	
 
 	def __str__(self):
 		return str(self.local_path)
