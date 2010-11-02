@@ -53,6 +53,12 @@ class BuildSystemBaseObject(slib.Objects.Object):
 	# End install
 	
 	
+	def remove(self):
+		pass
+
+	# End remove
+
+	
 	@property
 	def build_command(self):
 		if re.search(r'win32', sys.platform):

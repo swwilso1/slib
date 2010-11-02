@@ -212,6 +212,13 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 			os.chdir(currentDirectory)
 
 	# End install
+	
+	
+	def remove(self):
+		self.working_directory.remove()
+
+	# End remove
+	
 
 
 	def __setitem__(self, key, value):
