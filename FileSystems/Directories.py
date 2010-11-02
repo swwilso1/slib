@@ -228,6 +228,20 @@ class Directory(slib.FileSystems.FileSystemBaseObject):
 		return entries
 	# End all_entries
 
+
+	def create(self):
+		if not self.exists:
+			os.makedirs(self.fullpath)
+
+	# End create
+	
+	def remove(self):
+		if os.path.exists(self.fullpath):
+			shutil.rmtree(self.fullpath)
+
+	# End remove
+	
+
 	def __getitem__(self,key):
 		if type(key) != StringType and type(key) != UnicodeType:
 			raise KeyError(key)
