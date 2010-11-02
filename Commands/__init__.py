@@ -23,6 +23,7 @@ class CommandBase(slib.Objects.Object):
 		self.dryRun = False
 		self.captureOutput = False
 		self.log = None
+		self.exit_code = 0
 	# End __init__
 
 
@@ -31,5 +32,6 @@ class CommandBase(slib.Objects.Object):
 			self.log(command)
 		return ""
 	# End execute
+		
 
 # End CommandBase

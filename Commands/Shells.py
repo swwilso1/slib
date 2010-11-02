@@ -9,7 +9,7 @@ class Shell(slib.Commands.CommandBase):
 
 	def __init__(self):
 		slib.Commands.CommandBase.__init__(self)
-
+		self.raise_error_on_shell_error = True
 	# End __init__
 
 	def execute(self,command):
@@ -19,17 +19,20 @@ class Shell(slib.Commands.CommandBase):
 			return
 		
 		if self.captureOutput:
-			s,o = getstatusoutput(str(command))
-			if s != 0:
-				raise slib.Commands.CommandError("'%s' failed with error %d: %s" % (str(command), s, o))
+			self.exit_code,o = getstatusoutput(str(command))
+			if self.raise_error_on_shell_error:
+				if self.exit_code != 0:
+					raise slib.Commands.CommandError("'%s' failed with error %d: %s" % (str(command), self.__exit_code, o))
 			return o
 		else:
-			s = system(str(command))
-			if s != 0:
-				raise slib.Commands.CommandError("'%s' failed with error %d" % (str(command), s))
+			self.exit_code = system(str(command))
+			if self.raise_error_on_shell_error:
+				if self.exit_code != 0:
+					raise slib.Commands.CommandError("'%s' failed with error %d" % (str(command), self.exit_code))
+			return None
 
 	# End execute
-	
+
 
 # End Shell
 
