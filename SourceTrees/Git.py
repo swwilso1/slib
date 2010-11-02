@@ -48,21 +48,17 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 	
 	
 	def checkout(self):
-		localParentDir = self.local_path.parent
-
-		if not localParentDir.exists:
-			os.makedirs(localParentDir.fullpath)
+		self.local_path.parent.create()
 
 		currentDirectory = os.getcwd()
 		os.chdir(localParentDir.fullpath)
 
-		if self.local_path.exists:
-			slib.FileSystems.Directories.RemoveDirectory(self.local_path.fullpath)
+		self.local_path.remove()
 
 		command = "git clone " + self.repository + " " + self.name
 
 		self.shell.execute(command)
-
+		
 		if self.branch != "master":
 			os.chdir(self.local_path.fullpath)
 			command = "git checkout -b " + self.branch + " origin/" + self.branch
@@ -71,7 +67,6 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			except slib.Commands.CommandError, e:
 				print "Unable to switch to branch %s: %s" % (self.branch, e)
 
-			self.shell.captureOutput = False
 		os.chdir(currentDirectory)
 
 	# End checkout
@@ -156,9 +151,9 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch -a"
-			self.shell.captureOutput = True
+			if not self.shell.captureOutput:
+				self.shell.captureOutput = True
 			o = self.shell.execute(command)
-			self.shell.captureOutput = False
 			os.chdir(currentDirectory)
 			branches = [ self.__massageBranchName(branch) for branch in o.split('\n') ]
 			return branches
@@ -174,9 +169,9 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch"
-			self.shell.captureOutput = True
+			if not self.shell.captureOutput:
+				self.shell.captureOutput = True
 			o = self.shell.execute(command)
-			self.shell.captureOutput = False
 			os.chdir(currentDirectory)
 			for branch in o.split('\n'):
 				if re.match(r'^\*',branch):
@@ -218,9 +213,9 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			os.chdir(self.local_path.fullpath)
 		
 			command = "git tag"
-			self.shell.captureOutput = True
+			if not self.shell.captureOutput:
+				self.shell.captureOutput = True
 			o = self.shell.execute(command)
-			self.shell.captureOutput = False
 			os.chdir(currentDirectory)
 			tags = [ tag for tag in o.split('\n') ]
 			return tags
@@ -230,8 +225,7 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 
 
 	def remove(self):
-		if self.local_path.exists:
-			slib.FileSystems.Directories.RemoveDirectory(str(self.local_path))
+		self.local_path.remove()
 
 	# End remove
 
