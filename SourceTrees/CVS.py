@@ -691,7 +691,6 @@ class CVSTree(slib.SourceTrees.SourceTreeBaseObject):
 			shell = slib.Commands.Shells.Shell()
 			for entry in self.local_path.all_entries:
 				if not re.search(r'CVS', str(entry)) and not entry.type == slib.FileSystems.DIRECTORY:
-					print entry
 					currentDirectory = os.getcwd()
 					os.chdir(entry.path)
 					shell.captureOutput = True
@@ -704,7 +703,7 @@ class CVSTree(slib.SourceTrees.SourceTreeBaseObject):
 							if not branches.has_key(branch):
 								branches[branch] = True
 					os.chdir(currentDirectory)
-			return branches
+			return branches.keys()
 
 	# End branches
 	
