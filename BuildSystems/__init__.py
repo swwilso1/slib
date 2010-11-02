@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import re
+import sys
 import types
 import slib.Objects
 import slib.Errors
@@ -44,6 +46,22 @@ class BuildSystemBaseObject(slib.Objects.Object):
 		pass
 
 	# End build
+	
+	def install(self):
+		pass
+
+	# End install
+	
+	
+	@property
+	def build_command(self):
+		if re.search(r'win32', sys.platform):
+			return "nmake"
+		else:
+			return "make"
+
+	# End build_command
+	
 	
 	
 	def __contains__(self, obj):

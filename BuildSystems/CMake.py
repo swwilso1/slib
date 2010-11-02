@@ -133,6 +133,7 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 		else:
 			self.generator = None
 		self._path_sep_regex = re.compile(os.sep)
+		self.active_processors = None
 	# End __init__
 
 
@@ -141,16 +142,30 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 			raise slib.BuildSystems.BuildSystemError("Source tree %s does not exist" % (self.source_tree_directory.fullpath))
 		
 		shell = slib.Commands.Shells.Shell()
+		shell.capture_output = True
+		shell.raise_error_on_shell_error = False
+
 		self.working_directory.create()
 		
 		currentDirectory = os.getcwd()
 		os.chdir(self.working_directory.fullpath)
 		
-		shell.captureOutput = True
 		o = shell.execute(str(self))
 		if shell.exit_code != 0:
 			raise slib.BuildSystems.BuildSystemError("Error while configuration build system: " + o)
 		
+
+		# Now try for make ProcessorCount
+		o = shell.execute(self.build_command + " ProcessorCount")
+		if shell.exit_code == 0:
+			if re.search(r'ACTIVE_PROCESSORS', o):
+				lines = o.split("\n")
+				for line in lines:
+					match = re.search(r'^ACTIVE_PROCESSORS: (\d+)', line)
+					if match:
+						self.active_processors = match.group(1)
+						break
+
 		os.chdir(currentDirectory)
 
 	# End configure
@@ -160,17 +175,20 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 	def build(self,target=None):
 		if self.working_directory.exists:
 			shell = slib.Commands.Shells.Shell()
-			shell.captureOutput = True
+			shell.capture_output = True
+			shell.raise_error_on_shell_error = False
+
 			currentDirectory = os.getcwd()
 			os.chdir(self.working_directory.fullpath)
 			
-			command = "make"
-			if re.search(r'win32',sys.platform):
-				command = "nmake"
-			
+
+			command = self.build_command
+
+			if self.active_processors:
+				command += " -j " + self.active_processors
+
 			if target:
 				command += " " + str(target)
-			
 			o = shell.execute(command)
 			if shell.exit_code != 0:
 				raise slib.BuildSystems.BuildSystemError("Error while building: " + o)
@@ -178,6 +196,22 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 			os.chdir(currentDirectory)
 
 	# End build
+
+
+	def install(self):
+		if self.working_directory.exists:
+			shell = slib.Commands.Shells.Shell()
+			shell.capture_output = True
+			currentDirectory = os.getcwd()
+			os.chdir(self.working_directory.fullpath)
+
+			command = self.build_command
+			
+			shell.execute(command + " install")
+			
+			os.chdir(currentDirectory)
+
+	# End install
 
 
 	def __setitem__(self, key, value):
