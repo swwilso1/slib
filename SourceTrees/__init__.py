@@ -25,10 +25,12 @@ class SourceTreeBaseObject(slib.Objects.Object):
 			self.__branch = str(branch)
 		else:
 			self.__branch = branch
-
+			
 		self.path = str(path)
 		self.shell = slib.Commands.Shells.Shell()
 		self.args = args
+		
+		self.shell.captureOutput = True
 
 	# End __init__
 
