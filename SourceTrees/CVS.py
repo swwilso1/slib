@@ -303,13 +303,11 @@ class CVSTreeData(slib.Objects.Object):
 	}
 
 
-	def __init__(self, path, branches=False):
+	def __init__(self, path):
 		self.path = path
 		self.repository = None
 		self.files = []
 		self.directories = []
-		self.load_branch_data = branches
-		self.foo__branches = {}
 		self.__LoadCVSData()
 		self.__filesIndex = -1 
 		self.__filesLength = len(self.files)
@@ -379,21 +377,6 @@ class CVSTreeData(slib.Objects.Object):
 		result = self.__ParseData(path, data, loglines)
 		if result == None:
 			return
-		
-		if self.load_branch_data:
-			shell = slib.Commands.Shells.Shell()
-			currentDirectory = os.getcwd()
-			os.chdir(path)
-			shell.captureOutput = True
-			o = shell.execute("cvs status -v " + result[0])
-			data = o.split("\n")
-			for line in data:
-				if re.search(r'branch', line):
-					a = re.search(r'\t(.*?) ',line)
-					branch = a.group(1)
-					if not self.foo__branches.has_key(branch):
-						self.foo__branches[branch] = True
-			os.chdir(currentDirectory)
 
 		self.files.append(CVSFileData(result[0],result[1],result[2],result[3],result[4],result[5],self.repository))
 	# End __LoadFileData
@@ -412,7 +395,7 @@ class CVSTreeData(slib.Objects.Object):
 		result = self.__ParseData(path, entry, [])
 		if result == None:
 			return
-		self.directories.append(CVSTreeData(path + "/" + result[0], self.load_branch_data))
+		self.directories.append(CVSTreeData(path + "/" + result[0]))
 	# End __LoadTreeData
 	
 
@@ -442,7 +425,7 @@ class CVSTreeData(slib.Objects.Object):
 					continue
 					
 				if re.search(r'^\/', entry):
-					# print "A", self.load_branch_data
+					# print "A"
 					self.__LoadFileData(self.path, entry, entries_loglines)
 				elif re.search(r'^D',entry):
 					# print "B"
@@ -703,8 +686,25 @@ class CVSTree(slib.SourceTrees.SourceTreeBaseObject):
 	@property
 	def branches(self):
 		if self.exists:
-			td = CVSTreeData(self.local_path.fullpath, True)
-			return td.branches
+			print "Preparing branch information, this may take some time"
+			branches = {}
+			shell = slib.Commands.Shells.Shell()
+			for entry in self.local_path.all_entries:
+				if not re.search(r'CVS', str(entry)) and not entry.type == slib.FileSystems.DIRECTORY:
+					print entry
+					currentDirectory = os.getcwd()
+					os.chdir(entry.path)
+					shell.captureOutput = True
+					o = shell.execute("cvs status -v " + entry.name)
+					data = o.split("\n")
+					for line in data:
+						if re.search(r'branch', line):
+							a = re.search(r'\t(.*?) ',line)
+							branch = a.group(1)
+							if not branches.has_key(branch):
+								branches[branch] = True
+					os.chdir(currentDirectory)
+			return branches
 
 	# End branches
 	
