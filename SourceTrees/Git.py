@@ -151,8 +151,8 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch -a"
-			if not self.shell.captureOutput:
-				self.shell.captureOutput = True
+			if not self.shell.capture_output:
+				self.shell.capture_output = True
 			o = self.shell.execute(command)
 			os.chdir(currentDirectory)
 			branches = [ self.__massageBranchName(branch) for branch in o.split('\n') ]
@@ -169,8 +169,8 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch"
-			if not self.shell.captureOutput:
-				self.shell.captureOutput = True
+			if not self.shell.capture_output:
+				self.shell.capture_output = True
 			o = self.shell.execute(command)
 			os.chdir(currentDirectory)
 			for branch in o.split('\n'):
@@ -213,8 +213,8 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			os.chdir(self.local_path.fullpath)
 		
 			command = "git tag"
-			if not self.shell.captureOutput:
-				self.shell.captureOutput = True
+			if not self.shell.capture_output:
+				self.shell.capture_output = True
 			o = self.shell.execute(command)
 			os.chdir(currentDirectory)
 			tags = [ tag for tag in o.split('\n') ]

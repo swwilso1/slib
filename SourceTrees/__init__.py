@@ -28,9 +28,10 @@ class SourceTreeBaseObject(slib.Objects.Object):
 			
 		self.path = str(path)
 		self.shell = slib.Commands.Shells.Shell()
+		self.shell.capture_output = True
+
 		self.args = args
 		
-		self.shell.captureOutput = True
 
 	# End __init__
 

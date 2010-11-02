@@ -251,13 +251,6 @@ class Directory(slib.FileSystems.FileSystemBaseObject):
 		
 		return self.__getObjectAccordingToClass(obj.name, obj.path)
 
-		# skey = str(key)
-		# path = self.fullpath + os.path.sep + os.path.dirname(skey)
-		# name = os.path.basename(skey)
-		# obj = slib.FileSystems.FileSystemBaseObject(name,path)
-		# if not obj.exists:
-		# 	raise KeyError(skey)
-		# return self.__getObjectAccordingToClass(name,path)
 	# End __getitem__
 	
 

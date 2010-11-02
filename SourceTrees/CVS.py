@@ -693,7 +693,7 @@ class CVSTree(slib.SourceTrees.SourceTreeBaseObject):
 				if not re.search(r'CVS', str(entry)) and not entry.type == slib.FileSystems.DIRECTORY:
 					currentDirectory = os.getcwd()
 					os.chdir(entry.path)
-					shell.captureOutput = True
+					shell.capture_output = True
 					o = shell.execute("cvs status -v " + entry.name)
 					data = o.split("\n")
 					for line in data:

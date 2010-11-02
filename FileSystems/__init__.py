@@ -298,7 +298,7 @@ class FileSystemBaseObject(slib.Objects.Object):
 		if not type(other) == FileSystemBaseObject:
 			raise FileSystemException("%s not a FileSystemBaseObject" % (str(other)))
 		shell = slib.Commands.Shells.Shell()
-		shell.captureOutput = True
+		shell.capture_output = True
 		o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
 		return o
 	# End Difference
@@ -308,7 +308,7 @@ class FileSystemBaseObject(slib.Objects.Object):
 		if not type(other) == FileSystemBaseObject:
 			raise FileSystemException("%s not a FileSystemBaseObject" % (str(other)))
 		shell = slib.Commands.Shells.Shell()
-		shell.captureOutput = True
+		shell.capture_output = True
 		try:
 			o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
 		except libs.Commands.CommandError, e:

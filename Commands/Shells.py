@@ -7,18 +7,21 @@ from commands import getstatusoutput
 class Shell(slib.Commands.CommandBase):
 	"""The Shell class."""
 
-	def __init__(self):
+	def __init__(self, **kwargs):
 		slib.Commands.CommandBase.__init__(self)
-		self.raise_error_on_shell_error = True
+		if kwargs.has_key("raise_error_on_shell_error"):
+			self.raise_error_on_shell_error = kwargs["raise_error_on_shell_error"]
+		else:
+			self.raise_error_on_shell_error = True
 	# End __init__
 
 	def execute(self,command):
 		slib.Commands.CommandBase.execute(self,command)
 
-		if self.dryRun:
+		if self.dry_run:
 			return
 		
-		if self.captureOutput:
+		if self.capture_output:
 			self.exit_code,o = getstatusoutput(str(command))
 			if self.raise_error_on_shell_error:
 				if self.exit_code != 0:
