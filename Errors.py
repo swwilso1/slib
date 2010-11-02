@@ -23,3 +23,15 @@ class Error(slib.Objects.Object,Exception):
 	
 	
 # End Error
+
+
+class ArgumentError(Error):
+	"""The ArgumentError class."""
+
+	def __init__(self, value):
+		Error.__init__(self,value)
+
+	# End __init__
+
+# End ArgumentError
+
