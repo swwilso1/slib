@@ -204,7 +204,7 @@ class CMakeSystem(BuildSystemBaseObject):
 	
 
 
-	def build(self,target=None):
+	def build(self,target=None,**kwargs):
 		if self.working_directory.exists:
 			shell = Shell()
 			shell.capture_output = True
@@ -216,7 +216,10 @@ class CMakeSystem(BuildSystemBaseObject):
 
 			command = self.build_command
 
-			if self.active_processors:
+			if kwargs.has_key('processors'):
+				if kwargs['processors']:
+					command += " -j " + str(kwargs['processors'])
+			elif self.active_processors:
 				command += " -j " + self.active_processors
 
 			if target:
