@@ -71,6 +71,22 @@ class FilePathParameter(CMakeParameter):
 		return File(self.value)
 
 	# End fullpath
+	
+	@property
+	def exists(self):
+		f = File(self.value)
+		return f.exists
+
+	# End exists
+	
+	
+	@property
+	def remove(self):
+		f = File(self.value)
+		f.remove()
+
+	# End remove
+	
 
 # End FilePathParameter
 
@@ -89,6 +105,22 @@ class PathParameter(CMakeParameter):
 		return Directory(self.value)
 
 	# End fullpath
+	
+	
+	@property
+	def exists(self):
+		d = Directory(self.value)
+		return d.exists
+
+	# End exists
+	
+	@property
+	def remove(self):
+		d = Directory(self.value)
+		d.remove()
+
+	# End remove
+	
 	
 
 # End PathParameter
