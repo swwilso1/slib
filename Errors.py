@@ -1,13 +1,14 @@
 #! /usr/bin/env python
 
-import slib.Objects
+from slib.Objects import Object
+import exceptions
 
 
-class Error(slib.Objects.Object,Exception):
+class Error(Object,exceptions.Exception):
 	"""The Error class."""
 
 	def __init__(self, value):
-		slib.Objects.Object.__init__(self)
+		Object.__init__(self)
 		self.note = value
 	# End __init__
 

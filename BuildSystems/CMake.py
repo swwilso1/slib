@@ -4,19 +4,19 @@ import os
 import re
 import sys
 import types
-import slib.Objects
-import slib.BuildSystems
-import slib.Commands.Shells
-import slib.FileSystems
-import slib.FileSystems.Files
-import slib.FileSystems.Directories
+from slib.Objects import Object
+from slib.BuildSystems import BuildSystemBaseObject, BuildSystemError
+from slib.Commands.Shells import Shell
+from slib.FileSystems import FileSystemBaseObject, REGULAR_FILE
+from slib.FileSystems.Files import File
+from slib.FileSystems.Directories import Directory
 
 
-class CMakeParameter(slib.Objects.Object):
+class CMakeParameter(Object):
 	"""The CMakeParameter class."""
 
 	def __init__(self, name, value):
-		slib.Objects.Object.__init__(self)
+		Object.__init__(self)
 		self.name = name
 		self.type = None
 		self.value = value
@@ -68,7 +68,7 @@ class FilePathParameter(CMakeParameter):
 	
 	@property
 	def fullpath(self):
-		return slib.FileSystems.Files.File(self.value)
+		return File(self.value)
 
 	# End fullpath
 
@@ -86,7 +86,7 @@ class PathParameter(CMakeParameter):
 
 	@property
 	def fullpath(self):
-		return slib.FileSystems.Directories.Directory(self.value)
+		return Directory(self.value)
 
 	# End fullpath
 	
@@ -123,11 +123,11 @@ class InternalParameter(CMakeParameter):
 # End InternalParameter
 
 
-class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
+class CMakeSystem(BuildSystemBaseObject):
 	"""The CMakeSystem class."""
 
 	def __init__(self, working_directory, source_tree_directory, build_parameters = None, **kwargs):
-		slib.BuildSystems.BuildSystemBaseObject.__init__(self, working_directory, source_tree_directory, build_parameters)
+		BuildSystemBaseObject.__init__(self, working_directory, source_tree_directory, build_parameters)
 		if kwargs.has_key("generator"):
 			self.generator = kwargs['generator']
 		else:
@@ -139,9 +139,9 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 
 	def configure(self):
 		if not self.source_tree_directory.exists:
-			raise slib.BuildSystems.BuildSystemError("Source tree %s does not exist" % (self.source_tree_directory.fullpath))
+			raise BuildSystemError("Source tree %s does not exist" % (self.source_tree_directory.fullpath))
 		
-		shell = slib.Commands.Shells.Shell()
+		shell = Shell()
 		shell.capture_output = True
 		shell.raise_error_on_shell_error = False
 
@@ -152,7 +152,7 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 		
 		o = shell.execute(str(self))
 		if shell.exit_code != 0:
-			raise slib.BuildSystems.BuildSystemError("Error while configuration build system: " + o)
+			raise BuildSystemError("Error while configuration build system: " + o)
 		
 
 		# Now try for make ProcessorCount
@@ -174,7 +174,7 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 
 	def build(self,target=None):
 		if self.working_directory.exists:
-			shell = slib.Commands.Shells.Shell()
+			shell = Shell()
 			shell.capture_output = True
 			shell.raise_error_on_shell_error = False
 
@@ -191,7 +191,7 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 				command += " " + str(target)
 			o = shell.execute(command)
 			if shell.exit_code != 0:
-				raise slib.BuildSystems.BuildSystemError("Error while building: " + o)
+				raise BuildSystemError("Error while building: " + o)
 			
 			os.chdir(currentDirectory)
 
@@ -200,7 +200,7 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 
 	def install(self):
 		if self.working_directory.exists:
-			shell = slib.Commands.Shells.Shell()
+			shell = Shell()
 			shell.capture_output = True
 			currentDirectory = os.getcwd()
 			os.chdir(self.working_directory.fullpath)
@@ -223,7 +223,7 @@ class CMakeSystem(slib.BuildSystems.BuildSystemBaseObject):
 
 	def __setitem__(self, key, value):
 		if type(value) == types.StringType and self._path_sep_regex.search(value):
-			o = slib.FileSystems.FileSystemBaseObject(value)
+			o = FileSystemBaseObject(value)
 			if o.exists:
 				if o.type == slib.FileSystems.REGULAR_FILE:
 					self._build_parameters[key] = FilePathParameter(key,value)

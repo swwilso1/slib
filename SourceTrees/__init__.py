@@ -1,25 +1,27 @@
 #! /usr/bin/env python
 
-import slib.Objects
-import slib.Errors
-import slib.Commands.Shells
+from slib.Objects import Object
+from slib.Errors import Error
+from slib.Commands.Shells import Shell
 
-class SourceTreeError(slib.Errors.Error):
+__all__ = ["CVS", "Git", "Mercurial"]
+
+class SourceTreeError(Error):
 	"""The SourceTreeError class."""
 
 	def __init__(self, value):
-		slib.Errors.Error.__init__(self,value)
+		Error.__init__(self,value)
 
 	# End __init__
 
 # End SourceTreeError
 
 
-class SourceTreeBaseObject(slib.Objects.Object):
+class SourceTreeBaseObject(Object):
 	"""The SourceTreeBaseObject class."""
 
 	def __init__(self, repository, path, branch=None, *args):
-		slib.Objects.Object.__init__(self)
+		Object.__init__(self)
 		self.repository = str(repository)
 		if branch:
 			self.__branch = str(branch)
@@ -27,7 +29,7 @@ class SourceTreeBaseObject(slib.Objects.Object):
 			self.__branch = branch
 			
 		self.path = str(path)
-		self.shell = slib.Commands.Shells.Shell()
+		self.shell = Shell()
 		self.shell.capture_output = True
 
 		self.args = args
@@ -138,3 +140,8 @@ class SourceTreeBaseObject(slib.Objects.Object):
 	
 
 # End SourceTreeBaseObject
+
+
+import CVS
+import Git
+import Mercurial

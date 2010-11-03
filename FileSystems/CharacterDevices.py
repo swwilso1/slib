@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 
-import slib.FileSystems
+from slib.FileSystems import FileSystemBaseObject
 
-class CharacterDevice(slib.FileSystems.FileSystemBaseObject):
+class CharacterDevice(FileSystemBaseObject):
 	"""The CharacterDevice class."""
 
 	def __init__(self, name, path=None):
-		slib.FileSystems.FileSystemBaseObject.__init__(self,name,path)
+		FileSystemBaseObject.__init__(self,name,path)
 
 	# End __init__
 

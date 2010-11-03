@@ -5,10 +5,13 @@ import os
 import re
 import time
 import stat
-import slib.Objects
-import slib.Errors
-import slib.FileSystems
-import slib.Commands.Shells
+from slib.Objects import Object
+from slib.Errors import Error
+from slib.Commands.Shells import Shell
+
+
+__all__ = ["BlockDevices", "CharacterDevices", "Directories", "Fifos", "Files", "Sockets", "SymbolicLinks"]
+
 
 def FindFullDirectory(directory):
 	currentdirectory = os.getcwd()
@@ -23,11 +26,11 @@ def FindFullDirectory(directory):
 # End FindFullDirectory
 
 
-class FileSystemException(slib.Errors.Error):
-	"""The FileSystemException class."""
+class FileSystemError(Error):
+	"""The FileSystemError class."""
 
 	def __init__(self, value):
-		slib.Errors.Error.__init__(self,value)
+		Error.__init__(self,value)
 	# End __init__
 
 # End FSObjectException
@@ -43,11 +46,11 @@ SYMBOLIC_LINK = 6
 SOCKET = 7
 NO_TYPE = 99
 
-class FileSystemBaseObject(slib.Objects.Object):
+class FileSystemBaseObject(Object):
 	"""The FileSystemBaseObject class."""
 	
 	def __init__(self, name, path=None):
-		slib.Objects.Object.__init__(self)
+		Object.__init__(self)
 		if name.count(os.path.sep) > 0:
 			directory = os.path.dirname(name)
 			basename = os.path.basename(name)
@@ -296,8 +299,8 @@ class FileSystemBaseObject(slib.Objects.Object):
 	
 	def Difference(self,other):
 		if not type(other) == FileSystemBaseObject:
-			raise FileSystemException("%s not a FileSystemBaseObject" % (str(other)))
-		shell = slib.Commands.Shells.Shell()
+			raise FileSystemError("%s not a FileSystemBaseObject" % (str(other)))
+		shell = Shell()
 		shell.capture_output = True
 		o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
 		return o
@@ -306,8 +309,8 @@ class FileSystemBaseObject(slib.Objects.Object):
 
 	def ContentsSameQ(self,other):
 		if not type(other) == FileSystemBaseObject:
-			raise FileSystemException("%s not a FileSystemBaseObject" % (str(other)))
-		shell = slib.Commands.Shells.Shell()
+			raise FileSystemError("%s not a FileSystemBaseObject" % (str(other)))
+		shell = Shell()
 		shell.capture_output = True
 		try:
 			o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
@@ -366,6 +369,14 @@ def Difference(a,b):
 # End Difference
 
 
+
+import BlockDevices
+import CharacterDevices
+import Directories
+import Fifos
+import Files
+import Sockets
+import SymbolicLinks
 
 
 

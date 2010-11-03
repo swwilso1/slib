@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 
-import slib.Logs
+from slib.Logs import LogBase, LogError
 
-class File(slib.Logs.LogBase):
+class File(LogBase):
 	"""The File class."""
 
 	def __init__(self, level = 0):
-		slib.Logs.LogBase.__init__(self, level)
+		LogBase.__init__(self, level)
 		self.logFile = None
 		self.autoNewLine = True
 	# End __init__
@@ -24,14 +24,14 @@ class File(slib.Logs.LogBase):
 	def __call__(self, format, *args):
 		if self.logFile:
 			if self.logFile.closed:
-				raise slib.Logs.LogError("%s closed" % self.logFile.name)
+				raise LogError("%s closed" % self.logFile.name)
 			else:
 				self.logFile.write(format % (args))
 				if self.autoNewLine:
 					self.logFile.write("\n")
 				self.logFile.flush()
 		else:
-			raise slib.Logs.LogError("No associated log file, not yet opened")
+			raise LogError("No associated log file, not yet opened")
 
 	# End __call__
 	
@@ -39,14 +39,14 @@ class File(slib.Logs.LogBase):
 	def log(self,format,*args):
 		if self.logFile:
 			if self.logFile.closed:
-				raise slib.Logs.LogError("%s closed" % self.logFile.name)
+				raise LogError("%s closed" % self.logFile.name)
 			else:
 				self.logFile.write(format % (args))
 				if self.autoNewLine:
 					self.logFile.write("\n")
 				self.logFile.flush()
 		else:
-			raise slib.Logs.LogError("No associated log file, not yet opened")
+			raise LogError("No associated log file, not yet opened")
 
 	# End log
 	

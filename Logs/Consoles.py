@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 
-import slib.Logs
+from slib.Logs import LogBase
 
-class Console(slib.Logs.LogBase):
+class Console(LogBase):
 	"""The Console class."""
 
 	def __init__(self, level = 0):
-		slib.Logs.LogBase.__init__(self,level)
+		LogBase.__init__(self,level)
 
 	# End __init__
 

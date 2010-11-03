@@ -2,21 +2,21 @@
 
 import os
 import shutil
-import slib.FileSystems
-import slib.FileSystems.BlockDevices
-import slib.FileSystems.CharacterDevices
-import slib.FileSystems.Fifos
-import slib.FileSystems.Files
-import slib.FileSystems.SymbolicLinks
-import slib.FileSystems.Sockets
+from slib.FileSystems import FileSystemBaseObject
+from BlockDevices import BlockDevice
+from CharacterDevices import CharacterDevice
+from Fifos import Fifo
+from Files import File
+from SymbolicLinks import SymbolicLink
+from Sockets import Socket
 from types import *
 
 
-class Directory(slib.FileSystems.FileSystemBaseObject):
+class Directory(FileSystemBaseObject):
 	"""The Directory class."""
 
 	def __init__(self, name, path=None):
-		slib.FileSystems.FileSystemBaseObject.__init__(self, name, path)
+		FileSystemBaseObject.__init__(self, name, path)
 
 	# End __init__
 
@@ -29,21 +29,21 @@ class Directory(slib.FileSystems.FileSystemBaseObject):
 	
 
 	def __getObjectAccordingToClass(self,name,path):
-		e = slib.FileSystems.FileSystemBaseObject(name, self.fullpath)
+		e = FileSystemBaseObject(name, self.fullpath)
 		if e.directory:
 			obj = Directory(name,self.fullpath)
 		elif e.characterSpecialDevice:
-			obj = slib.FileSystems.CharacterDevices.CharacterDevice(name,self.fullpath)
+			obj = CharacterDevice(name,self.fullpath)
 		elif e.blockSpecialDevice:
-			obj = slib.FileSystems.BlockDevices.BlockDevice(name,self.fullpath)
+			obj = BlockDevice(name,self.fullpath)
 		elif e.regular:
-			obj = slib.FileSystems.Files.File(name,self.fullpath)
+			obj = File(name,self.fullpath)
 		elif e.fifo:
-			obj = slib.FileSystems.Fifos.Fifo(name,self.fullpath)
+			obj = Fifo(name,self.fullpath)
 		elif e.symbolicLink:
-			obj = slib.FileSystems.SymbolicLinks.SymbolicLink(name,self.fullpath)
+			obj = SymbolicLink(name,self.fullpath)
 		elif e.socket:
-			obj = slib.FileSystems.Sockets.Socket(name,self.fullpath)
+			obj = Socket(name,self.fullpath)
 		else:
 			obj = e
 		return obj
@@ -68,7 +68,7 @@ class Directory(slib.FileSystems.FileSystemBaseObject):
 		files = []
 		entries = os.listdir(self.fullpath)
 		for entry in entries:
-			obj = slib.FileSystems. FileSystemBaseObject(entry, self.fullpath)
+			obj = FileSystemBaseObject(entry, self.fullpath)
 			if not obj.directory and \
 			   not obj.socket and \
 			   not obj.symbolicLink and \
@@ -245,7 +245,7 @@ class Directory(slib.FileSystems.FileSystemBaseObject):
 	def __getitem__(self,key):
 		if type(key) != StringType and type(key) != UnicodeType:
 			raise KeyError(key)
-		obj = slib.FileSystems.FileSystemBaseObject(key)
+		obj = FileSystemBaseObject(key)
 		if not obj.exists:
 			raise KeyError(key)
 		
@@ -263,19 +263,12 @@ class Directory(slib.FileSystems.FileSystemBaseObject):
 		if type(key) != StringType and type(key) != UnicodeType:
 			return False
 
-		obj = slib.FileSystems.FileSystemBaseObject(key)
+		obj = FileSystemBaseObject(key)
 		if not obj.exists:
 			return False
 
 		return True
 		
-
-		# path = self.fullpath + os.path.sep + os.path.dirname(key)
-		# name = os.path.basename(key)
-		# obj = slib.FileSystems.FileSystemBaseObject(name,path)
-		# if not obj.exists:
-		# 	return False
-		# return True
 	# End has_key
 
 	def keys(self):

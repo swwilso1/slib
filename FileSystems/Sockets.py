@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 
-import slib.FileSystems
+from slib.FileSystems import FileSystemBaseObject
 
-class Socket(slib.FileSystems.FileSystemBaseObject):
+class Socket(FileSystemBaseObject):
 	"""The Socket class."""
 
 	def __init__(self, name, path=None):
-		slib.FileSystems.FileSystemBaseObject.__init__(self,name,path)
+		FileSystemBaseObject.__init__(self,name,path)
 
 	# End __init__
 

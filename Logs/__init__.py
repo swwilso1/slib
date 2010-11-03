@@ -1,23 +1,25 @@
 #! /usr/bin/env python
 
-import slib.Objects
-import slib.Errors
+from slib.Objects import Object
+from slib.Errors import Error
 
-class LogError(slib.Errors.Error):
+__all__ = ["Consoles", "Files"]
+
+class LogError(Error):
 	"""The LogError class."""
 
 	def __init__(self, value):
-		slib.Errors.Error.__init__(self, value)
+		Error.__init__(self, value)
 	# End __init__
 
 # End LogError
 
 
-class LogBase(slib.Objects.Object):
+class LogBase(Object):
 	"""The LogBase class."""
 
 	def __init__(self, level = 0):
-		slib.Objects.Object.__init__(self)
+		Object.__init__(self)
 		self.level = level
 
 	# End __init__
@@ -47,5 +49,8 @@ class LogBase(slib.Objects.Object):
 	
 
 # End LogBase
+
+import Consoles
+import Files
 
 

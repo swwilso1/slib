@@ -1,13 +1,13 @@
 #! /usr/bin/env python
 
-import slib.FileSystems
+from slib.FileSystems import FileSystemBaseObject
 
 
-class SymbolicLink(slib.FileSystems.FileSystemBaseObject):
+class SymbolicLink(FileSystemBaseObject):
 	"""The SymbolicLink class."""
 
 	def __init__(self, name, path=None):
-		slib.FileSystems.FileSystemBaseObject.__init__(self,name,path)		
+		FileSystemBaseObject.__init__(self,name,path)		
 
 	# End __init__
 

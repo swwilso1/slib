@@ -3,18 +3,20 @@
 import os
 import re
 import time
-import slib.Objects
-import slib.SourceTrees
-import slib.Commands.Shells
-import slib.FileSystems.Directories
+from slib.Objects import Object
+from slib.SourceTrees import SourceTreeBaseObject, SourceTreeError
+from slib.Commands.Shells import Shell
+from slib.FileSystems import DIRECTORY
+from slib.FileSystems.Directories import Directory
 
-class CVSRepository(slib.Objects.Object):
+class CVSRepository(Object):
 	"""The CVSRepository class."""
 
 	# CVS repository strings have the following form:
 	# [:method:][user[:password]@]hostname[:[port]]/path/to/repository
 
 	def __init__(self, repository):
+		Object.__init__(self)
 		self.__repository = str(repository)
 
 	# End __init__
@@ -225,10 +227,11 @@ class CVSRepository(slib.Objects.Object):
 
 
 
-class CVSFileData(slib.Objects.Object):
+class CVSFileData(Object):
 	"""The CVSFileData class."""
 
 	def __init__(self, name=None, ver=None, time=None, options=None, tag=None, modified=False, repository=None, filepath=None):
+		Object.__init__(self)
 		self.name = name
 		self.version = ver
 		self.time = time
@@ -274,7 +277,7 @@ class CVSFileData(slib.Objects.Object):
 # End CVSFileData
 
 
-class CVSTreeData(slib.Objects.Object):
+class CVSTreeData(Object):
 	"""The CVSTreeData class."""
 
 	month = {
@@ -304,6 +307,7 @@ class CVSTreeData(slib.Objects.Object):
 
 
 	def __init__(self, path):
+		Object.__init__(self)
 		self.path = path
 		self.repository = None
 		self.files = []
@@ -539,11 +543,11 @@ class CVSTreeData(slib.Objects.Object):
 # End CVSTreeData
 
 
-class CVSTree(slib.SourceTrees.SourceTreeBaseObject):
+class CVSTree(SourceTreeBaseObject):
 	"""The CVSTree class."""
 
 	def __init__(self, repository, module, path, branch=None,  name=None, *args):
-		slib.SourceTrees.SourceTreeBaseObject.__init__(self, repository, path, branch, args)
+		SourceTreeBaseObject.__init__(self, repository, path, branch, args)
 		self.__name = name
 		self.__module = module
 		self.__branch = branch
@@ -583,9 +587,9 @@ class CVSTree(slib.SourceTrees.SourceTreeBaseObject):
 	@property
 	def local_path(self):
 		if self.path:
-			directory = slib.FileSystems.Directories.Directory(self.name, self.path)
+			directory = Directory(self.name, self.path)
 		else:
-			directory = slib.FileSystems.Directories.Directory(self.name, ".")
+			directory = Directory(self.name, ".")
 
 		return directory
 
@@ -688,9 +692,9 @@ class CVSTree(slib.SourceTrees.SourceTreeBaseObject):
 		if self.exists:
 			print "Preparing branch information, this may take some time"
 			branches = {}
-			shell = slib.Commands.Shells.Shell()
+			shell = Shell()
 			for entry in self.local_path.all_entries:
-				if not re.search(r'CVS', str(entry)) and not entry.type == slib.FileSystems.DIRECTORY:
+				if not re.search(r'CVS', str(entry)) and not entry.type == DIRECTORY:
 					currentDirectory = os.getcwd()
 					os.chdir(entry.path)
 					shell.capture_output = True

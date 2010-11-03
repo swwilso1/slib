@@ -1,25 +1,25 @@
 #! /usr/bin/env python
 
-import slib.Objects
-import slib.Errors
-import slib.Logs.Consoles
-import slib.Logs.Files
+__all__ = ["Shells"]
 
-class CommandError(slib.Errors.Error):
+from slib.Objects import Object
+from slib.Errors import Error
+
+class CommandError(Error):
 	"""The CommandError class."""
 
 	def __init__(self, value):
-		slib.Errors.Error.__init__(self,value)
+		Error.__init__(self,value)
 	# End __init__
 
 # End CommandError
 
 
-class CommandBase(slib.Objects.Object):
+class CommandBase(Object):
 	"""The CommandBase class."""
 
 	def __init__(self, **kwargs):
-		slib.Objects.Object.__init__(self)
+		Object.__init__(self)
 
 		for key in kwargs:
 			self.__dict__[key] = kwargs[key]
@@ -66,3 +66,5 @@ class CommandBase(slib.Objects.Object):
 	
 
 # End CommandBase
+
+import Shells

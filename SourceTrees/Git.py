@@ -2,14 +2,15 @@
 
 import os
 import re
-import slib.SourceTrees
-import slib.FileSystems.Directories
+from slib.Commands import CommandError
+from slib.SourceTrees import SourceTreeBaseObject, SourceTreeError
+from slib.FileSystems.Directories import Directory
 
-class GitTree(slib.SourceTrees.SourceTreeBaseObject):
+class GitTree(SourceTreeBaseObject):
 	"""The GitTree class."""
 
 	def __init__(self, repository, path, branch=None,  name=None, *args):
-		slib.SourceTrees.SourceTreeBaseObject.__init__(self, repository, path, branch, args)
+		SourceTreeBaseObject.__init__(self, repository, path, branch, args)
 		self.__name = name
 	# End __init__
 
@@ -21,9 +22,9 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 		else:
 			if re.search(r':', self.repository):
 				if re.match(r'://', self.repository):
-					repository_directory = slib.FileSystems.Directories.Directory(self.repository.split("://")[1])
+					repository_directory = Directory(self.repository.split("://")[1])
 				else:
-					repository_directory = slib.FileSystems.Directories.Directory(self.repository.split(":")[1])
+					repository_directory = Directory(self.repository.split(":")[1])
 				
 				if re.search(r'\.', repository_directory.name):
 					return repository_directory.name.split(".")[0]
@@ -38,9 +39,9 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 	@property
 	def local_path(self):
 		if self.path:
-			directory = slib.FileSystems.Directories.Directory(self.name, self.path)
+			directory = Directory(self.name, self.path)
 		else:
-			directory = slib.FileSystems.Directories.Directory(self.name, ".")
+			directory = Directory(self.name, ".")
 
 		return directory
 
@@ -51,7 +52,7 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 		self.local_path.parent.create()
 
 		currentDirectory = os.getcwd()
-		os.chdir(localParentDir.fullpath)
+		os.chdir(self.local_path.parent.fullpath)
 
 		self.local_path.remove()
 
@@ -64,7 +65,7 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			command = "git checkout -b " + self.branch + " origin/" + self.branch
 			try:
 				self.shell.execute(command)
-			except slib.Commands.CommandError, e:
+			except CommandError, e:
 				print "Unable to switch to branch %s: %s" % (self.branch, e)
 
 		os.chdir(currentDirectory)
@@ -98,7 +99,7 @@ class GitTree(slib.SourceTrees.SourceTreeBaseObject):
 			command = "git checkout " + str(branch)
 			try:
 				self.shell.execute(command)
-			except slib.Commands.CommandError, e:
+			except CommandError, e:
 				# Instead try getting the branch from the origin:
 				command = "git checkout -b " + str(branch) + " origin/" + str(branch)
 				self.shell.execute(command)

@@ -3,31 +3,34 @@
 import re
 import sys
 import types
-import slib.Objects
-import slib.Errors
-import slib.FileSystems.Directories
 
-class BuildSystemError(slib.Errors.Error):
+__all__ = ["CMake"]
+
+from slib.Objects import Object
+from slib.Errors import Error, ArgumentError
+from slib.FileSystems.Directories import Directory
+
+class BuildSystemError(Error):
 	"""The BuildSystemError class."""
 
 	def __init__(self, value):
-		slib.Errors.Error.__init__(self,value)
+		Error.__init__(self,value)
 
 	# End __init__
 
 # End BuildSystemError
 
 
-class BuildSystemBaseObject(slib.Objects.Object):
+class BuildSystemBaseObject(Object):
 	"""The BuildSystemBaseObject class."""
 
 	def __init__(self, working_directory, source_tree_directory, build_parameters = None):
-		slib.Objects.Object.__init__(self)
-		self.working_directory = slib.FileSystems.Directories.Directory(working_directory)
-		self.source_tree_directory = slib.FileSystems.Directories.Directory(source_tree_directory)
+		Object.__init__(self)
+		self.working_directory = Directory(working_directory)
+		self.source_tree_directory = Directory(source_tree_directory)
 		if build_parameters:
 			if type(build_parameters) != types.DictType:
-				raise slib.Errors.ArgumentError("Third argument must be a dictionary")
+				raise ArgumentError("Third argument must be a dictionary")
 			self._build_parameters = build_parameters
 		else:
 			self._build_parameters = {}
@@ -115,3 +118,4 @@ class BuildSystemBaseObject(slib.Objects.Object):
 
 # End BuildSystemBaseObject
 
+import CMake

@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 
-import slib.FileSystems
+from slib.FileSystems import FileSystemBaseObject
 
-class BlockDevice(slib.FileSystems.FileSystemBaseObject):
+class BlockDevice(FileSystemBaseObject):
 	"""The BlockDevice class."""
 
 	def __init__(self, name, path=None):
-		slib.FileSystems.FileSystemBaseObject.__init__(self,name,path)		
+		FileSystemBaseObject.__init__(self,name,path)		
 
 	# End __init__
 
