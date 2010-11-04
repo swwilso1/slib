@@ -50,7 +50,7 @@ class File(LogBase):
 
 	# End log
 	
-	def logWithLevel(self,level,format,*args):
+	def log_with_level(self,level,format,*args):
 		if level >= self.level:
 			self.log(format,args)
 

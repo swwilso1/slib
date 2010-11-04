@@ -37,7 +37,7 @@ class LogBase(Object):
 
 	# End log
 
-	def logWithLevel(self, level, format, *args):
+	def log_with_level(self, level, format, *args):
 		pass
 
 	# End logWithLevel
