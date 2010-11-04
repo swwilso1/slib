@@ -648,7 +648,7 @@ class CVSTree(SourceTreeBaseObject):
 	# End root
 	
 	
-	def switchToBranch(self, branch):
+	def switch_to_branch(self, branch):
 		if self.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
@@ -660,10 +660,10 @@ class CVSTree(SourceTreeBaseObject):
 			self.shell.execute(command)
 			os.chdir(currentDirectory)
 
-	# End switchToBranch
+	# End switch_to_branch
 	
 
-	def makeNewBranch(self,branch):
+	def make_new_branch(self,branch):
 		if self.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
@@ -673,14 +673,14 @@ class CVSTree(SourceTreeBaseObject):
 		else:
 			raise SourceTreeError("Unable to create new branch: local checkout does not exist")
 
-	# End makeNewBranch
+	# End make_new_branch
 	
 
-	def makeNewBranchAndSwitch(self, branch):
-		self.makeNewBranch(branch)
-		self.switchToBranch(branch)
+	def make_new_branch_and_switch(self, branch):
+		self.make_new_branch(branch)
+		self.switch_to_branch(branch)
 
-	# End makeNewBranchAndSwitch
+	# End make_new_branch_and_switch
 	
 
 	# For CVS repositories, the branches method is problematic.  Branches are applied on a per/file basis

@@ -90,7 +90,7 @@ class GitTree(SourceTreeBaseObject):
 	# End update
 
 
-	def switchToBranch(self,branch):
+	def switch_to_branch(self,branch):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.fullpath)
@@ -107,10 +107,10 @@ class GitTree(SourceTreeBaseObject):
 			self.__branch = str(branch)
 			os.chdir(currentDirectory)
 
-	# End switchToBranch
+	# End switch_to_branch
 	
 
-	def makeNewBranch(self,branch):
+	def make_new_branch(self,branch):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.fullpath)
@@ -119,10 +119,10 @@ class GitTree(SourceTreeBaseObject):
 			self.shell.execute(command)
 			os.chdir(currentDirectory)
 
-	# End makeNewBranch
+	# End make_new_branch
 
 
-	def makeNewBranchAndSwitch(self, branch):
+	def make_new_branch_and_switch(self, branch):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.fullpath)
@@ -132,7 +132,7 @@ class GitTree(SourceTreeBaseObject):
 			self.__branch = str(branch)
 			os.chdir(currentDirectory)
 
-	# End makeNewBranchAndSwitch
+	# End make_new_branch_and_switch
 
 
 	def __massageBranchName(self,name):
@@ -182,7 +182,7 @@ class GitTree(SourceTreeBaseObject):
 	# End branch
 
 
-	def makeNewBranchFromRemote(self,branch,remote):
+	def make_new_branch_from_remote(self,branch,remote):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.fullpath)
@@ -191,10 +191,10 @@ class GitTree(SourceTreeBaseObject):
 			self.shell.execute(command)
 			os.chdir(currentDirectory)
 
-	# End makeNewBranchFromRemote
+	# End make_new_branch_from_remote
 
 	
-	def makeNewBranchFromRemoteAndSwitch(self,branch,remote="origin"):
+	def make_new_branch_from_remote_and_switch(self,branch,remote="origin"):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
 			os.chdir(self.local_path.fullpath)
@@ -204,7 +204,7 @@ class GitTree(SourceTreeBaseObject):
 			self.__branch = str(branch)
 			os.chdir(currentDirectory)
 
-	# End makeNewBranchFromRemoteAndSwitch
+	# End make_new_branch_from_remote_and_switch
 	
 
 	@property

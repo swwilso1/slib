@@ -79,22 +79,22 @@ class SourceTreeBaseObject(Object):
 	# End root
 	
 	
-	def switchToBranch(self, branch):
+	def switch_to_branch(self, branch):
 		pass
 
-	# End switchToBranch
+	# End switch_to_branch
 	
 
-	def makeNewBranch(self,branch):
+	def make_new_branch(self,branch):
 		pass
 
-	# End makeNewBranch
+	# End make_new_branch
 	
 
-	def makeNewBranchAndSwitch(self, branch):
+	def make_new_branch_and_switch(self, branch):
 		pass
 
-	# End makeNewBranchAndSwitch
+	# End make_new_branch_and_switch
 	
 
 	@property
