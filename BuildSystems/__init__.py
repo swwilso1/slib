@@ -34,6 +34,8 @@ class BuildSystemBaseObject(Object):
 			self._build_parameters = build_parameters
 		else:
 			self._build_parameters = {}
+		
+		self._output_path = None
 
 	# End __init__
 
@@ -56,6 +58,13 @@ class BuildSystemBaseObject(Object):
 	# End install
 	
 	
+	def package(self):
+		pass
+
+	# End package
+	
+	
+	
 	def remove(self):
 		pass
 
@@ -71,8 +80,41 @@ class BuildSystemBaseObject(Object):
 
 	# End build_command
 	
+	@property
+	def installer_extension(self):
+		if re.search(r'win32', sys.platform):
+			return "exe"
+		else:
+			return "sh"
+
+	# End installer_extension
 	
 	
+	@property
+	def package_extension(self):
+		if re.search(r'win32', sys.platform):
+			return "zip"
+		else:
+			return "tar.gz"
+
+	# End package_extension
+	
+	
+	
+	@property
+	def output_path(self):
+		if self._output_path:
+			return self._output_path.fullpath
+		return None
+
+	# End output_path
+	
+	@output_path.setter
+	def output_path(self,value):
+		self._output_path = Directory(str(value))
+
+	# End output_path
+
 	def __contains__(self, obj):
 		return self.has_key(obj)
 

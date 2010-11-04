@@ -249,6 +249,46 @@ class CMakeSystem(BuildSystemBaseObject):
 	# End install
 	
 	
+	def package(self):
+		if self.working_directory.exists:
+			shell = Shell()
+			shell.capture_output = True
+			currentDirectory = os.getcwd()
+			os.chdir(self.working_directory.fullpath)
+			
+			command = self.build_command
+			
+			shell.execute(command + " package")
+			
+			os.chdir(currentDirectory)
+
+	# End package
+
+
+	@property
+	def package_file(self):
+		if self.working_directory.exists:
+			for f in self.working_directory.files:
+				regex = re.compile(".*\." + self.package_extension)
+				if regex.search(f.name):
+					return f
+		return None
+
+	# End package_file
+	
+	
+	@property
+	def installer_file(self):
+		if self.working_directory.exists:
+			for f in self.working_directory.files:
+				regex = re.compile(".*\." + self.installer_extension)
+				if regex.search(f.name):
+					return f
+		return None
+	# End installer_file
+	
+	
+	
 	def remove(self):
 		self.working_directory.remove()
 
@@ -260,7 +300,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		if type(value) == types.StringType and self._path_sep_regex.search(value):
 			o = FileSystemBaseObject(value)
 			if o.exists:
-				if o.type == slib.FileSystems.REGULAR_FILE:
+				if o.type == REGULAR_FILE:
 					self._build_parameters[key] = FilePathParameter(key,value)
 					return
 			self._build_parameters[key] = PathParameter(key,value)
