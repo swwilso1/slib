@@ -298,6 +298,14 @@ class Directory(FileSystemBaseObject):
 		return children
 	# End getChildren
 	
+	
+	def make_current_directory(self):
+		current_directory = os.getcwd()
+		os.chdir(self.fullpath)
+		return current_directory
+
+	# End make_current_directory
+	
 
 # End Directory
 
