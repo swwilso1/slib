@@ -242,7 +242,7 @@ class CMakeSystem(BuildSystemBaseObject):
 
 			command = self.build_command
 			
-			shell.execute(command + " install")
+			shell.execute(command + " install/fast")
 			
 			os.chdir(currentDirectory)
 
