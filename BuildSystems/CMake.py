@@ -184,7 +184,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		
 		o = shell.execute(str(self))
 		if shell.exit_code != 0:
-			raise BuildSystemError("Error while configuration build system: " + o)
+			raise BuildSystemError("Error while configuring build system: " + o)
 		
 
 		# Now try for make ProcessorCount
