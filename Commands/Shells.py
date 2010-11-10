@@ -25,7 +25,7 @@ class Shell(CommandBase):
 			self.exit_code,o = getstatusoutput(str(command))
 			if self.raise_error_on_shell_error:
 				if self.exit_code != 0:
-					raise CommandError("'%s' failed with error %d: %s" % (str(command), self.__exit_code, o))
+					raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, o))
 			return o
 		else:
 			self.exit_code = system(str(command))
