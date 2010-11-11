@@ -5,8 +5,8 @@ from slib.Logs import LogBase
 class Console(LogBase):
 	"""The Console class."""
 
-	def __init__(self, level = 0):
-		LogBase.__init__(self,level)
+	def __init__(self, level = 0, **kwargs):
+		LogBase.__init__(self,level, **kwargs)
 
 	# End __init__
 

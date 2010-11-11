@@ -9,8 +9,8 @@ from slib.FileSystems.Directories import Directory
 class GitTree(SourceTreeBaseObject):
 	"""The GitTree class."""
 
-	def __init__(self, repository, path, branch=None,  name=None, *args):
-		SourceTreeBaseObject.__init__(self, repository, path, branch, args)
+	def __init__(self, repository, path, branch=None,  name=None, *args, **kwargs):
+		SourceTreeBaseObject.__init__(self, repository, path, branch, args, **kwargs)
 		self.__name = name
 	# End __init__
 

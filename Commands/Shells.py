@@ -8,7 +8,7 @@ class Shell(CommandBase):
 	"""The Shell class."""
 
 	def __init__(self, **kwargs):
-		CommandBase.__init__(self)
+		CommandBase.__init__(self, **kwargs)
 		if kwargs.has_key("raise_error_on_shell_error"):
 			self.raise_error_on_shell_error = kwargs["raise_error_on_shell_error"]
 		else:

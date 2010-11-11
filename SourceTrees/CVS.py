@@ -15,8 +15,8 @@ class CVSRepository(Object):
 	# CVS repository strings have the following form:
 	# [:method:][user[:password]@]hostname[:[port]]/path/to/repository
 
-	def __init__(self, repository):
-		Object.__init__(self)
+	def __init__(self, repository, **kwargs):
+		Object.__init__(self, **kwargs)
 		self.__repository = str(repository)
 
 	# End __init__
@@ -230,8 +230,8 @@ class CVSRepository(Object):
 class CVSFileData(Object):
 	"""The CVSFileData class."""
 
-	def __init__(self, name=None, ver=None, time=None, options=None, tag=None, modified=False, repository=None, filepath=None):
-		Object.__init__(self)
+	def __init__(self, name=None, ver=None, time=None, options=None, tag=None, modified=False, repository=None, filepath=None,**kwargs):
+		Object.__init__(self,**kwargs)
 		self.name = name
 		self.version = ver
 		self.time = time
@@ -306,8 +306,8 @@ class CVSTreeData(Object):
 	}
 
 
-	def __init__(self, path):
-		Object.__init__(self)
+	def __init__(self, path, **kwargs):
+		Object.__init__(self, **kwargs)
 		self.path = path
 		self.repository = None
 		self.files = []
@@ -546,8 +546,8 @@ class CVSTreeData(Object):
 class CVSTree(SourceTreeBaseObject):
 	"""The CVSTree class."""
 
-	def __init__(self, repository, module, path, branch=None,  name=None, *args):
-		SourceTreeBaseObject.__init__(self, repository, path, branch, args)
+	def __init__(self, repository, module, path, branch=None,  name=None, *args, **kwargs):
+		SourceTreeBaseObject.__init__(self, repository, path, branch, args, **kwargs)
 		self.__name = name
 		self.__module = module
 		self.__branch = branch

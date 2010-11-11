@@ -7,8 +7,8 @@ import exceptions
 class Error(Object,exceptions.Exception):
 	"""The Error class."""
 
-	def __init__(self, value):
-		Object.__init__(self)
+	def __init__(self, value, **kwargs):
+		Object.__init__(self, **kwargs)
 		self.note = value
 	# End __init__
 
@@ -29,8 +29,8 @@ class Error(Object,exceptions.Exception):
 class ArgumentError(Error):
 	"""The ArgumentError class."""
 
-	def __init__(self, value):
-		Error.__init__(self,value)
+	def __init__(self, value, **kwargs):
+		Error.__init__(self,value, **kwargs)
 
 	# End __init__
 

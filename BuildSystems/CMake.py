@@ -15,8 +15,8 @@ from slib.FileSystems.Directories import Directory
 class CMakeParameter(Object):
 	"""The CMakeParameter class."""
 
-	def __init__(self, name, value):
-		Object.__init__(self)
+	def __init__(self, name, value, **kwargs):
+		Object.__init__(self, **kwargs)
 		self.name = name
 		self.type = None
 		self.value = value
@@ -47,8 +47,8 @@ class CMakeParameter(Object):
 class StringParameter(CMakeParameter):
 	"""The StringParameter class."""
 
-	def __init__(self, name, value):
-		CMakeParameter.__init__(self, name, value)
+	def __init__(self, name, value, **kwargs):
+		CMakeParameter.__init__(self, name, value, **kwargs)
 		self.type = "STRING"
 
 	# End __init__
@@ -60,8 +60,8 @@ class StringParameter(CMakeParameter):
 class FilePathParameter(CMakeParameter):
 	"""The FilePathParameter class."""
 
-	def __init__(self, name, value):
-		CMakeParameter.__init__(self, name, value)
+	def __init__(self, name, value, **kwargs):
+		CMakeParameter.__init__(self, name, value, **kwargs)
 		self.type="FILEPATH"
 
 	# End __init__
@@ -94,8 +94,8 @@ class FilePathParameter(CMakeParameter):
 class PathParameter(CMakeParameter):
 	"""The PathParameter class."""
 
-	def __init__(self, name, value):
-		CMakeParameter.__init__(self, name, value)
+	def __init__(self, name, value, **kwargs):
+		CMakeParameter.__init__(self, name, value, **kwargs)
 		self.type="PATH"
 
 	# End __init__
@@ -129,13 +129,13 @@ class PathParameter(CMakeParameter):
 class BooleanParameter(CMakeParameter):
 	"""The BooleanParameter class."""
 
-	def __init__(self, name, value):
+	def __init__(self, name, value, **kwargs):
 		if value == True:
 			value = 'ON'
 		else:
 			value = 'OFF'
 		
-		CMakeParameter.__init__(self, name, value)
+		CMakeParameter.__init__(self, name, value, **kwargs)
 		self.type="BOOL"
 
 	# End __init__
@@ -146,8 +146,8 @@ class BooleanParameter(CMakeParameter):
 class InternalParameter(CMakeParameter):
 	"""The InternalParameter class."""
 
-	def __init__(self, name, value):
-		CMakeParameter.__init__(self, name, value)
+	def __init__(self, name, value, **kwargs):
+		CMakeParameter.__init__(self, name, value, **kwargs)
 		self.type="INTERNAL"
 
 	# End __init__
@@ -159,7 +159,7 @@ class CMakeSystem(BuildSystemBaseObject):
 	"""The CMakeSystem class."""
 
 	def __init__(self, working_directory, source_tree_directory, build_parameters = None, **kwargs):
-		BuildSystemBaseObject.__init__(self, working_directory, source_tree_directory, build_parameters)
+		BuildSystemBaseObject.__init__(self, working_directory, source_tree_directory, build_parameters, **kwargs)
 		if kwargs.has_key("generator"):
 			self.generator = kwargs['generator']
 		else:

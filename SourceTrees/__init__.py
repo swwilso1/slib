@@ -9,8 +9,8 @@ __all__ = ["CVS", "Git", "Mercurial"]
 class SourceTreeError(Error):
 	"""The SourceTreeError class."""
 
-	def __init__(self, value):
-		Error.__init__(self,value)
+	def __init__(self, value, **kwargs):
+		Error.__init__(self,value,**kwargs)
 
 	# End __init__
 
@@ -20,8 +20,8 @@ class SourceTreeError(Error):
 class SourceTreeBaseObject(Object):
 	"""The SourceTreeBaseObject class."""
 
-	def __init__(self, repository, path, branch=None, *args):
-		Object.__init__(self)
+	def __init__(self, repository, path, branch=None, *args, **kwargs):
+		Object.__init__(self, **kwargs)
 		self.repository = str(repository)
 		if branch:
 			self.__branch = str(branch)

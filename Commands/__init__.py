@@ -8,8 +8,8 @@ from slib.Errors import Error
 class CommandError(Error):
 	"""The CommandError class."""
 
-	def __init__(self, value):
-		Error.__init__(self,value)
+	def __init__(self, value, **kwargs):
+		Error.__init__(self,value, **kwargs)
 	# End __init__
 
 # End CommandError
@@ -19,7 +19,7 @@ class CommandBase(Object):
 	"""The CommandBase class."""
 
 	def __init__(self, **kwargs):
-		Object.__init__(self)
+		Object.__init__(self, **kwargs)
 
 		for key in kwargs:
 			self.__dict__[key] = kwargs[key]
@@ -33,11 +33,6 @@ class CommandBase(Object):
 			self.capture_output = kwargs["capture_output"]
 		else:
 			self.capture_output = False
-
-		if kwargs.has_key("log"):
-			self.log = kwargs["log"]
-		else:
-			self.log = None
 
 		self.exit_code = 0
 	# End __init__

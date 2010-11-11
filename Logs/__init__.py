@@ -8,8 +8,8 @@ __all__ = ["Consoles", "Files"]
 class LogError(Error):
 	"""The LogError class."""
 
-	def __init__(self, value):
-		Error.__init__(self, value)
+	def __init__(self, value,**kwargs):
+		Error.__init__(self, value, **kwargs)
 	# End __init__
 
 # End LogError
@@ -18,8 +18,8 @@ class LogError(Error):
 class LogBase(Object):
 	"""The LogBase class."""
 
-	def __init__(self, level = 0):
-		Object.__init__(self)
+	def __init__(self, level = 0, **kwargs):
+		Object.__init__(self, **kwargs)
 		self.level = level
 
 	# End __init__

@@ -5,8 +5,8 @@ from slib.Logs import LogBase, LogError
 class File(LogBase):
 	"""The File class."""
 
-	def __init__(self, level = 0):
-		LogBase.__init__(self, level)
+	def __init__(self, level = 0, **kwargs):
+		LogBase.__init__(self, level, **kwargs)
 		self.logFile = None
 		self.autoNewLine = True
 	# End __init__

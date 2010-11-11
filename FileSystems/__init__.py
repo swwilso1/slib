@@ -29,8 +29,8 @@ def FindFullDirectory(directory):
 class FileSystemError(Error):
 	"""The FileSystemError class."""
 
-	def __init__(self, value):
-		Error.__init__(self,value)
+	def __init__(self, value, **kwargs):
+		Error.__init__(self,value, **kwargs)
 	# End __init__
 
 # End FSObjectException
@@ -49,8 +49,8 @@ NO_TYPE = 99
 class FileSystemBaseObject(Object):
 	"""The FileSystemBaseObject class."""
 	
-	def __init__(self, name, path=None):
-		Object.__init__(self)
+	def __init__(self, name, path=None, **kwargs):
+		Object.__init__(self, **kwargs)
 		if name.count(os.path.sep) > 0:
 			directory = os.path.dirname(name)
 			basename = os.path.basename(name)

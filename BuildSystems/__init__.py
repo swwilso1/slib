@@ -13,8 +13,8 @@ from slib.FileSystems.Directories import Directory
 class BuildSystemError(Error):
 	"""The BuildSystemError class."""
 
-	def __init__(self, value):
-		Error.__init__(self,value)
+	def __init__(self, value, **kwargs):
+		Error.__init__(self,value, **kwargs)
 
 	# End __init__
 
@@ -24,8 +24,8 @@ class BuildSystemError(Error):
 class BuildSystemBaseObject(Object):
 	"""The BuildSystemBaseObject class."""
 
-	def __init__(self, working_directory, source_tree_directory, build_parameters = None):
-		Object.__init__(self)
+	def __init__(self, working_directory, source_tree_directory, build_parameters = None, **kwargs):
+		Object.__init__(self, **kwargs)
 		self.working_directory = Directory(working_directory)
 		self.source_tree_directory = Directory(source_tree_directory)
 		if build_parameters:

@@ -5,8 +5,8 @@ from slib.FileSystems import FileSystemBaseObject
 class File(FileSystemBaseObject):
 	"""The File class."""
 
-	def __init__(self, name, path=None):
-		FileSystemBaseObject.__init__(self,name,path)
+	def __init__(self, name, path=None, **kwargs):
+		FileSystemBaseObject.__init__(self,name,path, **kwargs)
 
 	# End __init__
 
