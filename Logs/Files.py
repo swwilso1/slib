@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
 from slib.Logs import LogBase, LogError
+from slib.Calendars import Date
+from slib.Calendars import DateTimeFormat
 
 class File(LogBase):
 	"""The File class."""
@@ -21,12 +23,21 @@ class File(LogBase):
 
 	# End close
 	
+	def __output_string(self, format, *args):
+		date = Date()
+		date.formatter = DateTimeFormat()
+		newformat = "%s: %s" % (str(date), str(format))
+		return newformat % (args)
+
+	# End __write
+	
+	
 	def __call__(self, format, *args):
 		if self.logFile:
 			if self.logFile.closed:
 				raise LogError("%s closed" % self.logFile.name)
 			else:
-				self.logFile.write(format % (args))
+				self.logFile.write(self.__output_string(format, *args))
 				if self.autoNewLine:
 					self.logFile.write("\n")
 				self.logFile.flush()
@@ -41,7 +52,7 @@ class File(LogBase):
 			if self.logFile.closed:
 				raise LogError("%s closed" % self.logFile.name)
 			else:
-				self.logFile.write(format % (args))
+				self.logFile.write(self.__output_string(format, *args))
 				if self.autoNewLine:
 					self.logFile.write("\n")
 				self.logFile.flush()
