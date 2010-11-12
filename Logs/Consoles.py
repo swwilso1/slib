@@ -2,7 +2,7 @@
 
 from slib.Logs import LogBase
 from slib.Calendars import Date
-from slib.Calendars import DateTimeFormat
+from slib.Calendars import DATE_TIME_FORMAT
 
 class Console(LogBase):
 	"""The Console class."""
@@ -13,8 +13,7 @@ class Console(LogBase):
 	# End __init__
 	
 	def __write(self, format, *args):
-		date = Date()
-		date.formatter = DateTimeFormat()
+		date = Date(format=DATE_TIME_FORMAT)
 		newformat = "%s: %s" % (str(date), str(format))
 		print newformat % (args)
 

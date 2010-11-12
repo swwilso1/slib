@@ -2,7 +2,7 @@
 
 from slib.Logs import LogBase, LogError
 from slib.Calendars import Date
-from slib.Calendars import DateTimeFormat
+from slib.Calendars import DATE_TIME_FORMAT
 
 class File(LogBase):
 	"""The File class."""
@@ -24,8 +24,7 @@ class File(LogBase):
 	# End close
 	
 	def __output_string(self, format, *args):
-		date = Date()
-		date.formatter = DateTimeFormat()
+		date = Date(format=DATE_TIME_FORMAT)
 		newformat = "%s: %s" % (str(date), str(format))
 		return newformat % (args)
 
