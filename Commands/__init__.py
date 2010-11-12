@@ -39,8 +39,8 @@ class CommandBase(Object):
 
 
 	def execute(self,command):
-		if self.log:
-			self.log(command)
+		if self.log_object:
+			self.log_object(command)
 		return ""
 	# End execute
 

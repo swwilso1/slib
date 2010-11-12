@@ -5,9 +5,9 @@ class Object(object):
 
 	def __init__(self, **kwargs):
 		if kwargs.has_key("log"):
-			self.log = kwargs["log"]
+			self.log_object = kwargs["log"]
 		else:
-			self.log = None
+			self.log_object = None
 
 	# End __init__
 
