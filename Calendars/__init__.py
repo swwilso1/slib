@@ -183,6 +183,11 @@ class DateTimeFormat(Format):
 
 # End DateTimeFormat
 
+VERBOSE_FORMAT = "VerboseFormat"
+MONTH_DAY_YEAR_WITH_SLASHES_FORMAT = "MonthDayYearWithSlashesFormat"
+MONTH_DAY_YEAR_WITH_DASHES_FORMAT = "MonthDayYearWithDashesFormat"
+DATE_TIME_FORMAT = "DateTimeFormat"
+
 
 MINUTE = 60
 HOUR = 3600
@@ -536,6 +541,13 @@ class DateDelta(Object):
 class Date(Object):
 	"""The Date class."""
 
+	formats = {
+		VERBOSE_FORMAT                     : VerboseFormat,
+		MONTH_DAY_YEAR_WITH_SLASHES_FORMAT : MonthDayYearWithSlashesFormat,
+		MONTH_DAY_YEAR_WITH_DASHES_FORMAT  : MonthDayYearWithDashesFormat,
+		DATE_TIME_FORMAT                   : DateTimeFormat
+	}
+
 	def __init__(self, intime=None, **kwargs):
 		Object.__init__(self,**kwargs)
 		if intime:
@@ -546,8 +558,31 @@ class Date(Object):
 		else:
 			self.time = time.time()
 		self.timeframe = time.localtime
-		self.formatter = VerboseFormat()
+		
+		if kwargs.has_key("format"):
+			self.__myformat = kwargs["format"]
+		else:
+			self.__myformat = VERBOSE_FORMAT
+
+		self.__formatter = Date.formats[self.__myformat]()
+
 	# End __init__
+	
+	
+	@property
+	def format(self):
+		return self.__myformat
+
+	# End format
+
+	@format.setter
+	def format(self,value):
+		self.__myformat = value
+		self.__formatter = Date.formats[value]()
+
+	# End format
+	
+	
 
 	
 	def update_time_to_current_time(self):
@@ -877,13 +912,16 @@ class Date(Object):
 	
 	
 	def __str__(self):
-		return self.formatter(self)
+		return self.__formatter(self)
 
 	# End __str__
 	
 	
 	def __repr__(self):
-		return self.__class__.__name__ + "(" + str(self.time) + ")"
+		result = self.__class__.__name__ + "(" + str(self.time) 
+		if self.__myformat != VERBOSE_FORMAT:
+			result += ",format='" + self.__myformat + "'"
+		return result + ")"
 
 	# End __repr__
 	
