@@ -73,6 +73,11 @@ class VerboseFormat(Format):
 			if time.hour > 12:
 				hour = self.number_as_string(time.hour - 12)
 				ampm = 'PM'
+			elif time.hour == 12:
+				ampm = 'PM'
+			elif time.hour == 0:
+				hour = self.number_as_string(12)
+				ampm = 'AM'
 			else:
 				ampm = 'AM'
 		else:
@@ -155,6 +160,12 @@ class DateTimeFormat(Format):
 			if time.hour > 12:
 				hour = self.number_as_string(time.hour - 12)
 				ampm = 'PM'
+			elif time.hour == 12:
+				hour = self.number_as_string(12)
+				ampm = 'PM'
+			elif time.hour == 0:
+				hour = self.number_as_string(12)
+				ampm = 'AM'
 			else:
 				ampm = 'AM'
 		else:
@@ -834,7 +845,7 @@ class Date(Object):
 		if isinstance(other, self.__class__):
 			return DateDelta(self.time - other.time)
 		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
-			return DateDelta(self.time - other)
+			return self.__class__(self.time - other)
 		else:
 			raise CalendarError("Cannot subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
@@ -845,7 +856,7 @@ class Date(Object):
 		if isinstance(other, self.__class__):
 			return DateDelta(other.time - self.time)
 		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
-			return DateDelta(other - self.time)
+			return self.__class__(other - self.time)
 		else:
 			raise CalendarError("Cannot subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
