@@ -26,7 +26,7 @@ class Format(Object):
 
 	def __init__(self, **kwargs):
 		Object.__init__(self,**kwargs)
-
+		self.military_time = False
 	# End __init__
 
 
@@ -69,15 +69,30 @@ class VerboseFormat(Format):
 		minute = self.number_as_string(time.minute)
 		second = self.number_as_string(time.second)
 		year = self.number_as_string(time.year)
-		return day + ' ' + month + ' ' + mday + ' ' + hour + ':' + minute + ':' + second + ' ' + year
+		if not self.military_time:
+			if time.hour > 12:
+				hour = self.number_as_string(time.hour - 12)
+				ampm = 'PM'
+			else:
+				ampm = 'AM'
+		else:
+			ampm = None
+
+		result = day + ' ' + month + ' ' + mday + ' ' + hour + ':' + minute + ':' + second
+
+		if ampm:
+			result += ' ' + ampm
+		
+		return result + ' ' + year
+		
 	# End __call__
 	
 # End VerboseFormat
 
 
 
-class MonthDayYearWithSlashes(Format):
-	"""The MonthDayYearWithSlashes class."""
+class MonthDayYearWithSlashesFormat(Format):
+	"""The MonthDayYearWithSlashesFormat class."""
 
 	def __init__(self, **kwargs):
 		Format.__init__(self,**kwargs)
@@ -93,10 +108,10 @@ class MonthDayYearWithSlashes(Format):
 
 	# End __call__
 	
-# End MonthDayYearWithSlashes
+# End MonthDayYearWithSlashesFormat
 
 
-class MonthDayYearWithDashes(Format):
+class MonthDayYearWithDashesFormat(Format):
 	"""The MonthDayYearWithDashes class."""
 
 	def __init__(self, **kwargs):
@@ -114,10 +129,52 @@ class MonthDayYearWithDashes(Format):
 	# End __call__
 	
 
-# End MonthDayYearWithDashes
+# End MonthDayYearWithDashesFormat
 
 
-DAY = 3600 * 24
+class DateTimeFormat(Format):
+	"""The DateTimeFormat class."""
+
+	def __init__(self, **kwargs):
+		Format.__init__(self,**kwargs)
+
+	# End __init__
+	
+	
+	def __call__(self,time):
+		month = self.number_as_string(time.month)
+		day = self.number_as_string(time.day)
+		year = self.number_as_string(time.year)
+		hour = self.number_as_string(time.hour)
+		minute = self.number_as_string(time.minute)
+		second = self.number_as_string(time.second)
+
+		year = year[2:]
+
+		if not self.military_time:
+			if time.hour > 12:
+				hour = self.number_as_string(time.hour - 12)
+				ampm = 'PM'
+			else:
+				ampm = 'AM'
+		else:
+			ampm = None
+
+		result = month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second
+
+		if ampm:
+			result += ' ' + ampm
+		
+		return result
+
+	# End __call__
+	
+
+# End DateTimeFormat
+
+
+HOUR = 3600
+DAY = HOUR * 24
 YEAR = DAY * 365
 LEAPYEAR = DAY * 366
 
