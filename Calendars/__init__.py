@@ -173,10 +173,353 @@ class DateTimeFormat(Format):
 # End DateTimeFormat
 
 
+MINUTE = 60
 HOUR = 3600
 DAY = HOUR * 24
 YEAR = DAY * 365
 LEAPYEAR = DAY * 366
+
+
+class DateDelta(Object):
+	"""The DateDelta class."""
+
+	def __init__(self, seconds = None, **kwargs):
+		Object.__init__(self,**kwargs)
+		if seconds:
+			if seconds >= 0:
+				self.seconds = seconds
+			else:
+				self.seconds = 0
+		else:
+			self.seconds = 0
+
+	# End __init__
+
+
+	def __int__(self):
+		return int(self.seconds)
+
+	# End __int__
+
+
+	def __long__(self):
+		return long(self.seconds)
+
+	# End __long__
+	
+	
+	def __float__(self):
+		return float(self.seconds)
+
+	# End __float__
+	
+	
+	def __complex__(self):
+		return complex(self.seconds)
+
+	# End __complex__
+	
+	
+	def __hex__(self):
+		return hex(self.seconds)
+
+	# End __hex__
+	
+	def __oct__(self):
+		return oct(self.seconds)
+
+	# End __oct__
+
+
+	def __lt__(self,other):
+		if isinstance(other,self.__class__):
+			return self.seconds < other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.seconds < other
+		else:
+			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __lt__
+
+
+	def __le__(self,other):
+		if isinstance(other,self.__class__):
+			return self.seconds <= other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.seconds <= other
+		else:
+			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __le__
+	
+
+	def __gt__(self,other):
+		if isinstance(other,self.__class__):
+			return self.seconds > other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.seconds > other
+		else:
+			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __gt__
+
+
+	def __ge__(self,other):
+		if isinstance(other,self.__class__):
+			return self.seconds >= other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.seconds >= other
+		else:
+			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __ge__
+
+
+	def __eq__(self,other):
+		if isinstance(other,self.__class__):
+			return self.seconds == other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.seconds == other
+		else:
+			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __eq__
+
+
+	def __ne__(self,other):
+		if isinstance(other,self.__class__):
+			return self.seconds != other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.seconds != other
+		else:
+			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __ne__
+
+
+	def __sub__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(self.seconds - other.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(self.seconds - other)
+		else:
+			raise CalendarError("Unable to subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __sub__
+
+	
+	def __rsub__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(other.seconds - self.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(other - self.seconds)
+		else:
+			raise CalendarError("Unable to subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __rsub__
+
+
+	def __isub__(self,other):
+		if isinstance(other,self.__class__):
+			self.seconds -= other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			self.seconds -= other
+		else:
+			raise CalendarError("Unable to subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
+		
+		return self
+
+	# End __isub__
+
+
+	def __add__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(self.seconds + other.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(self.seconds + other)
+		else:
+			raise CalendarError("Unable to add objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __add__
+	
+
+	def __radd__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(self.seconds + other.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(self.seconds + other)
+		else:
+			raise CalendarError("Unable to add objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __radd__
+	
+
+	def __iadd__(self,other):
+		if isinstance(other,self.__class__):
+			self.seconds += other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			self.seconds += other
+		else:
+			raise CalendarError("Unable to add objects of type %s and %s" % (self.__class__.__name__, type(other)))
+		
+		return self
+
+	# End __iadd__
+	
+
+	def __mul__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(self.seconds * other.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(self.seconds * other)
+		else:
+			raise CalendarError("Unable to multiply objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __mul__
+	
+	
+	def __rmul__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(self.seconds * other.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(self.seconds * other)
+		else:
+			raise CalendarError("Unable to multiply objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __rmul__
+	
+
+	def __imul__(self,other):
+		if isinstance(other,self.__class__):
+			self.seconds *= other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			self.seconds *= other
+		else:
+			raise CalendarError("Unable to multiply objects of type %s and %s" % (self.__class__.__name__, type(other)))
+		
+		return self
+
+	# End __imul__
+
+
+	def __div__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(self.seconds / other.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(self.seconds / other)
+		else:
+			raise CalendarError("Unable to divide objects of type %s and %s" % (self.__class__.__name__, type(other)))
+		
+	# End __div__
+
+
+	def __rdiv__(self,other):
+		if isinstance(other,self.__class__):
+			return self.__class__(other.seconds / self.seconds)
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			return self.__class__(other / self.seconds)
+		else:
+			raise CalendarError("Unable to divide objects of type %s and %s" % (self.__class__.__name__, type(other)))
+
+	# End __rdiv__
+
+	
+	def __idiv__(self,other):
+		if isinstance(other,self.__class__):
+			self.seconds /= other.seconds
+		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
+			self.seconds /= other
+		else:
+			raise CalendarError("Unable to divide objects of type %s and %s" % (self.__class__.__name__, type(other)))
+		
+		return self
+
+	# End __idiv__
+	
+
+	def __yearstring(self,years):
+		if years > 1 or years == 0:
+			return str(years) + " Years"
+		else:
+			return str(years) + " Year"
+
+	# End __yearstring
+	
+	
+	def __daystring(self,days):
+		if days > 1 or days == 0:
+			return str(days) + " Days"
+		else:
+			return str(days) + " Day"
+
+	# End __daystring
+	
+	
+	def __hourstring(self,hours):
+		if hours > 1 or hours == 0:
+			return str(hours) + " Hours"
+		else:
+			return str(hours) + " Hour"
+
+	# End __hourstring
+	
+	
+	def __minutestring(self,minutes):
+		if minutes > 1 or minutes == 0:
+			return str(minutes) + " Minutes"
+		else:
+			return str(minutes) + " Minute"
+
+	# End __minutestring
+	
+	
+	def __secondstring(self,seconds):
+		if seconds > 1 or seconds == 0:
+			return str(seconds) + " Seconds"
+		else:
+			return str(seconds) + " Second"
+
+	# End __secondstring
+	
+	
+	
+	
+
+	def __str__(self):
+		years = int(self.seconds / YEAR)
+		days = int((self.seconds % YEAR) / DAY)
+		hours = int(((self.seconds % YEAR) % DAY) / HOUR)
+		minutes = int((((self.seconds % YEAR) % DAY) % HOUR) / MINUTE)
+		seconds = int((((self.seconds % YEAR) % DAY) % HOUR) % MINUTE)
+
+		result = ""
+		if years > 0:			
+			return "%s %s %s %s %s" % (self.__yearstring(years), self.__daystring(days), \
+				self.__hourstring(hours), self.__minutestring(minutes), self.__secondstring(seconds))
+		elif days > 0:
+			return "%s %s %s %s" % (self.__daystring(days), self.__hourstring(hours), self.__minutestring(minutes), \
+				self.__secondstring(seconds))
+		elif hours > 0:
+			return "%s %s %s" % (self.__hourstring(hours), self.__minutestring(minutes), self.__secondstring(seconds))
+		elif minutes > 0:
+			return "%s %s" % (self.__minutestring(minutes), self.__secondstring(seconds))
+		else:
+			return "%s" % (self.__secondstring(seconds))
+	# End __str__
+	
+	
+	def __repr__(self):
+		result = self.__class__.__name__ + "("
+		if self.seconds != 0:
+			result += str(self.seconds)
+		return result + ")"
+
+	# End __repr__
+	
+	
+
+# End DateDelta
+
 
 
 class Date(Object):
@@ -481,15 +824,17 @@ class Date(Object):
 			self.time += other
 		else:
 			raise CalendarError("Cannot add objects of type %s and %s" % (self.__class__.__name__, type(other)))
+		
+		return self
 
 	# End __iadd__
 
 	
 	def __sub__(self,other):
 		if isinstance(other, self.__class__):
-			return self.__class__(self.time - other.time)
+			return DateDelta(self.time - other.time)
 		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
-			return self.__class__(self.time - other)
+			return DateDelta(self.time - other)
 		else:
 			raise CalendarError("Cannot subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
@@ -498,9 +843,9 @@ class Date(Object):
 
 	def __rsub__(self,other):
 		if isinstance(other, self.__class__):
-			return self.__class__(other.time - self.time)
+			return DateDelta(other.time - self.time)
 		elif type(other) == types.IntType or type(other) == types.LongType or type(other) == types.FloatType:
-			return self.__class__(other - self.time)
+			return DateDelta(other - self.time)
 		else:
 			raise CalendarError("Cannot subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
@@ -514,6 +859,8 @@ class Date(Object):
 			self.time -= other
 		else:
 			raise CalendarError("Cannot subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
+		
+		return self
 
 	# End __isub__
 	
