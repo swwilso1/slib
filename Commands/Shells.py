@@ -18,7 +18,7 @@ class Shell(CommandBase):
 			self.raise_error_on_shell_error = True
 	# End __init__
 
-	def execute(self,command):
+	def execute(self,command,return_value=0):
 		CommandBase.execute(self,command)
 
 		if self.dry_run:
@@ -37,14 +37,14 @@ class Shell(CommandBase):
 			data = process.stdout.read()
 			errors = process.stderr.read()
 
-			if self.exit_code != 0:
+			if self.exit_code != return_value:
 				raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, errors))
 			
 			return data
 		else:
 			errors = process.stderr.read()
 			
-			if self.exit_code != 0:
+			if self.exit_code != return_value:
 				raise CommandError("'%s' failed with error %d" % (str(command), self.exit_code))
 			
 			return None
