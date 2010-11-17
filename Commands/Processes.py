@@ -66,13 +66,13 @@ class ProcessBaseObject(Object):
 
 
 	def wait(self):
-		pass
+		return 0
 
 	# End wait
 	
 	
 	def poll(self):
-		pass
+		return 0
 
 	# End poll
 	
@@ -173,7 +173,7 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 		# End __init__
 
 
-		def wait(self):
+		def wait(self):			
 			return self.__process.wait()
 
 		# End wait
@@ -244,7 +244,10 @@ else:
 
 
 		def poll(self):
-			return self.__process.poll()
+			result = self.__process.poll()
+			if result == -1:
+				return None
+			return result
 
 		# End poll
 
