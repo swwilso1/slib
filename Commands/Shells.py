@@ -34,7 +34,7 @@ class Shell(CommandBase):
 		self.exit_code = process.wait()
 
 		if process.stdout:
-			data = process.stdout.readlines()
+			data = process.stdout.read()
 			errors = process.stderr.read()
 
 			if self.exit_code != 0:
