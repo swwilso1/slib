@@ -1,8 +1,11 @@
 #! /usr/bin/env python
 
+import sys
+
+from slib.Objects import Object
 from slib.Commands import CommandBase, CommandError
-from os import system
-from commands import getstatusoutput
+from slib.Commands.Processes import Process, PIPE, STDOUT
+
 
 class Shell(CommandBase):
 	"""The Shell class."""
@@ -22,16 +25,28 @@ class Shell(CommandBase):
 			return
 		
 		if self.capture_output:
-			self.exit_code,o = getstatusoutput(str(command))
-			if self.raise_error_on_shell_error:
-				if self.exit_code != 0:
-					raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, o))
-			return o
+			capture_output = PIPE
 		else:
-			self.exit_code = system(str(command))
-			if self.raise_error_on_shell_error:
-				if self.exit_code != 0:
-					raise CommandError("'%s' failed with error %d" % (str(command), self.exit_code))
+			capture_output = None
+		
+		process = Process(str(command),stdout=capture_output, stderr=PIPE)
+		
+		self.exit_code = process.wait()
+
+		if process.stdout:
+			data = process.stdout.readlines()
+			errors = process.stderr.read()
+
+			if self.exit_code != 0:
+				raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, errors))
+			
+			return data
+		else:
+			errors = process.stderr.read()
+			
+			if self.exit_code != 0:
+				raise CommandError("'%s' failed with error %d" % (str(command), self.exit_code))
+			
 			return None
 
 	# End execute
