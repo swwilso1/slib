@@ -31,23 +31,23 @@ class Shell(CommandBase):
 		
 		process = Process(str(command),stdout=capture_output, stderr=PIPE)
 		
+		data = ""
+		errors = ""
+		while process.poll() == None:
+			if process.stdout:
+				data += process.stdout.read()
+			errors += process.stderr.read()
+			
 		self.exit_code = process.wait()
 
-		if process.stdout:
-			data = process.stdout.read()
-			errors = process.stderr.read()
+		if self.exit_code != return_value:
+			raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, errors))
+			
 
-			if self.exit_code != return_value:
-				raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, errors))
-			
-			return data
-		else:
-			errors = process.stderr.read()
-			
-			if self.exit_code != return_value:
-				raise CommandError("'%s' failed with error %d" % (str(command), self.exit_code))
-			
+		if len(data) == 0:
 			return None
+
+		return data
 
 	# End execute
 
