@@ -651,7 +651,7 @@ class CVSTree(SourceTreeBaseObject):
 	def switch_to_branch(self, branch):
 		if self.exists:
 			currentDirectory = os.getcwd()
-			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
+			os.chdir(self.local_path.fullpath + os.sep + self.__module)
 			command = "cvs update "
 			if str(branch) == "head":
 				command += "-A"
