@@ -29,7 +29,7 @@ class Shell(CommandBase):
 		else:
 			capture_output = None
 		
-		process = Process(str(command),stdout=capture_output, stderr=PIPE)
+		process = Process(str(command),stdout=capture_output, stderr=PIPE,shell=True)
 		
 		data,errors = process.communicate()
 			
