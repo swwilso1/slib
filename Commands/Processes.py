@@ -153,8 +153,14 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 		def __init__(self, args, **kwargs):
 			ProcessBaseObject.__init__(self,args,**kwargs)
 			
-			command = ProcessCommand(self.args)
-			self.args = command.process_form
+			self.shell = False
+			if kwargs.has_key("shell"):
+				if kwargs["shell"] == True:
+					self.shell = True
+				
+			else:
+				command = ProcessCommand(self.args)
+				self.args = command.process_form
 			
 			if self._stdout == PIPE:
 				stdout_value = subprocess.PIPE
@@ -168,7 +174,7 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 			else:
 				stderr_value = None
 			
-			self.__process = subprocess.Popen(self.args,stdin=subprocess.PIPE,stdout=stdout_value,stderr=stderr_value)
+			self.__process = subprocess.Popen(self.args,stdin=subprocess.PIPE,stdout=stdout_value,stderr=stderr_value,shell=self.shell)
 
 		# End __init__
 
@@ -224,12 +230,19 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 else:
 	# We have a version of Python < 2.6
 	import popen2
+	from shlex import split
 	
 	class Process(ProcessBaseObject):
 		"""The Process class."""
 
 		def __init__(self, args, **kwargs):
 			ProcessBaseObject.__init__(self, args, **kwargs)
+			
+			self.shell = True
+			if kwargs.has_key("shell"):
+				if kwargs["shell"] == False:
+					self.shell = False
+					self.args = split(self.args)
 			
 			if self._stderr == PIPE:
 				stderr_value = True
