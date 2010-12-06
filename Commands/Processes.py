@@ -184,6 +184,13 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 
 		# End poll
 
+		
+		def communicate(self, input=None):
+			return self.__process.communicate(input)
+
+		# End communicate
+		
+
 
 		@property
 		def stdout(self):
@@ -250,6 +257,20 @@ else:
 			return result
 
 		# End poll
+		
+		
+		def communicate(self, input=None):
+			stdoutdata = ""
+			stderrdata = ""
+			while self.__process.poll() == -1:
+				stdoutdata += self.__process.fromchild.read()
+				if self.__process.childerr != None:
+					stderrdata += self.__process.childerr.read()
+			
+			return (stdoutdata, stderrdata)
+
+		# End communicate
+		
 
 
 		@property
