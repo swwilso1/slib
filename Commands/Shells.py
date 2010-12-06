@@ -31,12 +31,7 @@ class Shell(CommandBase):
 		
 		process = Process(str(command),stdout=capture_output, stderr=PIPE)
 		
-		data = ""
-		errors = ""
-		while process.poll() == None:
-			if process.stdout:
-				data += process.stdout.read()
-			errors += process.stderr.read()
+		data,error = process.communicate()
 			
 		self.exit_code = process.wait()
 
