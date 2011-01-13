@@ -56,13 +56,15 @@ class GitTree(SourceTreeBaseObject):
 
 		self.local_path.remove()
 
+		orig_branch = self.branch
+
 		command = "git clone " + self.repository + " " + self.name
 
 		self.shell.execute(command)
 		
-		if self.branch != "master":
+		if orig_branch != "master" and orig_branch != None:
 			os.chdir(self.local_path.fullpath)
-			command = "git checkout -b " + self.branch + " origin/" + self.branch
+			command = "git checkout -b " + orig_branch + " origin/" + orig_branch
 			try:
 				self.shell.execute(command)
 			except CommandError, e:
