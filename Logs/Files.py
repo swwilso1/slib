@@ -14,12 +14,14 @@ class File(LogBase):
 	# End __init__
 
 	def open(self, file, mode):
-		self.logFile = open(file, mode)
+		if not Object.global_dry_run:
+			self.logFile = open(file, mode)
 
 	# End open
 
 	def close(self):
-		self.logFile.close()
+		if self.logFile:
+			self.logFile.close()
 
 	# End close
 	

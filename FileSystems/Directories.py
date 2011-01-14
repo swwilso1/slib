@@ -66,7 +66,13 @@ class Directory(FileSystemBaseObject):
 	@property
 	def files(self):
 		files = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
+
 		for entry in entries:
 			obj = FileSystemBaseObject(entry, self.fullpath)
 			if not obj.directory and \
@@ -80,7 +86,12 @@ class Directory(FileSystemBaseObject):
 	@property
 	def directories(self):
 		directories = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
 		for entry in entries:
 			obj = self.__getObjectAccordingToClass(entry,self.fullpath)
 			if obj.directory:
@@ -91,7 +102,12 @@ class Directory(FileSystemBaseObject):
 	@property
 	def characters(self):
 		specials = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
 		for entry in entries:
 			obj = self.__getObjectAccordingToClass(entry,self.fullpath)
 			if obj.characterSpecialDevice:
@@ -102,7 +118,12 @@ class Directory(FileSystemBaseObject):
 	@property
 	def blocks(self):
 		specials = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
 		for entry in entries:
 			obj = self.__getObjectAccordingToClass(entry,self.fullpath)
 			if obj.blockSpecialDevice:
@@ -113,7 +134,12 @@ class Directory(FileSystemBaseObject):
 	@property
 	def regulars(self):
 		regs = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
 		for entry in entries:
 			obj = self.__getObjectAccordingToClass(entry,self.fullpath)
 			if obj.regular:
@@ -124,7 +150,12 @@ class Directory(FileSystemBaseObject):
 	@property
 	def fifos(self):
 		specials = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
 		for entry in entries:
 			obj = self.__getObjectAccordingToClass(entry,self.fullpath)
 			if obj.fifo:
@@ -135,7 +166,12 @@ class Directory(FileSystemBaseObject):
 	@property
 	def links(self):
 		specials = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
 		for entry in entries:
 			obj = self.__getObjectAccordingToClass(entry,self.fullpath)
 			if obj.symbolicLink:
@@ -146,7 +182,12 @@ class Directory(FileSystemBaseObject):
 	@property
 	def sockets(self):
 		specials = []
-		entries = os.listdir(self.fullpath)
+		try:
+			entries = os.listdir(self.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+			entries = []
 		for entry in entries:
 			obj = self.__getObjectAccordingToClass(entry,self.fullpath)
 			if obj.socket:
@@ -231,7 +272,8 @@ class Directory(FileSystemBaseObject):
 
 	def create(self):
 		if not self.exists:
-			os.makedirs(self.fullpath)
+			if not Object.global_dry_run():
+				os.makedirs(self.fullpath)
 
 	# End create
 	

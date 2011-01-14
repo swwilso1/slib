@@ -601,7 +601,12 @@ class CVSTree(SourceTreeBaseObject):
 		self.local_path.parent.create()
 
 		currentDirectory = os.getcwd()
-		os.chdir(self.local_path.parent.fullpath)
+		
+		try:
+			os.chdir(self.local_path.parent.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
 
 		self.local_path.remove()
 
@@ -632,7 +637,12 @@ class CVSTree(SourceTreeBaseObject):
 	def update(self):
 		if self.exists:
 			currentDirectory = os.getcwd()
-			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
+
+			try:
+				os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
+			except OSError as e:
+				if not Object.global_dry_run:
+					raise e
 			command = "cvs update -dP"
 			self.shell.execute(command)
 			os.chdir(currentDirectory)
@@ -651,10 +661,16 @@ class CVSTree(SourceTreeBaseObject):
 	def switch_to_branch(self, branch):
 		if self.exists:
 			currentDirectory = os.getcwd()
-			if self.__name:
-				os.chdir(self.local_path.fullpath)
-			else:
-				os.chdir(self.local_path.fullpath + os.sep + self.__module)
+
+			try:
+				if self.__name:
+					os.chdir(self.local_path.fullpath)
+				else:
+					os.chdir(self.local_path.fullpath + os.sep + self.__module)
+			except OSError as e:
+				if not Object.global_dry_run:
+					raise e
+
 			command = "cvs update "
 			if str(branch) == "head":
 				command += "-A"

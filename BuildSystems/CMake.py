@@ -170,7 +170,7 @@ class CMakeSystem(BuildSystemBaseObject):
 
 
 	def configure(self):
-		if not self.source_tree_directory.exists:
+		if not Object.global_dry_run and not self.source_tree_directory.exists:
 			raise BuildSystemError("Source tree %s does not exist" % (self.source_tree_directory.fullpath))
 		
 		shell = Shell()
@@ -180,10 +180,15 @@ class CMakeSystem(BuildSystemBaseObject):
 		self.working_directory.create()
 		
 		currentDirectory = os.getcwd()
-		os.chdir(self.working_directory.fullpath)
+
+		try:
+			os.chdir(self.working_directory.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
 		
 		o = shell.execute(str(self))
-		if shell.exit_code != 0:
+		if shell.exit_code != 0 and not Object.global_dry_run:
 			raise BuildSystemError("Error while configuring build system: " + o)
 		
 
@@ -211,9 +216,13 @@ class CMakeSystem(BuildSystemBaseObject):
 			shell.raise_error_on_shell_error = False
 
 			currentDirectory = os.getcwd()
-			os.chdir(self.working_directory.fullpath)
-			
 
+			try:
+				os.chdir(self.working_directory.fullpath)
+			except OSError as e:
+				if not Object.global_dry_run:
+					raise e
+			
 			command = self.build_command
 
 			if kwargs.has_key('processors'):
@@ -225,7 +234,7 @@ class CMakeSystem(BuildSystemBaseObject):
 			if target:
 				command += " " + str(target)
 			o = shell.execute(command)
-			if shell.exit_code != 0:
+			if shell.exit_code != 0 and not Object.global_dry_run:
 				raise BuildSystemError("Error while building: " + o)
 			
 			os.chdir(currentDirectory)
@@ -238,7 +247,12 @@ class CMakeSystem(BuildSystemBaseObject):
 			shell = Shell()
 			shell.capture_output = True
 			currentDirectory = os.getcwd()
-			os.chdir(self.working_directory.fullpath)
+			
+			try:
+				os.chdir(self.working_directory.fullpath)
+			except OSError as e:
+				if not Object.global_dry_run:
+					raise e
 
 			command = self.build_command
 			
@@ -254,7 +268,12 @@ class CMakeSystem(BuildSystemBaseObject):
 			shell = Shell()
 			shell.capture_output = True
 			currentDirectory = os.getcwd()
-			os.chdir(self.working_directory.fullpath)
+			
+			try:
+				os.chdir(self.working_directory.fullpath)
+			except OSError as e:
+				if not Object.global_dry_run:
+					raise e
 			
 			command = self.build_command
 			

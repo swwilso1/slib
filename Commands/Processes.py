@@ -174,25 +174,37 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 			else:
 				stderr_value = None
 			
-			self.__process = subprocess.Popen(self.args,stdin=subprocess.PIPE,stdout=stdout_value,stderr=stderr_value,shell=self.shell)
+			if not Object.global_dry_run:
+				self.__process = subprocess.Popen(self.args,stdin=subprocess.PIPE,stdout=stdout_value,stderr=stderr_value,shell=self.shell)
+			else:
+				self.__process = None
 
 		# End __init__
 
 
 		def wait(self):			
-			return self.__process.wait()
+			if self.__process:
+				return self.__process.wait()
+			
+			return 0
 
 		# End wait
 
 
 		def poll(self):
-			return self.__process.poll()
+			if self.__process:
+				return self.__process.poll()
+			
+			return None
 
 		# End poll
 
 		
 		def communicate(self, input=None):
-			return self.__process.communicate(input)
+			if self.__process:
+				return self.__process.communicate(input)
+			
+			return ("","")
 
 		# End communicate
 		
@@ -200,28 +212,40 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 
 		@property
 		def stdout(self):
-			return self.__process.stdout
+			if self.__process:
+				return self.__process.stdout
+			
+			return None
 
 		# End stdout
 
 
 		@property
 		def stderr(self):
-			return self.__process.stderr
+			if self.__process:
+				return self.__process.stderr
+			
+			return None
 
 		# End stderr
 
 
 		@property
 		def stdin(self):
-			return self.__process.stdin
+			if self.__process:
+				return self.__process.stdin
+
+			return None
 
 		# End stdin
 
 
 		@property
 		def pid(self):
-			return self.__process.pid
+			if self.__process:
+				return self.__process.pid
+			
+			return 0
 
 		# End pid
 		
@@ -252,35 +276,47 @@ else:
 			command = ProcessCommand(self.args)
 			self.args = command.process_form
 			
-			self.__process = popen2.Popen3(self.args, capturestderr=stderr_value)
+			if not Object.global_dry_run:
+				self.__process = popen2.Popen3(self.args, capturestderr=stderr_value)
+			else:
+				self.__process = None
 
 		# End __init__
 
 
 		def wait(self):
-			return self.__process.wait()
+			if self.__process:
+				return self.__process.wait()
+			
+			return 0
 
 		# End wait
 
 
 		def poll(self):
-			result = self.__process.poll()
-			if result == -1:
-				return None
-			return result
+			if self.__process:
+				result = self.__process.poll()
+				if result == -1:
+					return None
+				return result
+
+			return None
 
 		# End poll
 		
 		
 		def communicate(self, input=None):
-			stdoutdata = ""
-			stderrdata = ""
-			while self.__process.poll() == -1:
-				stdoutdata += self.__process.fromchild.read()
-				if self.__process.childerr != None:
-					stderrdata += self.__process.childerr.read()
+			if self.__process:
+				stdoutdata = ""
+				stderrdata = ""
+				while self.__process.poll() == -1:
+					stdoutdata += self.__process.fromchild.read()
+					if self.__process.childerr != None:
+						stderrdata += self.__process.childerr.read()
 			
-			return (stdoutdata, stderrdata)
+				return (stdoutdata, stderrdata)
+			
+			return ("", "")
 
 		# End communicate
 		
@@ -288,28 +324,40 @@ else:
 
 		@property
 		def stdout(self):
-			return self.__process.fromchild
+			if self.__process:
+				return self.__process.fromchild
+
+			return None
 
 		# End stdout
 
 
 		@property
 		def stderr(self):
-			return self.__process.childerr
+			if self.__process:
+				return self.__process.childerr
+			
+			return None
 
 		# End stderr
 
 
 		@property
 		def stdin(self):
-			return self.__process.tochild
+			if self.__process:
+				return self.__process.tochild
+			
+			return None
 
 		# End stdin
 
 
 		@property
 		def pid(self):
-			return self.__process.pid
+			if self.__process:
+				return self.__process.pid
+			
+			return 0
 
 		# End pid
 

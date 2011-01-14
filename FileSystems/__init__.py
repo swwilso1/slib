@@ -82,62 +82,82 @@ class FileSystemBaseObject(Object):
 
 	@property
 	def st_mode(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_mode
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_mode
+		return 0
 	# End st_mode
 	
 	@property
 	def st_ino(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_ino
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_ino
+		return 0
 	# End st_ino
 
 	@property
 	def st_dev(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_dev
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_dev
+		return 0
 	# End st_dev
 	
 	@property
 	def st_nlink(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_nlink
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_nlink
+		return 0
 	# End st_nlink
 
 	@property
 	def st_uid(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_uid
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_uid
+		return 0
 	# End st_uid
 
 	@property
 	def st_gid(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_gid
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_gid
+		return 0
 	# End st_gid
 
 	@property
 	def st_size(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_size
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_size
+		return 0
 	# End st_size
 
 	@property
 	def st_atime(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_atime
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_atime
+		return 0
 	# End st_atime
 
 	@property
 	def st_mtime(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_mtime
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_mtime
+		return 0
 	# End st_ino
 
 	@property
 	def st_ctime(self):
-		fsdata = os.stat(self.fullpath)
-		return fsdata.st_ctime
+		if not Object.global_dry_run:
+			fsdata = os.stat(self.fullpath)
+			return fsdata.st_ctime
+		return 0
 	# End st_ctime
 
 	@property

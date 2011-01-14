@@ -52,7 +52,12 @@ class GitTree(SourceTreeBaseObject):
 		self.local_path.parent.create()
 
 		currentDirectory = os.getcwd()
-		os.chdir(self.local_path.parent.fullpath)
+
+		try:
+			os.chdir(self.local_path.parent.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				return e
 
 		self.local_path.remove()
 
@@ -63,7 +68,11 @@ class GitTree(SourceTreeBaseObject):
 		self.shell.execute(command)
 		
 		if orig_branch != "master" and orig_branch != None:
-			os.chdir(self.local_path.fullpath)
+			try:
+				os.chdir(self.local_path.fullpath)
+			except OSError as e:
+				if not Object.global_dry_run:
+					return e
 			command = "git checkout -b " + orig_branch + " origin/" + orig_branch
 			try:
 				self.shell.execute(command)
