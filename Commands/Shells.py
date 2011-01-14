@@ -21,7 +21,7 @@ class Shell(CommandBase):
 	def execute(self,command,return_value=0):
 		CommandBase.execute(self,command)
 
-		if self.dry_run:
+		if self.dry_run or CommandBase.global_dry_run:
 			return
 		
 		if self.capture_output:
@@ -45,7 +45,7 @@ class Shell(CommandBase):
 				
 		return data
 
-	# End execute
+	# End execute	
 
 
 # End Shell

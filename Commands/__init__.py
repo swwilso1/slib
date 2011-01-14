@@ -18,6 +18,8 @@ class CommandError(Error):
 class CommandBase(Object):
 	"""The CommandBase class."""
 
+	global_dry_run = False
+
 	def __init__(self, **kwargs):
 		Object.__init__(self, **kwargs)
 
@@ -43,6 +45,12 @@ class CommandBase(Object):
 			self.log_object(command)
 		return ""
 	# End execute
+
+
+	def enableGlobalDryRun(self):
+		CommandBase.global_dry_run = True
+
+	# End enableGlobalDryRun
 
 
 	def __repr__(self):
