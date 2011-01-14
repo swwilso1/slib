@@ -2,6 +2,7 @@
 
 import os
 import re
+from slib.Objects import Object
 from slib.Commands import CommandError
 from slib.SourceTrees import SourceTreeBaseObject, SourceTreeError
 from slib.FileSystems.Directories import Directory

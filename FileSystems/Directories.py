@@ -2,6 +2,7 @@
 
 import os
 import shutil
+from slib.Objects import Object
 from slib.FileSystems import FileSystemBaseObject
 from BlockDevices import BlockDevice
 from CharacterDevices import CharacterDevice

@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+from slib.Objects import Object
 from slib.FileSystems import FileSystemBaseObject
 
 class CharacterDevice(FileSystemBaseObject):

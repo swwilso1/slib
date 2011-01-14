@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+from slib.Objects import Object
 from slib.Logs import LogBase
 from slib.Calendars import Date
 from slib.Calendars import DATE_TIME_FORMAT
