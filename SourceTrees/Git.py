@@ -55,6 +55,8 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.parent.fullpath)
 			os.chdir(self.local_path.parent.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -70,6 +72,8 @@ class GitTree(SourceTreeBaseObject):
 		
 		if orig_branch != "master" and orig_branch != None:
 			try:
+				if Object.log_object and Object.global_dry_run:
+					Object.log_object.log("cd " + self.local_path.fullpath)
 				os.chdir(self.local_path.fullpath)
 			except OSError as e:
 				if not Object.global_dry_run:
@@ -94,6 +98,8 @@ class GitTree(SourceTreeBaseObject):
 	def update(self):
 		if self.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 			command = "git pull origin"
 			self.shell.execute(command)
@@ -105,6 +111,8 @@ class GitTree(SourceTreeBaseObject):
 	def switch_to_branch(self,branch):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 
 			# First try just checkout out the branch:
@@ -125,6 +133,8 @@ class GitTree(SourceTreeBaseObject):
 	def make_new_branch(self,branch):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch " + str(branch)
@@ -137,6 +147,8 @@ class GitTree(SourceTreeBaseObject):
 	def make_new_branch_and_switch(self, branch):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git checkout -b " + str(branch)
@@ -161,6 +173,8 @@ class GitTree(SourceTreeBaseObject):
 	def branches(self):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch -a"
@@ -179,6 +193,8 @@ class GitTree(SourceTreeBaseObject):
 	def branch(self):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch"
@@ -197,6 +213,8 @@ class GitTree(SourceTreeBaseObject):
 	def make_new_branch_from_remote(self,branch,remote):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git branch " + str(branch) + " " + str(remote) + "/" + str(branch)
@@ -209,6 +227,8 @@ class GitTree(SourceTreeBaseObject):
 	def make_new_branch_from_remote_and_switch(self,branch,remote="origin"):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 			
 			command = "git checkout -b " + str(branch) + " " + str(remote) + "/" + str(branch)
@@ -223,6 +243,8 @@ class GitTree(SourceTreeBaseObject):
 	def tags(self):
 		if self.local_path.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		
 			command = "git tag"

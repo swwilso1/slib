@@ -345,6 +345,8 @@ class Directory(FileSystemBaseObject):
 	def make_current_directory(self):
 		current_directory = os.getcwd()
 		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.fullpath)
 			os.chdir(self.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:

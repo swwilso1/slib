@@ -182,6 +182,8 @@ class CMakeSystem(BuildSystemBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.working_directory.fullpath)
 			os.chdir(self.working_directory.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -222,6 +224,8 @@ class CMakeSystem(BuildSystemBaseObject):
 			currentDirectory = os.getcwd()
 
 			try:
+				if Object.log_object and Object.global_dry_run:
+					Object.log_object.log("cd " + self.working_directory.fullpath)
 				os.chdir(self.working_directory.fullpath)
 			except OSError as e:
 				if not Object.global_dry_run:
@@ -253,6 +257,8 @@ class CMakeSystem(BuildSystemBaseObject):
 			currentDirectory = os.getcwd()
 			
 			try:
+				if Object.log_object and Object.global_dry_run:
+					Object.log_object.log("cd " + self.working_directory.fullpath)
 				os.chdir(self.working_directory.fullpath)
 			except OSError as e:
 				if not Object.global_dry_run:
@@ -274,6 +280,8 @@ class CMakeSystem(BuildSystemBaseObject):
 			currentDirectory = os.getcwd()
 			
 			try:
+				if Object.log_object and Object.global_dry_run:
+					Object.log_object.log("cd " + self.working_directory.fullpath)
 				os.chdir(self.working_directory.fullpath)
 			except OSError as e:
 				if not Object.global_dry_run:

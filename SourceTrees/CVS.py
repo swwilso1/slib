@@ -603,6 +603,8 @@ class CVSTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 		
 		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.parent.fullpath)
 			os.chdir(self.local_path.parent.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -639,6 +641,8 @@ class CVSTree(SourceTreeBaseObject):
 			currentDirectory = os.getcwd()
 
 			try:
+				if Object.log_object and Object.global_dry_run:
+					Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
 				os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
 			except OSError as e:
 				if not Object.global_dry_run:
@@ -664,8 +668,12 @@ class CVSTree(SourceTreeBaseObject):
 
 			try:
 				if self.__name:
+					if Object.log_object and Object.global_dry_run:
+						Object.log_object.log("cd " + self.local_path.fullpath)
 					os.chdir(self.local_path.fullpath)
 				else:
+					if Object.log_object and Object.global_dry_run:
+						Object.log_object.log("cd " + self.local_path.fullpath + os.sep + self.__module)
 					os.chdir(self.local_path.fullpath + os.sep + self.__module)
 			except OSError as e:
 				if not Object.global_dry_run:
@@ -685,6 +693,8 @@ class CVSTree(SourceTreeBaseObject):
 	def make_new_branch(self,branch):
 		if self.exists:
 			currentDirectory = os.getcwd()
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
 			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
 			command = "cvs tag -b " + str(branch)
 			self.shell.execute(command)
@@ -715,6 +725,8 @@ class CVSTree(SourceTreeBaseObject):
 			for entry in self.local_path.all_entries:
 				if not re.search(r'CVS', str(entry)) and not entry.type == DIRECTORY:
 					currentDirectory = os.getcwd()
+					if Object.log_object and Object.global_dry_run:
+						Object.log_object.log("cd " + entry.path)
 					os.chdir(entry.path)
 					shell.capture_output = True
 					o = shell.execute("cvs status -v " + entry.name)
