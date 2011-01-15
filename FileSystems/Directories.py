@@ -364,8 +364,12 @@ def MakeDirectoryAndRemovePreviousContents(name,clearDirectory=True):
 	if os.path.exists(name):
 		if not clearDirectory:
 			shutil.rmtree(name)
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("mkdir " + name)
 			os.mkdir(name)
 	else:
+		if Object.log_object and Object.global_dry_run:
+			Object.log_object.log("mkdir " + name)
 		os.mkdir(name)
 
 # End MakeDirectoryAndRemovePreviousContents
