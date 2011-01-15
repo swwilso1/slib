@@ -194,6 +194,10 @@ class CMakeSystem(BuildSystemBaseObject):
 
 		# Now try for make ProcessorCount
 		o = shell.execute(self.build_command + " ProcessorCount")
+
+		if Object.global_dry_run:
+			o = ""
+
 		if shell.exit_code == 0:
 			if re.search(r'ACTIVE_PROCESSORS', o):
 				lines = o.split("\n")
