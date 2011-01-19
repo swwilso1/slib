@@ -551,6 +551,12 @@ class CVSTree(SourceTreeBaseObject):
 		self.__name = name
 		self.__module = module
 		self.__branch = branch
+		
+		if kwargs.has_key("date"):
+			self.__date = kwargs["date"]
+		else:
+			self.__date = None
+
 	# End __init__
 
 	
@@ -595,7 +601,32 @@ class CVSTree(SourceTreeBaseObject):
 
 	# End local_path
 	
+	
+	@property
+	def date(self):
+		return self.__date
 
+	# End date
+	
+
+	@property
+	def checkout_command(self):
+		command = "cvs -d " + self.repository + " co"
+		
+		if self.__date:
+			command += " -D " + self.__date
+		
+		if self.__name:
+			command += " -d " + self.__name
+		
+		if self.branch:
+			command += " -r " + self.branch
+		
+		command += " " + self.__module
+
+		return command
+	# End checkout_command
+	
 
 	def checkout(self):
 		self.local_path.parent.create()
@@ -612,17 +643,7 @@ class CVSTree(SourceTreeBaseObject):
 
 		self.local_path.remove()
 
-		command = "cvs -d " + self.repository + " co"
-		
-		if self.__name:
-			command += " -d " + self.__name
-		
-		if self.branch:
-			command += " -r " + self.branch
-		
-		command += " " + self.__module
-
-		self.shell.execute(command)
+		self.shell.execute(self.checkout_command)
 
 		os.chdir(currentDirectory)
 
