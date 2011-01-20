@@ -40,8 +40,8 @@ class CommandBase(Object):
 
 
 	def execute(self,command):
-		if self.log_object:
-			self.log_object(command)
+		if Object.log_object:
+			Object.log_object(command)
 		return ""
 	# End execute
 
