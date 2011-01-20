@@ -216,82 +216,79 @@ class CMakeSystem(BuildSystemBaseObject):
 
 
 	def build(self,target=None,**kwargs):
-		if self.working_directory.exists:
-			shell = Shell()
-			shell.capture_output = True
-			shell.raise_error_on_shell_error = False
+		shell = Shell()
+		shell.capture_output = True
+		shell.raise_error_on_shell_error = False
 
-			currentDirectory = os.getcwd()
+		currentDirectory = os.getcwd()
 
-			try:
-				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.working_directory.fullpath)
-				os.chdir(self.working_directory.fullpath)
-			except OSError as e:
-				if not Object.global_dry_run:
-					raise e
-			
-			command = self.build_command
+		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.working_directory.fullpath)
+			os.chdir(self.working_directory.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+		
+		command = self.build_command
 
-			if kwargs.has_key('processors'):
-				if kwargs['processors']:
-					command += " -j " + str(kwargs['processors'])
-			elif self.active_processors:
-				command += " -j " + self.active_processors
+		if kwargs.has_key('processors'):
+			if kwargs['processors']:
+				command += " -j " + str(kwargs['processors'])
+		elif self.active_processors:
+			command += " -j " + self.active_processors
 
-			if target:
-				command += " " + str(target)
-			o = shell.execute(command)
-			if shell.exit_code != 0 and not Object.global_dry_run:
-				raise BuildSystemError("Error while building: " + o)
-			
-			os.chdir(currentDirectory)
+		if target:
+			command += " " + str(target)
+		o = shell.execute(command)
+		if shell.exit_code != 0 and not Object.global_dry_run:
+			raise BuildSystemError("Error while building: " + o)
+		
+		os.chdir(currentDirectory)
 
 	# End build
 
 
 	def install(self):
-		if self.working_directory.exists:
-			shell = Shell()
-			shell.capture_output = True
-			currentDirectory = os.getcwd()
-			
-			try:
-				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.working_directory.fullpath)
-				os.chdir(self.working_directory.fullpath)
-			except OSError as e:
-				if not Object.global_dry_run:
-					raise e
+		shell = Shell()
+		shell.capture_output = True
+		currentDirectory = os.getcwd()
+		
+		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.working_directory.fullpath)
+			os.chdir(self.working_directory.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
 
-			command = self.build_command
-			
-			shell.execute(command + " install/fast")
-			
-			os.chdir(currentDirectory)
+		command = self.build_command
+		
+		shell.execute(command + " install/fast")
+		
+		os.chdir(currentDirectory)
 
 	# End install
 	
 	
 	def package(self):
-		if self.working_directory.exists:
-			shell = Shell()
-			shell.capture_output = True
-			currentDirectory = os.getcwd()
-			
-			try:
-				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.working_directory.fullpath)
-				os.chdir(self.working_directory.fullpath)
-			except OSError as e:
-				if not Object.global_dry_run:
-					raise e
-			
-			command = self.build_command
-			
-			shell.execute(command + " package")
-			
-			os.chdir(currentDirectory)
+		shell = Shell()
+		shell.capture_output = True
+		currentDirectory = os.getcwd()
+		
+		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.working_directory.fullpath)
+			os.chdir(self.working_directory.fullpath)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+		
+		command = self.build_command
+		
+		shell.execute(command + " package")
+		
+		os.chdir(currentDirectory)
 
 	# End package
 
