@@ -40,9 +40,9 @@ class GitTree(SourceTreeBaseObject):
 	@property
 	def local_path(self):
 		if self.path:
-			directory = Directory(self.name, self.path)
+			directory = Directory(self.path + os.sep + self.name)
 		else:
-			directory = Directory(self.name, ".")
+			directory = Directory(self.name)
 
 		return directory
 

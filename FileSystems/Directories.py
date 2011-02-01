@@ -16,8 +16,8 @@ from types import *
 class Directory(FileSystemBaseObject):
 	"""The Directory class."""
 
-	def __init__(self, name, path=None, **kwargs):
-		FileSystemBaseObject.__init__(self, name, path, **kwargs)
+	def __init__(self, name, **kwargs):
+		FileSystemBaseObject.__init__(self, name, **kwargs)
 
 	# End __init__
 

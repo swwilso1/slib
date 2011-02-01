@@ -49,19 +49,16 @@ NO_TYPE = 99
 class FileSystemBaseObject(Object):
 	"""The FileSystemBaseObject class."""
 	
-	def __init__(self, name, path=None, **kwargs):
+	def __init__(self, name, **kwargs):
 		Object.__init__(self, **kwargs)
 		if name.count(os.path.sep) > 0:
 			directory = os.path.dirname(name)
 			basename = os.path.basename(name)
 			self.name = basename
-			if path:
-				self._path = directory + os.path.sep + path
-			else:
-				self._path = directory
+			self._path = directory
 		else:
 			self.name = name
-			self._path = path
+			self._path = None
 	# End __init__
 
 	@property
@@ -360,10 +357,7 @@ class FileSystemBaseObject(Object):
 	# End __str__
 	
 	def __repr__(self):
-		if self.path != ".":
-			return self.__class__.__name__ + "(" + self.name + "," + self.path + ")"
-		else:
-			return self.__class__.__name__ + "(" + self.name + ")"
+		return self.__class__.__name__ + "(" + self.path + os.sep + self.name + ")"
 	# End __repr__
 
 # End FileSystemBaseObject
