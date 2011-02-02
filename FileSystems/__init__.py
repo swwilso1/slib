@@ -5,6 +5,7 @@ import os
 import re
 import time
 import stat
+import types
 from slib.Objects import Object
 from slib.Errors import Error
 from slib.Commands.Shells import Shell
@@ -51,13 +52,14 @@ class FileSystemBaseObject(Object):
 	
 	def __init__(self, name, **kwargs):
 		Object.__init__(self, **kwargs)
-		if name.count(os.path.sep) > 0:
-			directory = os.path.dirname(name)
-			basename = os.path.basename(name)
+		strname = str(name)
+		if strname.count(os.path.sep) > 0:
+			directory = os.path.dirname(strname)
+			basename = os.path.basename(strname)
 			self.name = basename
 			self._path = directory
 		else:
-			self.name = name
+			self.name = strname
 			self._path = None
 	# End __init__
 
@@ -343,6 +345,19 @@ class FileSystemBaseObject(Object):
 		return False
 	# End ContentsDifferentQ
 	
+
+	def __add__(self, other):
+		return self.__class__(self.fullpath + os.sep + str(other))
+
+	# End __add__
+	
+	
+	def __radd__(self, other):
+		return self.__class__(str(other) + os.sep + self.fullpath)
+
+	# End __radd__
+	
+
 	def __eq__(self, other):
 		if not type(self) == type(other):
 			return False

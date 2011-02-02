@@ -18,10 +18,10 @@ class Directory(FileSystemBaseObject):
 	"""The Directory class."""
 
 	def __init__(self, name, **kwargs):
-		dirname = FindFullDirectory(name)
+		dirname = str(name)
 		if kwargs.has_key('autofind'):
-			if not kwargs['autofind']:
-				dirname = name
+			if kwargs['autofind']:
+				dirname = FindFullDirectory(dirname)
 		FileSystemBaseObject.__init__(self, dirname, **kwargs)
 
 	# End __init__
