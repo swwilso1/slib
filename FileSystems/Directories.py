@@ -35,21 +35,21 @@ class Directory(FileSystemBaseObject):
 	
 
 	def __getObjectAccordingToClass(self,name,path):
-		e = FileSystemBaseObject(name, self.fullpath)
+		e = FileSystemBaseObject(self.fullpath + os.sep + name)
 		if e.directory:
-			obj = Directory(name,self.fullpath)
+			obj = Directory(self.fullpath + os.sep + name)
 		elif e.characterSpecialDevice:
-			obj = CharacterDevice(name,self.fullpath)
+			obj = CharacterDevice(self.fullpath + os.sep + name)
 		elif e.blockSpecialDevice:
-			obj = BlockDevice(name,self.fullpath)
+			obj = BlockDevice(self.fullpath + os.sep + name)
 		elif e.regular:
-			obj = File(name,self.fullpath)
+			obj = File(self.fullpath + os.sep + name)
 		elif e.fifo:
-			obj = Fifo(name,self.fullpath)
+			obj = Fifo(self.fullpath + os.sep + name)
 		elif e.symbolicLink:
-			obj = SymbolicLink(name,self.fullpath)
+			obj = SymbolicLink(self.fullpath + os.sep + name)
 		elif e.socket:
-			obj = Socket(name,self.fullpath)
+			obj = Socket(self.fullpath + os.sep + name)
 		else:
 			obj = e
 		return obj
@@ -80,7 +80,7 @@ class Directory(FileSystemBaseObject):
 			entries = []
 
 		for entry in entries:
-			obj = FileSystemBaseObject(entry, self.fullpath)
+			obj = FileSystemBaseObject(self.fullpath + os.sep + entry)
 			if not obj.directory and \
 			   not obj.socket and \
 			   not obj.symbolicLink and \
@@ -358,7 +358,7 @@ class Directory(FileSystemBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		return current_directory
+		return Directory(current_directory)
 
 	# End make_current_directory
 	
