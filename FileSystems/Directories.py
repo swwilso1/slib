@@ -4,6 +4,7 @@ import os
 import shutil
 from slib.Objects import Object
 from slib.FileSystems import FileSystemBaseObject
+from slib.FileSystems import FindFullDirectory
 from BlockDevices import BlockDevice
 from CharacterDevices import CharacterDevice
 from Fifos import Fifo
@@ -17,7 +18,11 @@ class Directory(FileSystemBaseObject):
 	"""The Directory class."""
 
 	def __init__(self, name, **kwargs):
-		FileSystemBaseObject.__init__(self, name, **kwargs)
+		dirname = FindFullDirectory(name)
+		if kwargs.has_key('autofind'):
+			if not kwargs['autofind']:
+				dirname = name
+		FileSystemBaseObject.__init__(self, dirname, **kwargs)
 
 	# End __init__
 
