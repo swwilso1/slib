@@ -294,6 +294,15 @@ class CMakeSystem(BuildSystemBaseObject):
 
 
 	@property
+	def exists(self):
+		if self.working_directory.exists:
+			return True
+		return False
+
+	# End exists
+	
+
+	@property
 	def package_file(self):
 		if self.working_directory.exists:
 			for f in self.working_directory.files:
@@ -325,6 +334,9 @@ class CMakeSystem(BuildSystemBaseObject):
 
 
 	def __setitem__(self, key, value):
+		if type(value) == Directory:
+			value = str(value)
+
 		if type(value) == types.StringType and self._path_sep_regex.search(value):
 			o = FileSystemBaseObject(value)
 			if o.exists:
@@ -348,7 +360,10 @@ class CMakeSystem(BuildSystemBaseObject):
 			command += str(value) + " "
 		
 		if self.generator:
-			command += "-G " + self.generator + " "
+			if self.generator.count(' ') > 0:
+				command += "-G '" + self.generator + "' "
+			else:
+				command += "-G " + self.generator + " "
 		else:
 			if re.search(r'win32',sys.platform):
 				command += "-G NMake Makefiles "
