@@ -26,8 +26,8 @@ class BuildSystemBaseObject(Object):
 
 	def __init__(self, working_directory, source_tree_directory, build_parameters = None, **kwargs):
 		Object.__init__(self, **kwargs)
-		self.working_directory = Directory(working_directory)
-		self.source_tree_directory = Directory(source_tree_directory)
+		self.working_directory = Directory(str(working_directory))
+		self.source_tree_directory = Directory(str(source_tree_directory))
 		if build_parameters:
 			if type(build_parameters) != types.DictType:
 				raise ArgumentError("Third argument must be a dictionary")
@@ -70,6 +70,13 @@ class BuildSystemBaseObject(Object):
 
 	# End remove
 
+
+	@property
+	def exists(self):
+		return False
+
+	# End exists
+	
 	
 	@property
 	def build_command(self):
