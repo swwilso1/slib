@@ -4,7 +4,7 @@ import re
 import sys
 import types
 
-__all__ = ["Copies", "LibTools", "ZipTools"]
+__all__ = ["CopyTools", "LibTools", "ZipTools"]
 
 from slib.Objects import Object
 from slib.Errors import Error, ArgumentError
@@ -52,3 +52,10 @@ class ToolBaseObject(Object):
 	
 
 # End ToolBaseObject
+
+
+import CopyTools
+import LibTools
+import ZipTools
+
+
