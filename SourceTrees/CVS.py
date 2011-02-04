@@ -629,7 +629,8 @@ class CVSTree(SourceTreeBaseObject):
 	
 
 	def checkout(self):
-		self.local_path.parent.create()
+		if not self.local_path.parent.exists:
+			self.local_path.parent.create()
 
 		currentDirectory = os.getcwd()
 		
@@ -658,19 +659,21 @@ class CVSTree(SourceTreeBaseObject):
 
 	
 	def update(self):
-		if self.exists:
-			currentDirectory = os.getcwd()
+		if not Object.global_dry_run and not self.local_path.exists:
+			return
 
-			try:
-				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
-				os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
-			except OSError as e:
-				if not Object.global_dry_run:
-					raise e
-			command = "cvs update -dP"
-			self.shell.execute(command)
-			os.chdir(currentDirectory)
+		currentDirectory = os.getcwd()
+
+		try:
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
+			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+		command = "cvs update -dP"
+		self.shell.execute(command)
+		os.chdir(currentDirectory)
 
 	# End update
 	
@@ -684,44 +687,50 @@ class CVSTree(SourceTreeBaseObject):
 	
 	
 	def switch_to_branch(self, branch):
-		if self.exists:
-			currentDirectory = os.getcwd()
+		if not Object.global_dry_run and not self.local_path.exists:
+			return
 
-			try:
-				if self.__name:
-					if Object.log_object and Object.global_dry_run:
-						Object.log_object.log("cd " + self.local_path.fullpath)
-					os.chdir(self.local_path.fullpath)
-				else:
-					if Object.log_object and Object.global_dry_run:
-						Object.log_object.log("cd " + self.local_path.fullpath + os.sep + self.__module)
-					os.chdir(self.local_path.fullpath + os.sep + self.__module)
-			except OSError as e:
-				if not Object.global_dry_run:
-					raise e
+		currentDirectory = os.getcwd()
 
-			command = "cvs update "
-			if str(branch) == "head":
-				command += "-A"
+		try:
+			if self.__name:
+				if Object.log_object and Object.global_dry_run:
+					Object.log_object.log("cd " + self.local_path.fullpath)
+				os.chdir(self.local_path.fullpath)
 			else:
-				"-r " + str(branch)
-			self.shell.execute(command)
-			os.chdir(currentDirectory)
+				if Object.log_object and Object.global_dry_run:
+					Object.log_object.log("cd " + self.local_path.fullpath + os.sep + self.__module)
+				os.chdir(self.local_path.fullpath + os.sep + self.__module)
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+
+		command = "cvs update "
+		if str(branch) == "head":
+			command += "-A"
+		else:
+			command += "-r " + str(branch)
+		self.shell.execute(command)
+		os.chdir(currentDirectory)
 
 	# End switch_to_branch
 	
 
 	def make_new_branch(self,branch):
-		if self.exists:
-			currentDirectory = os.getcwd()
+		if not Object.global_dry_run and not self.local_path.exists:
+			return
+
+		currentDirectory = os.getcwd()
+		try:
 			if Object.log_object and Object.global_dry_run:
 				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
 			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
-			command = "cvs tag -b " + str(branch)
-			self.shell.execute(command)
-			os.chdir(currentDirectory)
-		else:
-			raise SourceTreeError("Unable to create new branch: local checkout does not exist")
+		except OSError as e:
+			if not Object.global_dry_run:
+				raise e
+		command = "cvs tag -b " + str(branch)
+		self.shell.execute(command)
+		os.chdir(currentDirectory)
 
 	# End make_new_branch
 	
@@ -739,27 +748,37 @@ class CVSTree(SourceTreeBaseObject):
 	# file in tree to retrieve the available branches.
 	@property
 	def branches(self):
-		if self.exists:
-			print "Preparing branch information, this may take some time"
-			branches = {}
-			shell = Shell()
-			for entry in self.local_path.all_entries:
-				if not re.search(r'CVS', str(entry)) and not entry.type == DIRECTORY:
-					currentDirectory = os.getcwd()
+		if not Object.global_dry_run and not self.local_path.exists:
+			return []
+
+		if Object.log_object:
+			Object.log_object.log("Preparing branch information, this may take some time")
+
+		branches = {}
+		shell = Shell()
+		for entry in self.local_path.all_entries:
+			if not re.search(r'CVS', str(entry)) and not entry.type == DIRECTORY:
+				currentDirectory = os.getcwd()
+
+				try:
 					if Object.log_object and Object.global_dry_run:
 						Object.log_object.log("cd " + entry.path)
 					os.chdir(entry.path)
-					shell.capture_output = True
-					o = shell.execute("cvs status -v " + entry.name)
-					data = o.split("\n")
-					for line in data:
-						if re.search(r'branch', line):
-							a = re.search(r'\t(.*?) ',line)
-							branch = a.group(1)
-							if not branches.has_key(branch):
-								branches[branch] = True
-					os.chdir(currentDirectory)
-			return branches.keys()
+				except OSError as e:
+					if not Object.global_dry_run:
+						raise e
+
+				shell.capture_output = True
+				o = shell.execute("cvs status -v " + entry.name)
+				data = o.split("\n")
+				for line in data:
+					if re.search(r'branch', line):
+						a = re.search(r'\t(.*?) ',line)
+						branch = a.group(1)
+						if not branches.has_key(branch):
+							branches[branch] = True
+				os.chdir(currentDirectory)
+		return branches.keys()
 
 	# End branches
 	
