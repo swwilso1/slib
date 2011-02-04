@@ -25,7 +25,7 @@ class ZipTool(ToolBaseObject):
 		path = Directory(folder.path)
 		current_working_directory = path.make_current_directory()
 		
-		self.execute("zip -R " + folder.name + " " + str(output_name))
+		self.execute("zip -q -r " + str(output_name) + " " + folder.name)
 
 		current_working_directory.make_current_directory()
 
