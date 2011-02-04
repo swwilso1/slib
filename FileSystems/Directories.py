@@ -277,11 +277,10 @@ class Directory(FileSystemBaseObject):
 
 
 	def create(self):
-		if not self.exists:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("mkdir " + self.fullpath)
-			if not Object.global_dry_run:
-				os.makedirs(self.fullpath)
+		if Object.log_object and Object.global_dry_run:
+			Object.log_object.log("mkdir " + self.fullpath)
+		if not Object.global_dry_run:
+			os.makedirs(self.fullpath)
 
 	# End create
 	
