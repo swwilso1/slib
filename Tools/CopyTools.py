@@ -21,7 +21,7 @@ class CopyTool(ToolBaseObject):
 		else:
 			self.copy_command = 'cp'
 
-		if kwargs.has_key["use_cmake"]:
+		if kwargs.has_key("use_cmake"):
 			if kwargs["use_cmake"]:
 				self.copy_command = 'cmake -E copy'
 
