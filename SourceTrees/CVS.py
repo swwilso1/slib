@@ -667,7 +667,7 @@ class CVSTree(SourceTreeBaseObject):
 		try:
 			if Object.log_object and Object.global_dry_run:
 				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
-			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
+			os.chdir(self.local_path.parent.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
