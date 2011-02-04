@@ -8,6 +8,7 @@ __all__ = ["CopyTools", "LibTools", "ZipTools"]
 
 from slib.Objects import Object
 from slib.Errors import Error, ArgumentError
+from slib.Commands.Shells import Shell
 
 class ToolError(Error):
 	"""The ToolError class."""
