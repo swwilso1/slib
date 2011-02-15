@@ -574,7 +574,11 @@ class CVSTree(SourceTreeBaseObject):
 	@property
 	def local_path(self):
 		if self.path:
-			directory = Directory(self.path + os.sep + self.name)
+			if re.search(r'\/$', self.path):
+				path = self.path[:-1]
+			else:
+				path = self.path
+			directory = Directory(path + os.sep + self.name)
 		else:
 			directory = Directory(self.name)
 
@@ -624,7 +628,7 @@ class CVSTree(SourceTreeBaseObject):
 			if not Object.global_dry_run:
 				raise e
 
-		self.local_path.remove()
+		self.shell.execute("rm -rf *")
 
 		self.shell.execute(self.checkout_command)
 
@@ -645,11 +649,11 @@ class CVSTree(SourceTreeBaseObject):
 			return
 
 		currentDirectory = os.getcwd()
-
+		
 		try:
 			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.name)
-			os.chdir(self.local_path.parent.fullpath + os.sep + self.name)
+				Object.log_object.log("cd " + self.local_path.fullpath)
+			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
@@ -675,14 +679,9 @@ class CVSTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if self.__name:
-				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.local_path.fullpath)
-				os.chdir(self.local_path.fullpath)
-			else:
-				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.local_path.fullpath + os.sep + self.name)
-				os.chdir(self.local_path.fullpath + os.sep + self.name)
+			if Object.log_object and Object.global_dry_run:
+				Object.log_object.log("cd " + self.local_path.fullpath)
+			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
@@ -705,8 +704,8 @@ class CVSTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 		try:
 			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.name)
-			os.chdir(self.local_path.parent.fullpath + os.sep + self.name)
+				Object.log_object.log("cd " + self.local_path.fullpath)
+			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
