@@ -343,8 +343,6 @@ class CVSTreeData(Object):
 	def __ParseData(self, path, entry, loglines):
 		entrydata = entry.split('/')[1:]
 
-		# print "Entry: %s, data: %s" % (repr(entry), str(entrydata))
-
 		if re.search(r'^T', entrydata[4]):
 			entrydata[4] = entrydata[4][1:-1]
 		else:
@@ -368,7 +366,6 @@ class CVSTreeData(Object):
 			newdate = self.__PrepDate(path + "/" + entrydata[0])
 
 			if newdate != entrydata[2]:
-				# print entrydata[0], repr(newdate), repr(entrydata[2])
 				modified = True;
 
 		
@@ -386,13 +383,6 @@ class CVSTreeData(Object):
 	# End __LoadFileData
 
 
-	@property
-	def branches(self):
-		return self.foo__branches.keys()
-
-	# End branches
-	
-	
 
 	def __LoadTreeData(self, path, entry):
 		entry = re.sub(r'^D(.*)', r'\1', entry)
@@ -429,10 +419,8 @@ class CVSTreeData(Object):
 					continue
 					
 				if re.search(r'^\/', entry):
-					# print "A"
 					self.__LoadFileData(self.path, entry, entries_loglines)
 				elif re.search(r'^D',entry):
-					# print "B"
 					self.__LoadTreeData(self.path, entry)
 
 			for entry in entries_loglines:
@@ -443,11 +431,9 @@ class CVSTreeData(Object):
 					continue
 
 				if re.search(r'^A \/.*', entry):
-					# print "C"
 					newentry = re.sub(r'A (.*)', r'\1', entry)
 					self.__LoadFileData(self.path, newentry, [])
 				elif re.search(r'^A D(.*)', entry):
-					# print "D"
 					newentry = re.sub(r'A D(.*)', r'\1', entry)
 					self.__LoadTreeData(self.path, newentry)
 
@@ -474,9 +460,7 @@ class CVSTreeData(Object):
 		mods = []
 		files = self.all_files
 		for f in files:
-			# print f
 			if f.modified:
-				# print f[1]
 				mods.append(f.fullpath)
 		return mods
 	# End modfiles
@@ -565,9 +549,6 @@ class CVSTree(SourceTreeBaseObject):
 		if self.__name:
 			return self.__name
 		else:
-			a = re.search(r'(.*)\/', self.__module)
-			if a:
-				return a.group(1)
 			return self.__module
 	# End name
 	
@@ -577,7 +558,7 @@ class CVSTree(SourceTreeBaseObject):
 		if not self.exists:
 			return self.__branch
 
-		cvstreedata = CVSTreeData(self.local_path.parent.fullpath + os.sep + self.__module)
+		cvstreedata = CVSTreeData(self.local_path.fullpath)
 		
 		tags = cvstreedata.tags
 
@@ -629,15 +610,16 @@ class CVSTree(SourceTreeBaseObject):
 	
 
 	def checkout(self):
-		if not self.local_path.parent.exists:
-			self.local_path.parent.create()
-
+		path = Directory(self.path)
+		if not path.exists:
+			path.create()
+			
 		currentDirectory = os.getcwd()
 		
 		try:
 			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.parent.fullpath)
-			os.chdir(self.local_path.parent.fullpath)
+				Object.log_object.log("cd " + path.fullpath)
+			os.chdir(path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
@@ -666,8 +648,8 @@ class CVSTree(SourceTreeBaseObject):
 
 		try:
 			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
-			os.chdir(self.local_path.parent.fullpath)
+				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.name)
+			os.chdir(self.local_path.parent.fullpath + os.sep + self.name)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
@@ -699,8 +681,8 @@ class CVSTree(SourceTreeBaseObject):
 				os.chdir(self.local_path.fullpath)
 			else:
 				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.local_path.fullpath + os.sep + self.__module)
-				os.chdir(self.local_path.fullpath + os.sep + self.__module)
+					Object.log_object.log("cd " + self.local_path.fullpath + os.sep + self.name)
+				os.chdir(self.local_path.fullpath + os.sep + self.name)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
@@ -723,8 +705,8 @@ class CVSTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 		try:
 			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.__module)
-			os.chdir(self.local_path.parent.fullpath + os.sep + self.__module)
+				Object.log_object.log("cd " + self.local_path.parent.fullpath + os.sep + self.name)
+			os.chdir(self.local_path.parent.fullpath + os.sep + self.name)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
@@ -788,14 +770,14 @@ class CVSTree(SourceTreeBaseObject):
 		if not self.exists:
 			return None
 
-		cvstreedata = CVSTreeData(self.local_path.parent.fullpath + os.sep + self.__module)
+		cvstreedata = CVSTreeData(self.local_path.fullpath)
 
 		tags = cvstreedata.tags
 
 		if len(tags) == 0:
 			return None
 		else:
-			return tags[0]
+			return tags
 
 	# End tags
 
@@ -807,13 +789,14 @@ class CVSTree(SourceTreeBaseObject):
 	def __repr__(self):
 		
 		text = self.__class__.__name__ + "(" + repr(self.repository) + "," + repr(self.__module) + "," + repr(self.path) + ","
+
 		if self.branch != None:
 			text += repr(self.branch)
 		else:
 			text += " " + str(None)
 		
-		if self.name != None:
-			text += "," + repr(self.name)
+		if self.__name != None:
+			text += "," + repr(self.__name)
 		else:
 			text += ", " + str(None)
 
@@ -825,3 +808,39 @@ class CVSTree(SourceTreeBaseObject):
 	# End __repr__
 
 # End CVSTree
+
+
+def CVSTreeArgs(tree_data):
+	if len(tree_data.tags) > 0:
+		tag = tree_data.tags[0]
+	else:
+		tag = None
+	
+	repository = "cvs.wolfram.com:/cvs"
+	module = tree_data.repository
+	
+	full_path = Directory(tree_data.path)
+
+	if re.search(tree_data.repository, tree_data.path):
+		path_parts = tree_data.path.split(tree_data.repository)
+		local_path = path_parts[0]
+		name = None
+	else:
+		full_path = Directory(tree_data.path)
+		local_path = str(full_path.parent)
+		name = full_path.name
+		
+
+	
+	return (repository, module, local_path, tag, name)
+
+# End CVSTreeArgs
+
+
+def ConvertPathToCVSTree(path):
+	tree_data = CVSTreeData(path)
+	args = CVSTreeArgs(tree_data)
+	return CVSTree(*args)
+
+# End ConvertPathToCVSTree
+
