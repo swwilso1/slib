@@ -70,6 +70,14 @@ class Directory(FileSystemBaseObject):
 	
 
 	@property
+	def empty(self):
+		return len(self.entries) == 0
+
+	# End empty
+	
+
+
+	@property
 	def files(self):
 		files = []
 		try:
