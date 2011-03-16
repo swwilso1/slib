@@ -527,6 +527,25 @@ class CVSTreeData(Object):
 # End CVSTreeData
 
 
+class CVSModulePath(Object):
+	"""The CVSModulePath class."""
+
+	def __init__(self, module):
+		self.module = str(module)
+	# End __init__
+
+	@property
+	def root(self):
+		names = self.module.split(os.sep)
+		return names[0]
+
+	# End root
+	
+
+# End CVSModulePath
+
+
+
 class CVSTree(SourceTreeBaseObject):
 	"""The CVSTree class."""
 
@@ -612,6 +631,17 @@ class CVSTree(SourceTreeBaseObject):
 		return command
 	# End checkout_command
 	
+	
+	@property
+	def local_source_path(self):
+		if self.__name:
+			return self.__name
+		else:
+			return CVSModulePath(self.__module).root
+
+	# End local_source_path
+	
+	
 
 	def checkout(self):
 		path = Directory(self.path)
@@ -628,7 +658,7 @@ class CVSTree(SourceTreeBaseObject):
 			if not Object.global_dry_run:
 				raise e
 
-		self.shell.execute("rm -rf *")
+		self.shell.execute("rm -rf " + self.local_source_path)
 
 		self.shell.execute(self.checkout_command)
 
