@@ -164,6 +164,7 @@ class CMakeSystem(BuildSystemBaseObject):
 			self.generator = kwargs['generator']
 		else:
 			self.generator = None
+		
 		self._path_sep_regex = re.compile(os.sep)
 		self.active_processors = None
 	# End __init__
@@ -356,6 +357,10 @@ class CMakeSystem(BuildSystemBaseObject):
 
 	def __str__(self):
 		command = "cmake "
+
+		for flag in self._commandLineFlags:
+			command += str(flag) + " "
+
 		for value in self._build_parameters.values():
 			command += str(value) + " "
 		
@@ -382,6 +387,9 @@ class CMakeSystem(BuildSystemBaseObject):
 		
 		if self.generator:
 			text += ", generator=" + repr(self.generator)
+			
+		if len(self._commandLineFlags) > 0:
+			text += ", command_line_flags=" + repr(self._commandLineFlags)
 		text += ")"
 		
 		return text

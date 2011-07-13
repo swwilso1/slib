@@ -34,9 +34,14 @@ class BuildSystemBaseObject(Object):
 			self._build_parameters = build_parameters
 		else:
 			self._build_parameters = {}
+
+		if kwargs.has_key("command_line_flags"):
+			if type(kwargs['command_line_flags']) != types.ListType:
+				raise TypeError("command_line_flags must be a List")
+			self._commandLineFlags = kwargs['command_line_flags']
 		
 		self._output_path = None
-
+		
 	# End __init__
 
 
@@ -69,6 +74,13 @@ class BuildSystemBaseObject(Object):
 		pass
 
 	# End remove
+
+
+	def add_commandline_flag(self, flag):
+		self._commandLineFlags.append(flag)
+
+	# End add_commandline_flag
+	
 
 
 	@property
