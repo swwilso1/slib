@@ -39,6 +39,8 @@ class BuildSystemBaseObject(Object):
 			if type(kwargs['command_line_flags']) != types.ListType:
 				raise TypeError("command_line_flags must be a List")
 			self._commandLineFlags = kwargs['command_line_flags']
+		else:
+			self._commandLineFlags = []
 		
 		self._output_path = None
 		
