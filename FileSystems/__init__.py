@@ -214,6 +214,21 @@ class FileSystemBaseObject(Object):
 	# End type
 
 	@property
+	def extension(self):
+		return None
+
+	# End extension
+
+	@property
+	def hasExtension(self):
+		if self.extension:
+			return True
+		return False
+
+	# End hasExtension
+	
+
+	@property
 	def exists(self):
 		return os.path.exists(self.fullpath)
 	# End exists

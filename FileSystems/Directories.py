@@ -284,6 +284,19 @@ class Directory(FileSystemBaseObject):
 	# End all_entries
 
 
+	@property
+	def extensions(self):
+		allEntries = self.all_entries
+		extensions = {}
+		for entry in allEntries:
+			if entry.hasExtension:
+				if not extensions.has_key(entry.extension):
+					extensions[entry.extension] = True
+		return extensions.keys()
+
+	# End extensions
+
+
 	def create(self):
 		if Object.log_object and Object.global_dry_run:
 			Object.log_object.log("mkdir " + self.fullpath)

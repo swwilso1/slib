@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import re
 from slib.Objects import Object
 from slib.FileSystems import FileSystemBaseObject
 
@@ -24,5 +25,16 @@ class File(FileSystemBaseObject):
 		else:
 			raise FileSystemError("Current user does not have read permissions for %s" % (str(self.fullpath)))
 	# End contents
+	
+	
+	@property
+	def extension(self):
+		if self.name.count('.') == 1:
+			match = re.search(r'.*\.(.*)$', self.name)
+			if match:
+				return match.group(1)
+		return None
+
+	# End extension
 
 # End File
