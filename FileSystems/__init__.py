@@ -9,6 +9,7 @@ import types
 from slib.Objects import Object
 from slib.Errors import Error
 from slib.Commands.Shells import Shell
+from slib.Commands import CommandError
 
 
 __all__ = ["BlockDevices", "CharacterDevices", "Directories", "Fifos", "Files", "Sockets", "SymbolicLinks"]
@@ -332,9 +333,9 @@ class FileSystemBaseObject(Object):
 	
 	
 	def Difference(self,other):
-		if not type(other) == FileSystemBaseObject:
-			raise FileSystemError("%s not a FileSystemBaseObject" % (str(other)))
-		shell = Shell()
+		if self.__class__ != other.__class__:
+	    		raise FileSystemError("%s not a %s" % (str(other),str(self.__class__)))
+	    	shell = Shell()
 		shell.capture_output = True
 		o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
 		return o
@@ -342,13 +343,13 @@ class FileSystemBaseObject(Object):
 	
 
 	def ContentsSameQ(self,other):
-		if not type(other) == FileSystemBaseObject:
-			raise FileSystemError("%s not a FileSystemBaseObject" % (str(other)))
+		if self.__class__ != other.__class__:
+			raise FileSystemError("%s not a %s" % (str(other),str(self.__class__)))
 		shell = Shell()
 		shell.capture_output = True
 		try:
 			o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
-		except libs.Commands.CommandError, e:
+		except CommandError, e:
 			return False
 		return True
 
