@@ -44,8 +44,16 @@ class Shell(CommandBase):
 		if data != None:
 			if len(data) == 0:
 				rvalue = None
+				
+		if errors != None and len(errors) > 0:
+			if rvalue != None:
+				final_output = rvalue + "\n" + errors
+			else:
+				final_output = errors
+		else:
+			final_output = rvalue
 		
-		Object.logIfVerbose(self,rvalue,no_format=True)
+		Object.logIfVerbose(self,final_output,no_format=True)
 		
 		return rvalue
 
