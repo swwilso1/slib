@@ -1,4 +1,4 @@
-
+import types
 
 class Object(object):
 	"""The Object class."""
@@ -13,6 +13,14 @@ class Object(object):
 		Object.verbose = False
 
 	# End __init__
+
+	def setClassVerbose(self, arg):
+		if type(arg) != types.BooleanType:
+			raise TypeError("Argument must be boolean")
+		Object.verbose = arg
+
+	# End setClassVerbose
+	
 
 	def setClassLog(self, log):
 		Object.log_object = log
