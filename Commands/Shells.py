@@ -45,7 +45,7 @@ class Shell(CommandBase):
 			if len(data) == 0:
 				rvalue = None
 		
-		Object.logIfVerbose(rvalue)
+		Object.logIfVerbose(self,rvalue)
 		
 		return rvalue
 
