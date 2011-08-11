@@ -35,9 +35,9 @@ class LibTool(ToolBaseObject):
 
 		command = self.__make_command(output_file,input_files)
 
-		Object.logIfVerbose(command)
+		Object.logIfVerbose(self,command)
 		o = self.execute(command)
-		Object.logIfVerbose(o)
+		Object.logIfVerbose(self,o)
 
 	# End join
 	
