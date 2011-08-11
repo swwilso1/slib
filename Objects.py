@@ -46,7 +46,7 @@ class Object(object):
 	# End enableGlobalDryRun	
 
 	def logIfVerbose(self, arg):
-		if Object.log_object and Object.getClassVerbose() and arg != None:
+		if Object.log_object and Object.getClassVerbose(self) and arg != None:
 			Object.log_object.log(str(arg))
 	# End logIfVerbose
 	
