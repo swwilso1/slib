@@ -9,8 +9,15 @@ class Object(object):
 	def __init__(self, **kwargs):
 		if kwargs.has_key("log"):
 			Object.log_object = kwargs["log"]	
-				
+		
+		if kwargs.has_key("verbose"):
+			if type(kwargs["verbose"]) != types.BooleanType:
+				raise TypeError("verbose keyword value must be Boolean")
+			Object.verbose = kwargs["verbose"]
+
+
 	# End __init__
+
 
 	def setClassVerbose(self, arg):
 		if type(arg) != types.BooleanType:
@@ -18,6 +25,14 @@ class Object(object):
 		Object.verbose = arg
 
 	# End setClassVerbose
+	
+	
+	def getClassVerbose(self):
+		if Object.__dict__.has_key("verbose"):
+			return Object.verbose
+		return False
+	
+	# End getClassVerbose
 	
 
 	def setClassLog(self, log):
