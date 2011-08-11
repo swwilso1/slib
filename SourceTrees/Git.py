@@ -56,8 +56,7 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.parent.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.parent.fullpath)
 			os.chdir(self.local_path.parent.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -69,22 +68,26 @@ class GitTree(SourceTreeBaseObject):
 
 		command = "git clone " + self.repository + " " + self.name
 
-		self.shell.execute(command)
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
 		
 		if orig_branch != "master" and orig_branch != None:
 			try:
-				if Object.log_object and Object.global_dry_run:
-					Object.log_object.log("cd " + self.local_path.fullpath)
+				Object.logIfDryRun("cd " + self.local_path.fullpath)
 				os.chdir(self.local_path.fullpath)
 			except OSError as e:
 				if not Object.global_dry_run:
 					raise e
 			command = "git checkout -b " + orig_branch + " origin/" + orig_branch
 			try:
-				self.shell.execute(command)
+				Object.logIfVerbose(command)
+				o = self.shell.execute(command)
+				Object.logIfVerbose(o)
 			except CommandError, e:
 				print "Unable to switch to branch %s: %s" % (self.branch, e)
 
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End checkout
@@ -102,14 +105,18 @@ class GitTree(SourceTreeBaseObject):
 
 		currentDirectory = os.getcwd()
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		command = "git pull origin"
-		self.shell.execute(command)
+
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		
 	# End update
@@ -122,8 +129,7 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -132,13 +138,19 @@ class GitTree(SourceTreeBaseObject):
 		# First try just checkout out the branch:
 		command = "git checkout " + str(branch)
 		try:
-			self.shell.execute(command)
+			Object.logIfVerbose(command)
+			o = self.shell.execute(command)
+			Object.logIfVerbose(o)
 		except CommandError, e:
 			# Instead try getting the branch from the origin:
 			command = "git checkout -b " + str(branch) + " origin/" + str(branch)
-			self.shell.execute(command)
+			Object.logIfVerbose(command)
+			o = self.shell.execute(command)
+			Object.logIfVerbose(o)
 
 		self.__branch = str(branch)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End switch_to_branch
@@ -151,15 +163,19 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		
 		command = "git branch " + str(branch)
-		self.shell.execute(command)
+
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch
@@ -172,16 +188,20 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		
 		command = "git checkout -b " + str(branch)
-		self.shell.execute(command)
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
 		self.__branch = str(branch)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch_and_switch
@@ -205,8 +225,7 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -215,7 +234,12 @@ class GitTree(SourceTreeBaseObject):
 		command = "git branch -a"
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
+
+		Object.logIfVerbose(command)
 		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		branches = [ self.__massageBranchName(branch) for branch in o.split('\n') ]
 		return branches
@@ -231,8 +255,7 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -241,7 +264,12 @@ class GitTree(SourceTreeBaseObject):
 		command = "git branch"
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
+
+		Object.logIfVerbose(command)
 		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		if o:
 			for branch in o.split('\n'):
@@ -259,15 +287,19 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		
 		command = "git branch " + str(branch) + " " + str(remote) + "/" + str(branch)
-		self.shell.execute(command)
+
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch_from_remote
@@ -280,16 +312,20 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		
 		command = "git checkout -b " + str(branch) + " " + str(remote) + "/" + str(branch)
-		self.shell.execute(command)
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
 		self.__branch = str(branch)
+
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch_from_remote_and_switch
@@ -303,8 +339,7 @@ class GitTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -313,7 +348,12 @@ class GitTree(SourceTreeBaseObject):
 		command = "git tag"
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
+
+		Object.logIfVerbose(command)
 		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		tags = [ tag for tag in o.split('\n') ]
 		return tags

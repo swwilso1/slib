@@ -33,8 +33,11 @@ class LibTool(ToolBaseObject):
 		if type(input_files) != types.ListType and type(input_files) != types.TupleType:
 			raise ToolError("2nd argument must be a list or tuple of file names")
 
+		command = self.__make_command(output_file,input_files)
 
-		self.execute(self.__make_command(output_file,input_files))
+		Object.logIfVerbose(command)
+		o = self.execute(command)
+		Object.logIfVerbose(o)
 
 	# End join
 	

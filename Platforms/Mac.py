@@ -25,7 +25,9 @@ class MacInspector(PlatformInspectorBaseObject):
 		
 		self._installedRam = long(self._installedRam)
 
+		Object.logIfVerbose("sw_vers -productVersion")
 		self._osVersion = shell.execute("sw_vers -productVersion").strip()
+		Object.logIfVerbose(self._osVersion)
 
 		self._machineHardware = shell.execute("uname -m").strip()
 		

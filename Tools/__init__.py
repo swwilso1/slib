@@ -34,7 +34,9 @@ class ToolBaseObject(Object):
 	def execute(self, command):
 		shell = Shell()
 		try:
-			shell.execute(command)
+			Object.logIfVerbose(command)
+			o = shell.execute(command)
+			Object.logIfVerbose(o)
 		except CommandError as e:
 			message = str(e)
 			raise ToolError(message)

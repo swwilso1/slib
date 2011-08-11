@@ -9,6 +9,8 @@ class Object(object):
 	def __init__(self, **kwargs):
 		if kwargs.has_key("log"):
 			Object.log_object = kwargs["log"]
+		
+		self.verbose = False
 
 	# End __init__
 
@@ -20,7 +22,19 @@ class Object(object):
 	def enableGlobalDryRun(self):
 		Object.global_dry_run = True
 
-	# End enableGlobalDryRun
+	# End enableGlobalDryRun	
+
+	def logIfVerbose(self, arg):
+		if self.log_object and self.verbose and arg != None:
+			self.log_object.log(str(arg))
+	# End logIfVerbose
+	
+	def logIfDryRun(self, arg):
+		if self.log_object and self.global_dry_run and arg != None:
+			self.log_object.log(str(arg))
+
+	# End logIfDryRun
+	
 	
 
 # End Object

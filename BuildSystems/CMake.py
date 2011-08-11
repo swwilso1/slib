@@ -183,23 +183,25 @@ class CMakeSystem(BuildSystemBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.working_directory.fullpath)
+			Object.logIfDryRun("cd " + self.working_directory.fullpath)
 			os.chdir(self.working_directory.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		
+		Object.logIfVerbose(str(self))
+
 		o = shell.execute(str(self))
 		if shell.exit_code != 0 and not Object.global_dry_run:
 			raise BuildSystemError("Error while configuring build system: " + o)
-		
+
+		Object.logIfVerbose(o)		
+		Object.logIfVerbose(self.build_command + " ProcessorCount")
 
 		# Now try for make ProcessorCount
 		o = shell.execute(self.build_command + " ProcessorCount")
 
-		if Object.global_dry_run:
-			o = ""
+		Object.logIfVerbose(o)
 
 		if shell.exit_code == 0:
 			if re.search(r'ACTIVE_PROCESSORS', o):
@@ -210,6 +212,7 @@ class CMakeSystem(BuildSystemBaseObject):
 						self.active_processors = match.group(1)
 						break
 
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End configure
@@ -224,8 +227,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.working_directory.fullpath)
+			Object.logIfDryRun("cd " + self.working_directory.fullpath)
 			os.chdir(self.working_directory.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -241,10 +243,14 @@ class CMakeSystem(BuildSystemBaseObject):
 
 		if target:
 			command += " " + str(target)
+
+		Object.logIfVerbose(command)
 		o = shell.execute(command)
 		if shell.exit_code != 0 and not Object.global_dry_run:
 			raise BuildSystemError("Error while building: " + o)
+		Object.logIfVerbose(o)
 		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End build
@@ -256,8 +262,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		currentDirectory = os.getcwd()
 		
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.working_directory.fullpath)
+			Object.logIfDryRun("cd " + self.working_directory.fullpath)
 			os.chdir(self.working_directory.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -265,8 +270,11 @@ class CMakeSystem(BuildSystemBaseObject):
 
 		command = self.build_command
 		
-		shell.execute(command + " install/fast")
+		Object.logIfVerbose(command + " install/fast")
+		o = shell.execute(command + " install/fast")
+		Object.logIfVerbose(o)
 		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End install
@@ -278,8 +286,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		currentDirectory = os.getcwd()
 		
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.working_directory.fullpath)
+			Object.logIfDryRun("cd " + self.working_directory.fullpath)
 			os.chdir(self.working_directory.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -287,8 +294,11 @@ class CMakeSystem(BuildSystemBaseObject):
 		
 		command = self.build_command
 		
-		shell.execute(command + " package")
+		Object.logIfVerbose(command + " package")
+		o = shell.execute(command + " package")
+		Object.logIfVerbose(o)
 		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End package
@@ -328,6 +338,7 @@ class CMakeSystem(BuildSystemBaseObject):
 	
 	
 	def remove(self):
+		Object.logIfDryRun("rmdir " + self.working_directory.fullpath)
 		self.working_directory.remove()
 
 	# End remove

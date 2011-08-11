@@ -651,17 +651,21 @@ class CVSTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 		
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + path.fullpath)
+			Object.logIfDryRun("cd " + path.fullpath)
 			os.chdir(path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 
-		self.shell.execute("rm -rf " + self.local_source_path)
+		Object.logIfVerbose("rm -rf " + self.local_source_path)
+		o = self.shell.execute("rm -rf " + self.local_source_path)
+		Object.logIfVerbose(o)
 
-		self.shell.execute(self.checkout_command)
+		Object.logIfVerbose(self.checkout_command)
+		o = self.shell.execute(self.checkout_command)
+		Object.logIfVerbose(o)
 
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End checkout
@@ -681,14 +685,18 @@ class CVSTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 		
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		command = "cvs update -dP"
-		self.shell.execute(command)
+
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End update
@@ -709,8 +717,7 @@ class CVSTree(SourceTreeBaseObject):
 		currentDirectory = os.getcwd()
 
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
@@ -721,7 +728,12 @@ class CVSTree(SourceTreeBaseObject):
 			command += "-A"
 		else:
 			command += "-r " + str(branch)
-		self.shell.execute(command)
+
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun(currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End switch_to_branch
@@ -733,14 +745,18 @@ class CVSTree(SourceTreeBaseObject):
 
 		currentDirectory = os.getcwd()
 		try:
-			if Object.log_object and Object.global_dry_run:
-				Object.log_object.log("cd " + self.local_path.fullpath)
+			Object.logIfDryRun("cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
 		command = "cvs tag -b " + str(branch)
-		self.shell.execute(command)
+
+		Object.logIfVerbose(command)
+		o = self.shell.execute(command)
+		Object.logIfVerbose(o)
+		
+		Object.logIfDryRun("cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch
@@ -772,15 +788,16 @@ class CVSTree(SourceTreeBaseObject):
 				currentDirectory = os.getcwd()
 
 				try:
-					if Object.log_object and Object.global_dry_run:
-						Object.log_object.log("cd " + entry.path)
+					Object.logIfDryRun("cd " + entry.path)
 					os.chdir(entry.path)
 				except OSError as e:
 					if not Object.global_dry_run:
 						raise e
 
 				shell.capture_output = True
+				Object.logIfVerbose("cvs status -v " + entry.name)
 				o = shell.execute("cvs status -v " + entry.name)
+				Object.logIfVerbose(o)
 				data = o.split("\n")
 				for line in data:
 					if re.search(r'branch', line):
@@ -788,6 +805,8 @@ class CVSTree(SourceTreeBaseObject):
 						branch = a.group(1)
 						if not branches.has_key(branch):
 							branches[branch] = True
+							
+				Object.logIfDryRun("cd " + currentDirectory)
 				os.chdir(currentDirectory)
 		return branches.keys()
 
