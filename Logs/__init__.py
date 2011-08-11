@@ -36,6 +36,12 @@ class LogBase(Object):
 		pass
 
 	# End log
+	
+	def log_without_format(self, output):
+		pass
+
+	# End log_without_format
+	
 
 	def log_with_level(self, level, format, *args):
 		pass

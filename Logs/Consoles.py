@@ -31,6 +31,14 @@ class Console(LogBase):
 		self.__write(format, *args)
 
 	# End log
+	
+	def log_without_format(self, output):
+		date = Date(format=DATE_TIME_FORMAT)
+		newoutput = "%s: %s" % (str(date), str(output))
+		print newoutput
+
+	# End log_without_format
+	
 
 	def log_with_level(self, level, format, *args):
 		if level >= self.level:

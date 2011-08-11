@@ -62,7 +62,25 @@ class File(LogBase):
 			raise LogError("No associated log file, not yet opened")
 
 	# End log
+
+
+	def log_without_format(self, output):
+		if self.logFile:
+			if self.logFile.closed:
+				raise LogError("%s closed" % self.logFile.name)
+			else:
+				date = Date(format=DATE_TIME_FORMAT)
+				newoutput = "%s: %s" % (str(date),str(output))
+				self.logFile.write(newoutput)
+				if self.autoNewLine:
+					self.logFile.write("\n")
+				self.logFile.flush()
+		else:
+			raise LogError("No associated log file, not yet opened")
+
+	# End log_without_format
 	
+
 	def log_with_level(self,level,format,*args):
 		if level >= self.level:
 			self.log(format,args)

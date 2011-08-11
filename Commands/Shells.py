@@ -45,10 +45,7 @@ class Shell(CommandBase):
 			if len(data) == 0:
 				rvalue = None
 		
-		if(rvalue != None and len(rvalue) > 0):
-			rvalue = re.sub(r'%','\\%',rvalue)
-		
-		Object.logIfVerbose(self,rvalue)
+		Object.logIfVerbose(self,rvalue,no_format=True)
 		
 		return rvalue
 

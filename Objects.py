@@ -45,9 +45,19 @@ class Object(object):
 
 	# End enableGlobalDryRun	
 
-	def logIfVerbose(self, arg):
+	def logIfVerbose(self, arg, **keyargs):
 		if Object.log_object and Object.getClassVerbose(self) and arg != None:
-			Object.log_object.log(str(arg))
+			needs_format = True
+			if keyargs.has_key("no_format"):
+				if type(keyargs["no_format"]) != types.BooleanType:
+					raise TypeError("no_format must be Boolean")
+				if keyargs["no_format"]:
+					Object.log_object.log_without_format(str(arg))
+					needs_format = False
+			
+			if needs_format:
+				Object.log_object.log(str(arg))
+
 	# End logIfVerbose
 	
 	def logIfDryRun(self, arg):
