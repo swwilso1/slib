@@ -10,7 +10,7 @@ class Object(object):
 		if kwargs.has_key("log"):
 			Object.log_object = kwargs["log"]
 		
-		self.verbose = False
+		Object.verbose = False
 
 	# End __init__
 
