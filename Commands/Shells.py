@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import sys
+import sys, re
 
 from slib.Objects import Object
 from slib.Commands import CommandBase, CommandError
@@ -44,6 +44,9 @@ class Shell(CommandBase):
 		if data != None:
 			if len(data) == 0:
 				rvalue = None
+		
+		if(rvalue != None and len(rvalue) > 0):
+			rvalue = re.sub(r'%','\\%',rvalue)
 		
 		Object.logIfVerbose(self,rvalue)
 		
