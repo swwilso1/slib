@@ -24,7 +24,7 @@ class Shell(CommandBase):
 		if self.dry_run or Object.global_dry_run:
 			return
 		
-		if self.capture_output:
+		if self.capture_output or self.verbose:
 			capture_output = PIPE
 		else:
 			capture_output = None
