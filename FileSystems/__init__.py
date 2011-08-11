@@ -337,9 +337,7 @@ class FileSystemBaseObject(Object):
 	    		raise FileSystemError("%s not a %s" % (str(other),str(self.__class__)))
 	    	shell = Shell()
 		shell.capture_output = True
-		Object.logIfVerbose(self,"diff " + self.fullpath + " " + other.fullpath)
 		o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
-		Object.logIfVerbose(self,o)
 		return o
 	# End Difference
 	
@@ -350,9 +348,7 @@ class FileSystemBaseObject(Object):
 		shell = Shell()
 		shell.capture_output = True
 		try:
-			Object.logIfVerbose(self,"diff " + self.fullpath + " " + other.fullpath)
-			o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
-			Object.logIfVerbose(self,o)
+			shell.execute("diff " + self.fullpath + " " + other.fullpath)
 		except CommandError, e:
 			return False
 		return True

@@ -39,11 +39,15 @@ class Shell(CommandBase):
 			raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, errors))
 			
 
+		rvalue = data
+
 		if data != None:
 			if len(data) == 0:
-				return None
-				
-		return data
+				rvalue = None
+		
+		Object.logIfVerbose(rvalue)
+		
+		return rvalue
 
 	# End execute	
 

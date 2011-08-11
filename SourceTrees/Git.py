@@ -68,9 +68,7 @@ class GitTree(SourceTreeBaseObject):
 
 		command = "git clone " + self.repository + " " + self.name
 
-		Object.logIfVerbose(self,command)
-		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
+		self.shell.execute(command)
 		
 		if orig_branch != "master" and orig_branch != None:
 			try:
@@ -81,9 +79,7 @@ class GitTree(SourceTreeBaseObject):
 					raise e
 			command = "git checkout -b " + orig_branch + " origin/" + orig_branch
 			try:
-				Object.logIfVerbose(self,command)
-				o = self.shell.execute(command)
-				Object.logIfVerbose(self,o)
+				self.shell.execute(command)
 			except CommandError, e:
 				print "Unable to switch to branch %s: %s" % (self.branch, e)
 
@@ -112,9 +108,7 @@ class GitTree(SourceTreeBaseObject):
 				raise e
 		command = "git pull origin"
 
-		Object.logIfVerbose(self,command)
-		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
+		self.shell.execute(command)
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -138,15 +132,11 @@ class GitTree(SourceTreeBaseObject):
 		# First try just checkout out the branch:
 		command = "git checkout " + str(branch)
 		try:
-			Object.logIfVerbose(self,command)
-			o = self.shell.execute(command)
-			Object.logIfVerbose(self,o)
+			self.shell.execute(command)
 		except CommandError, e:
 			# Instead try getting the branch from the origin:
 			command = "git checkout -b " + str(branch) + " origin/" + str(branch)
-			Object.logIfVerbose(self,command)
-			o = self.shell.execute(command)
-			Object.logIfVerbose(self,o)
+			self.shell.execute(command)
 
 		self.__branch = str(branch)
 		
@@ -171,9 +161,7 @@ class GitTree(SourceTreeBaseObject):
 		
 		command = "git branch " + str(branch)
 
-		Object.logIfVerbose(self,command)
-		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
+		self.shell.execute(command)
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -195,9 +183,7 @@ class GitTree(SourceTreeBaseObject):
 				raise e
 		
 		command = "git checkout -b " + str(branch)
-		Object.logIfVerbose(self,command)
-		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
+		self.shell.execute(command)
 		
 		self.__branch = str(branch)
 		
@@ -235,9 +221,7 @@ class GitTree(SourceTreeBaseObject):
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
 
-		Object.logIfVerbose(self,command)
 		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -265,9 +249,7 @@ class GitTree(SourceTreeBaseObject):
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
 
-		Object.logIfVerbose(self,command)
 		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -295,9 +277,7 @@ class GitTree(SourceTreeBaseObject):
 		
 		command = "git branch " + str(branch) + " " + str(remote) + "/" + str(branch)
 
-		Object.logIfVerbose(self,command)
-		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
+		self.shell.execute(command)
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -319,9 +299,7 @@ class GitTree(SourceTreeBaseObject):
 				raise e
 		
 		command = "git checkout -b " + str(branch) + " " + str(remote) + "/" + str(branch)
-		Object.logIfVerbose(self,command)
-		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
+		self.shell.execute(command)
 		
 		self.__branch = str(branch)
 
@@ -349,9 +327,7 @@ class GitTree(SourceTreeBaseObject):
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
 
-		Object.logIfVerbose(self,command)
 		o = self.shell.execute(command)
-		Object.logIfVerbose(self,o)
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)

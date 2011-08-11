@@ -36,10 +36,7 @@ class CopyTool(ToolBaseObject):
 			command += " " + str(opt)
 		
 		command += " " + str(source) + " " + str(destination)
-
-		Object.logIfVerbose(self,command)
-		o = self.execute(command)
-		Object.logIfVerbose(self,o)
+		self.execute(command)
 
 	# End copy
 
@@ -52,11 +49,8 @@ class CopyTool(ToolBaseObject):
 		for source in sources:
 			source_list += str(source) + " "
 		
-		command = self.copy_command + " " + source_list + str(destination)
-		
-		Object.logIfVerbose(self,command)
-		o = self.execute(command)
-		Object.logIfVerbose(self,o)
+		command = self.copy_command + " " + source_list + str(destination)		
+		self.execute(command)
 
 	# End copy_multiple
 	
@@ -75,10 +69,7 @@ class CopyTool(ToolBaseObject):
 			command += " " + str(opt)
 		
 		command += " " + str(source) + " " + str(destination)
-
-		Object.logIfVerbose(self,command)
-		o = self.execute(command)
-		Object.logIfVerbose(self,o)
+		self.execute(command)
 
 	# End copy_recursively
 	

@@ -189,19 +189,12 @@ class CMakeSystem(BuildSystemBaseObject):
 			if not Object.global_dry_run:
 				raise e
 		
-		Object.logIfVerbose(self,str(self))
-
-		o = shell.execute(str(self))
+		shell.execute(str(self))
 		if shell.exit_code != 0 and not Object.global_dry_run:
 			raise BuildSystemError("Error while configuring build system: " + o)
 
-		Object.logIfVerbose(self,o)		
-		Object.logIfVerbose(self,self.build_command + " ProcessorCount")
-
 		# Now try for make ProcessorCount
-		o = shell.execute(self.build_command + " ProcessorCount")
-
-		Object.logIfVerbose(self,o)
+		shell.execute(self.build_command + " ProcessorCount")
 
 		if shell.exit_code == 0:
 			if re.search(r'ACTIVE_PROCESSORS', o):
@@ -244,11 +237,9 @@ class CMakeSystem(BuildSystemBaseObject):
 		if target:
 			command += " " + str(target)
 
-		Object.logIfVerbose(self,command)
-		o = shell.execute(command)
+		shell.execute(command)
 		if shell.exit_code != 0 and not Object.global_dry_run:
 			raise BuildSystemError("Error while building: " + o)
-		Object.logIfVerbose(self,o)
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -269,10 +260,7 @@ class CMakeSystem(BuildSystemBaseObject):
 				raise e
 
 		command = self.build_command
-		
-		Object.logIfVerbose(self,command + " install/fast")
-		o = shell.execute(command + " install/fast")
-		Object.logIfVerbose(self,o)
+		shell.execute(command + " install/fast")
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -292,11 +280,8 @@ class CMakeSystem(BuildSystemBaseObject):
 			if not Object.global_dry_run:
 				raise e
 		
-		command = self.build_command
-		
-		Object.logIfVerbose(self,command + " package")
-		o = shell.execute(command + " package")
-		Object.logIfVerbose(self,o)
+		command = self.build_command		
+		shell.execute(command + " package")
 		
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
