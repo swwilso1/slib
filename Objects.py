@@ -25,13 +25,13 @@ class Object(object):
 	# End enableGlobalDryRun	
 
 	def logIfVerbose(self, arg):
-		if self.log_object and self.verbose and arg != None:
-			self.log_object.log(str(arg))
+		if Object.log_object and Object.verbose and arg != None:
+			Object.log_object.log(str(arg))
 	# End logIfVerbose
 	
 	def logIfDryRun(self, arg):
-		if self.log_object and self.global_dry_run and arg != None:
-			self.log_object.log(str(arg))
+		if Object.log_object and Object.global_dry_run and arg != None:
+			Object.log_object.log(str(arg))
 
 	# End logIfDryRun
 	
