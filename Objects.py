@@ -8,10 +8,8 @@ class Object(object):
 
 	def __init__(self, **kwargs):
 		if kwargs.has_key("log"):
-			Object.log_object = kwargs["log"]
-		
-		Object.verbose = False
-
+			Object.log_object = kwargs["log"]	
+				
 	# End __init__
 
 	def setClassVerbose(self, arg):
