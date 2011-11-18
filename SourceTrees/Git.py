@@ -6,6 +6,7 @@ from slib.Objects import Object
 from slib.Commands import CommandError
 from slib.SourceTrees import SourceTreeBaseObject, SourceTreeError
 from slib.FileSystems.Directories import Directory
+from slib.Commands.Shells import Shell
 
 class GitTree(SourceTreeBaseObject):
 	"""The GitTree class."""
@@ -226,7 +227,7 @@ class GitTree(SourceTreeBaseObject):
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		branches = [ self.__massageBranchName(branch) for branch in o.split('\n') ]
-		return branches
+		return [ branch for branch in branches if len(branch) > 0 ]
 
 	# End branches
 
@@ -332,7 +333,7 @@ class GitTree(SourceTreeBaseObject):
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		tags = [ tag for tag in o.split('\n') ]
-		return tags
+		return [ tag for tag in tags if len(tag) > 0 ]
 
 	# End tags
 
@@ -364,5 +365,34 @@ class GitTree(SourceTreeBaseObject):
 	# End __repr__
 	
 # End GitTree
+
+
+def ConvertPathToGITTree(path):
+	currentDirectory = os.getcwd()
+	os.chdir(path)	
+	shell = Shell()
+	shell.capture_output = True
+	# Calculate the repository
+	command = 'git remote -v | grep origin | grep fetch'
+	output = shell.execute(command)
+	name_repo = output.split(' ')[0]
+	repository = name_repo.split('\t')[1]
+	
+	# Calculate the branch
+	command = 'git branch'
+	output = shell.execute(command)
+	branch = output.split(' ')[1]
+	
+	os.chdir(currentDirectory)
+
+	# Calculate the path
+	thePath = os.path.dirname(path)
+	
+	# Calculate the name
+	name = os.path.basename(path)
+	
+	return GitTree(repository, thePath, branch, name)
+
+# End ConvertPathToGITTree
 
 
