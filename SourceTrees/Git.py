@@ -369,7 +369,7 @@ class GitTree(SourceTreeBaseObject):
 
 def ConvertPathToGITTree(path):
 	currentDirectory = os.getcwd()
-	os.chdir(path)	
+	os.chdir(str(path))	
 	shell = Shell()
 	shell.capture_output = True
 	# Calculate the repository
@@ -386,10 +386,10 @@ def ConvertPathToGITTree(path):
 	os.chdir(currentDirectory)
 
 	# Calculate the path
-	thePath = os.path.dirname(path)
+	thePath = os.path.dirname(str(path))
 	
 	# Calculate the name
-	name = os.path.basename(path)
+	name = os.path.basename(str(path))
 	
 	return GitTree(repository, thePath, branch, name)
 
