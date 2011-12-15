@@ -246,7 +246,7 @@ class CVSFileData(Object):
 	@property
 	def fullpath(self):
 		if self.filepath:
-			return str(self.filepath) + "/" + str(self.name)
+			return str(self.filepath) + os.path.sep + str(self.name)
 		else:
 			return str(self.name)
 	# End fullpath
@@ -254,7 +254,7 @@ class CVSFileData(Object):
 	@property
 	def cvslocation(self):
 		if self.repository:
-			return str(self.repository) + "/" + str(self.name)
+			return str(self.repository) + os.path.sep + str(self.name)
 		else:
 			return str(self.name)
 	# End cvslocation
@@ -341,7 +341,7 @@ class CVSTreeData(Object):
 
 
 	def __ParseData(self, path, entry, loglines):
-		entrydata = entry.split('/')[1:]
+		entrydata = entry.split(os.path.sep)[1:]
 
 		if re.search(r'^T', entrydata[4]):
 			entrydata[4] = entrydata[4][1:-1]
@@ -362,8 +362,8 @@ class CVSTreeData(Object):
 					return None
 
 		modified = False
-		if not os.path.isdir(path + "/" + entrydata[0]):
-			newdate = self.__PrepDate(path + "/" + entrydata[0])
+		if not os.path.isdir(path + os.path.sep + entrydata[0]):
+			newdate = self.__PrepDate(path + os.path.sep + entrydata[0])
 
 			if newdate != entrydata[2]:
 				modified = True;
@@ -389,14 +389,14 @@ class CVSTreeData(Object):
 		result = self.__ParseData(path, entry, [])
 		if result == None:
 			return
-		self.directories.append(CVSTreeData(path + "/" + result[0]))
+		self.directories.append(CVSTreeData(path + os.path.sep + result[0]))
 	# End __LoadTreeData
 	
 
 	def __LoadCVSData(self):
-		if os.path.exists(self.path + "/CVS"):
-			cvsdir = self.path + "/CVS"
-			repofile = open(cvsdir + "/Repository")
+		if os.path.exists(self.path + os.path.sep + "CVS"):
+			cvsdir = self.path + os.path.sep + "CVS"
+			repofile = open(cvsdir + os.path.sep + "Repository")
 			repodata = repofile.readlines()
 			if len(repodata) > 1:
 				raise BadRepositoryException()
@@ -405,13 +405,13 @@ class CVSTreeData(Object):
 			
 			entries_loglines = []
 
-			if os.path.exists(cvsdir + "/Entries.log"):
-				entries_logfile = open(cvsdir + "/Entries.log")
+			if os.path.exists(cvsdir + os.path.sep + "Entries.Log"):
+				entries_logfile = open(cvsdir + os.path.sep + "Entries.Log")
 				entries_loglines = entries_logfile.readlines()
 
 			entrieslines = []
-			if os.path.exists(cvsdir + "/Entries"):
-				entriesfile = open(cvsdir + "/Entries")
+			if os.path.exists(cvsdir + os.path.sep + "Entries"):
+				entriesfile = open(cvsdir + os.path.sep + "Entries")
 				entrieslines = entriesfile.readlines()
 			
 			for entry in entrieslines:
