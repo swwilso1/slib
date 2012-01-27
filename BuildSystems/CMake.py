@@ -11,6 +11,38 @@ from slib.FileSystems import FileSystemBaseObject, REGULAR_FILE
 from slib.FileSystems.Files import File
 from slib.FileSystems.Directories import Directory
 
+class CMakeParameterParser(Object):
+	"""The CMakeParameterParser class."""
+
+	def __init__(self, **kwargs):
+		Object.__init__(self, **kwargs)
+
+	# End __init__
+
+	def parse(self, parameter):
+		result = []
+		strippedParameter = parameter
+		if re.search(r'^-D', parameter):
+			strippedParameter = parameter[2:]
+
+		if re.search(r':', strippedParameter):
+			values = strippedParameter.split(':')
+			result.append(values[0])
+			typeAndValue = values[1].split('=')
+			result.append(typeAndValue[1])
+			result.append(typeAndValue[0])
+		else:
+			nameAndValue = strippedParameter.split('=')
+			result.append(nameAndValue[0])
+			result.append(nameAndValue[1])
+			result.append(None)
+
+		return result
+
+	# End parse
+
+# End CMakeParameterParser
+
 
 class CMakeParameter(Object):
 	"""The CMakeParameter class."""
