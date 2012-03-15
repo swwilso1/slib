@@ -197,6 +197,11 @@ class CMakeSystem(BuildSystemBaseObject):
 		else:
 			self.generator = None
 		
+		if kwargs.has_key("binary"):
+			self.binary = kwargs['binary']
+		else:
+			self.binary = "cmake"
+
 		self._path_sep_regex = re.compile(os.sep)
 		self.active_processors = None
 	# End __init__
@@ -384,7 +389,7 @@ class CMakeSystem(BuildSystemBaseObject):
 
 
 	def __str__(self):
-		command = "cmake "
+		command = self.binary + " "
 
 		for flag in self._commandLineFlags:
 			command += str(flag) + " "
