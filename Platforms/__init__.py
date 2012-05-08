@@ -91,6 +91,66 @@ class PlatformInspectorBaseObject(Object):
 
 	# End osVersion.deleter
 	
+
+	@property
+	def osMajorVersion(self):
+		thisVersion = self.osVersion
+		majorVersion = re.sub(r'([\d]+)\..*', '\\1', thisVersion)
+		return int(majorVersion)
+	# End osMajorVersion
+
+	@osMajorVersion.setter
+	def osMajorVersion(self,value):
+		raise TypeError("Unable to reset osMajorVersion")
+
+	# End osMajorVersion.setter
+
+	@osMajorVersion.deleter
+	def osMajorVersion(self):
+		raise TypeError("Unable to delete osMajorVersion")
+
+	# End osMajorVersion.deleter
+
+	@property
+	def osMinorVersion(self):
+		thisVersion = self.osVersion
+		minorVersion = re.sub(r'[\d]+\.([\d]+)\..*', '\\1', thisVersion)
+		return int(minorVersion)
+
+	# End osMinorVersion
+
+	@osMinorVersion.setter
+	def osMinorVersion(self,value):
+		raise TypeError("Unable to reset osMinorVersion")
+	
+	# End osMinorVersion.setter
+
+
+	@osMinorVersion.deleter
+	def osMinorVersion(self):
+		raise TypeError("Unable to delete osMinorVersion")
+
+	# End osMinorVersion.deleter
+
+	@property
+	def osReleaseVersion(self):
+		thisVersion = self.osVersion
+		releaseVersion = re.sub(r'[\d]+\.[\d]+\.([\d]+)', '\\1', thisVersion)
+		return int(releaseVersion)
+
+	# End osReleaseVersion
+
+	@osReleaseVersion.setter
+	def osReleaseVersion(self,value):
+		raise TypeError("Unable to reset osReleaseVersion")
+
+	# End osReleaseVersion.setter
+
+	@osReleaseVersion.deleter
+	def osReleaseVersion(self):
+		raise TypeError("Unable to reset osReleaseVersion")
+
+	# End osReleaseVersion.deleter
 	
 	@property
 	def systemID(self):
