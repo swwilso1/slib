@@ -27,6 +27,9 @@ class MacInspector(PlatformInspectorBaseObject):
 
 		Object.logIfVerbose(self,"sw_vers -productVersion")
 		self._osVersion = shell.execute("sw_vers -productVersion").strip()
+		if re.match(r'[\d]+\.[\d]+$',self._osVersion):
+			self._osVersion += ".0"
+
 		Object.logIfVerbose(self,self._osVersion)
 
 		self._machineHardware = shell.execute("uname -m").strip()
