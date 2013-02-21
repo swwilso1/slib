@@ -107,7 +107,14 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
+
 		command = "git pull origin"
+
+		# Get the current branch
+		branch = self.branch
+
+		if branch:
+			command += " " + branch
 
 		self.shell.execute(command)
 		
