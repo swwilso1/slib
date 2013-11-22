@@ -29,7 +29,7 @@ class File(FileSystemBaseObject):
 	
 	@property
 	def extension(self):
-		if self.name.count('.') == 1:
+		if self.name.count('.') > 0:
 			match = re.search(r'.*\.(.*)$', self.name)
 			if match:
 				return match.group(1)
