@@ -27,6 +27,19 @@ class CopyTool(ToolBaseObject):
 
 	# End __init__
 
+
+	def __escapeDifficultCharacters(self, value):
+
+		value = re.sub(r' ', r'\ ', value)
+		value = re.sub(r"'", r"\'", value)
+		value = re.sub(r'\?', r'\\?', value)
+		value = re.sub(r'\&', r'\\&', value)
+
+		return value
+
+	# End __escapeDifficultCharacters
+
+
 	
 	def copy(self, source, destination, options = []):
 		shell = Shell()
@@ -34,7 +47,10 @@ class CopyTool(ToolBaseObject):
 		command = self.copy_command
 		for opt in options:
 			command += " " + str(opt)
-		
+
+		source = self.__escapeDifficultCharacters(source)		
+		destination = self.__escapeDifficultCharacters(destination)
+
 		command += " " + str(source) + " " + str(destination)
 		self.execute(command)
 
@@ -47,8 +63,11 @@ class CopyTool(ToolBaseObject):
 		shell = Shell()
 		source_list = ""
 		for source in sources:
+			source = self.__escapeDifficultCharacters(source)
 			source_list += str(source) + " "
 		
+		destination = self.__escapeDifficultCharacters(destination)
+
 		command = self.copy_command + " " + source_list + str(destination)		
 		self.execute(command)
 
@@ -67,6 +86,9 @@ class CopyTool(ToolBaseObject):
 		command = copy_command
 		for opt in options:
 			command += " " + str(opt)
+
+		source = self.__escapeDifficultCharacters(source)
+		destination = self.__escapeDifficultCharacters(destination)
 		
 		command += " " + str(source) + " " + str(destination)
 		self.execute(command)
