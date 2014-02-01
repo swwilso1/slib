@@ -96,5 +96,17 @@ class File(FileSystemBaseObject):
 	# End convertLineEndings
 	
 	
+	def updateContents(self, newlines=[]):
+		if not self.regular:
+			raise FileSystemError("%s not a regular file, cannot change file" % (str(self.fullpath)))
+		if self.canRead:
+			if self.regular:
+				f = open(self.fullpath,"w")
+				return f.writelines(newlines)
+			else:
+				raise FileSystemError("%s not a regular file, cannot change file" % (str(self.fullpath)))
+		else:
+			raise FileSystemError("Current user does not have write permissions for %s" % (str(self.fullpath)))
+	# End updateContents
 
 # End File
