@@ -34,6 +34,8 @@ class CopyTool(ToolBaseObject):
 		value = re.sub(r"'", r"\'", value)
 		value = re.sub(r'\?', r'\\?', value)
 		value = re.sub(r'\&', r'\\&', value)
+		value = re.sub(r'\(', r"\(", value)
+		value = re.sub(r'\)', r"\)", value)
 
 		return value
 
