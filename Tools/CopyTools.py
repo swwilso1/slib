@@ -42,7 +42,7 @@ class CopyTool(ToolBaseObject):
 	# End __escapeDifficultCharacters
 
 
-	
+
 	def copy(self, source, destination, options = []):
 		shell = Shell()
 
@@ -50,8 +50,8 @@ class CopyTool(ToolBaseObject):
 		for opt in options:
 			command += " " + str(opt)
 
-		source = self.__escapeDifficultCharacters(source)		
-		destination = self.__escapeDifficultCharacters(destination)
+		source = self.__escapeDifficultCharacters(str(source))
+		destination = self.__escapeDifficultCharacters(str(destination))
 
 		command += " " + str(source) + " " + str(destination)
 		self.execute(command)
@@ -65,38 +65,38 @@ class CopyTool(ToolBaseObject):
 		shell = Shell()
 		source_list = ""
 		for source in sources:
-			source = self.__escapeDifficultCharacters(source)
+			source = self.__escapeDifficultCharacters(str(source))
 			source_list += str(source) + " "
-		
-		destination = self.__escapeDifficultCharacters(destination)
 
-		command = self.copy_command + " " + source_list + str(destination)		
+		destination = self.__escapeDifficultCharacters(str(destination))
+
+		command = self.copy_command + " " + source_list + str(destination)
 		self.execute(command)
 
 	# End copy_multiple
-	
-	
+
+
 	def copy_recursively(self, source, destination, options=[]):
 		if re.search(r'win32', sys.platform):
 			copy_command = 'xcopy'
 		else:
 			copy_command = 'cp -R'
-		
+
 		if re.search(r'cmake',self.copy_command):
 			copy_command = self.copy_command
-		
+
 		command = copy_command
 		for opt in options:
 			command += " " + str(opt)
 
-		source = self.__escapeDifficultCharacters(source)
-		destination = self.__escapeDifficultCharacters(destination)
-		
+		source = self.__escapeDifficultCharacters(str(source))
+		destination = self.__escapeDifficultCharacters(str(destination))
+
 		command += " " + str(source) + " " + str(destination)
 		self.execute(command)
 
 	# End copy_recursively
-	
-	
+
+
 
 # End CopyTool
