@@ -52,7 +52,7 @@ class CMakeParameter(Object):
 		self.name = name
 		self.type = None
 		self.value = value
-		
+
 
 	# End __init__
 
@@ -61,7 +61,7 @@ class CMakeParameter(Object):
 		return str(self)
 
 	# End command_line_form
-	
+
 
 	def __str__(self):
 		return "-D" + str(self.name) + ":" + str(self.type) + "=" + str(self.value)
@@ -71,7 +71,7 @@ class CMakeParameter(Object):
 		return self.__class__.__name__ + "(" + repr(self.name) + "," + repr(self.value) + ")"
 
 	# End __repr__
-	
+
 
 # End CMakeParameter
 
@@ -84,7 +84,7 @@ class StringParameter(CMakeParameter):
 		self.type = "STRING"
 
 	# End __init__
-	
+
 
 # End StringParameter
 
@@ -97,28 +97,28 @@ class FilePathParameter(CMakeParameter):
 		self.type="FILEPATH"
 
 	# End __init__
-	
+
 	@property
 	def fullpath(self):
 		return File(self.value)
 
 	# End fullpath
-	
+
 	@property
 	def exists(self):
 		f = File(self.value)
 		return f.exists
 
 	# End exists
-	
-	
+
+
 	@property
 	def remove(self):
 		f = File(self.value)
 		f.remove()
 
 	# End remove
-	
+
 
 # End FilePathParameter
 
@@ -137,23 +137,23 @@ class PathParameter(CMakeParameter):
 		return Directory(self.value)
 
 	# End fullpath
-	
-	
+
+
 	@property
 	def exists(self):
 		d = Directory(self.value)
 		return d.exists
 
 	# End exists
-	
+
 	@property
 	def remove(self):
 		d = Directory(self.value)
 		d.remove()
 
 	# End remove
-	
-	
+
+
 
 # End PathParameter
 
@@ -166,7 +166,7 @@ class BooleanParameter(CMakeParameter):
 			value = 'ON'
 		else:
 			value = 'OFF'
-		
+
 		CMakeParameter.__init__(self, name, value, **kwargs)
 		self.type="BOOL"
 
@@ -196,27 +196,32 @@ class CMakeSystem(BuildSystemBaseObject):
 			self.generator = kwargs['generator']
 		else:
 			self.generator = None
-		
+
 		if kwargs.has_key("binary"):
 			self.binary = kwargs['binary']
 		else:
 			self.binary = "cmake"
 
 		self._path_sep_regex = re.compile(os.sep)
-		self.active_processors = None
+
+		if "processors" in kwargs:
+			self.active_processors = kwargs["processors"]
+		else:
+			self.active_processors = None
+
 	# End __init__
 
 
 	def configure(self):
 		if not Object.global_dry_run and not self.source_tree_directory.exists:
 			raise BuildSystemError("Source tree %s does not exist" % (self.source_tree_directory.fullpath))
-		
+
 		shell = Shell()
 		shell.capture_output = True
 		shell.raise_error_on_shell_error = False
 
 		self.working_directory.create()
-		
+
 		currentDirectory = os.getcwd()
 
 		try:
@@ -225,28 +230,29 @@ class CMakeSystem(BuildSystemBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		shell.execute(str(self))
 		if shell.exit_code != 0 and not Object.global_dry_run:
 			raise BuildSystemError("Error while configuring build system: " + o)
 
-		# Now try for make ProcessorCount
-		o = shell.execute(self.build_command + " ProcessorCount")
+		if not self.active_processors:
+			# Now try for make ProcessorCount
+			o = shell.execute(self.build_command + " ProcessorCount")
 
-		if shell.exit_code == 0:
-			if re.search(r'ACTIVE_PROCESSORS', o):
-				lines = o.split("\n")
-				for line in lines:
-					match = re.search(r'^ACTIVE_PROCESSORS: (\d+)', line)
-					if match:
-						self.active_processors = match.group(1)
-						break
+			if shell.exit_code == 0:
+				if re.search(r'ACTIVE_PROCESSORS', o):
+					lines = o.split("\n")
+					for line in lines:
+						match = re.search(r'^ACTIVE_PROCESSORS: (\d+)', line)
+						if match:
+							self.active_processors = match.group(1)
+							break
 
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End configure
-	
+
 
 
 	def build(self,target=None,**kwargs):
@@ -262,7 +268,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		command = self.build_command
 
 		if kwargs.has_key('processors'):
@@ -277,7 +283,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		shell.execute(command)
 		if shell.exit_code != 0 and not Object.global_dry_run:
 			raise BuildSystemError("Error while building: " + o)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
@@ -288,7 +294,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		shell = Shell()
 		shell.capture_output = True
 		currentDirectory = os.getcwd()
-		
+
 		try:
 			Object.logIfDryRun(self,"cd " + self.working_directory.fullpath)
 			os.chdir(self.working_directory.fullpath)
@@ -298,28 +304,28 @@ class CMakeSystem(BuildSystemBaseObject):
 
 		command = self.build_command
 		shell.execute(command + " install/fast")
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End install
-	
-	
+
+
 	def package(self):
 		shell = Shell()
 		shell.capture_output = True
 		currentDirectory = os.getcwd()
-		
+
 		try:
 			Object.logIfDryRun(self,"cd " + self.working_directory.fullpath)
 			os.chdir(self.working_directory.fullpath)
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
-		command = self.build_command		
+
+		command = self.build_command
 		shell.execute(command + " package")
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
@@ -333,7 +339,7 @@ class CMakeSystem(BuildSystemBaseObject):
 		return False
 
 	# End exists
-	
+
 
 	@property
 	def package_file(self):
@@ -345,8 +351,8 @@ class CMakeSystem(BuildSystemBaseObject):
 		return None
 
 	# End package_file
-	
-	
+
+
 	@property
 	def installer_file(self):
 		if self.working_directory.exists:
@@ -356,15 +362,15 @@ class CMakeSystem(BuildSystemBaseObject):
 					return f
 		return None
 	# End installer_file
-	
-	
-	
+
+
+
 	def remove(self):
 		Object.logIfDryRun(self,"rmdir " + self.working_directory.fullpath)
 		self.working_directory.remove()
 
 	# End remove
-	
+
 
 
 	def __setitem__(self, key, value):
@@ -384,7 +390,7 @@ class CMakeSystem(BuildSystemBaseObject):
 			self._build_parameters[key] = BooleanParameter(key,value)
 		else:
 			self._build_parameters[key] = StringParameter(key,str(value))
-	
+
 	# End __setitem__
 
 
@@ -396,7 +402,7 @@ class CMakeSystem(BuildSystemBaseObject):
 
 		for value in self._build_parameters.values():
 			command += str(value) + " "
-		
+
 		if self.generator:
 			if self.generator.count(' ') > 0:
 				command += "-G '" + self.generator + "' "
@@ -405,30 +411,30 @@ class CMakeSystem(BuildSystemBaseObject):
 		else:
 			if re.search(r'win32',sys.platform):
 				command += "-G NMake Makefiles "
-		
+
 		command += str(self.source_tree_directory)
-		
+
 		return command
 
 	# End __str__
-	
+
 
 	def __repr__(self):
 		text =  self.__class__.__name__ + "('" + str(self.working_directory) + "', '" + str(self.source_tree_directory) + "'"
 		if len(self._build_parameters.keys()) > 0:
 			text += ", " + repr(self._build_parameters)
-		
+
 		if self.generator:
 			text += ", generator=" + repr(self.generator)
-			
+
 		if len(self._commandLineFlags) > 0:
 			text += ", command_line_flags=" + repr(self._commandLineFlags)
 		text += ")"
-		
+
 		return text
-		
+
 
 	# End __repr__
 
-	
+
 # End CMakeSystem
