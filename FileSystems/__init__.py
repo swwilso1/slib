@@ -215,6 +215,14 @@ class FileSystemBaseObject(Object):
 	# End type
 
 	@property
+	def hidden(self):
+		if re.search(r'^\..*',self.name):
+			return True
+		return False
+
+	# End hidden
+
+	@property
 	def extension(self):
 		return None
 
