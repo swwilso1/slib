@@ -3,6 +3,7 @@
 import re
 from slib.Objects import Object
 from slib.FileSystems import FileSystemBaseObject
+from slib.FileSystems import FileSystemError
 
 class File(FileSystemBaseObject):
 	"""The File class."""
@@ -25,8 +26,8 @@ class File(FileSystemBaseObject):
 		else:
 			raise FileSystemError("Current user does not have read permissions for %s" % (str(self.fullpath)))
 	# End contents
-	
-	
+
+
 	@property
 	def extension(self):
 		if self.name.count('.') > 0:
@@ -37,7 +38,7 @@ class File(FileSystemBaseObject):
 
 	# End extension
 
-	
+
 	@property
 	def lineEndings(self):
 		unix = False
@@ -54,11 +55,11 @@ class File(FileSystemBaseObject):
 			return "Unix"
 		elif windows:
 			return "Windows"
-		return None		
-		
+		return None
+
 	# End lineEndings
-	
-	
+
+
 	def convertLineEndings(self, platform = None):
 		newlines = []
 		if platform == "Unix":
@@ -83,19 +84,19 @@ class File(FileSystemBaseObject):
 				elif re.search(r'\n$', line):
 					modLine = re.sub(r'\n$', r'\r\n', line)
 				newlines.append(modLine)
-			
+
 
 		try:
 			f = open(self.fullpath,"w")
 		except IOError as e:
 			raise FileSystemError("Cannot write to file %s: %s" % (str(self.fullpath), str(e)))
-		
+
 		f.writelines(newlines)
 		f.close()
 
 	# End convertLineEndings
-	
-	
+
+
 	def updateContents(self, newlines=[]):
 		if not self.regular:
 			raise FileSystemError("%s not a regular file, cannot change file" % (str(self.fullpath)))
@@ -108,5 +109,14 @@ class File(FileSystemBaseObject):
 		else:
 			raise FileSystemError("Current user does not have write permissions for %s" % (str(self.fullpath)))
 	# End updateContents
+
+
+	def create(self):
+		if not self.exists:
+			try:
+				f = open(self.fullpath, "w")
+			except IOError as e:
+				raise FileSystemError("Cannot open file %s for writing: %s" % (str(self.fullpath), str(e)))
+			f.writelines([" "])
 
 # End File
