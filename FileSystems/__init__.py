@@ -12,7 +12,14 @@ from slib.Commands.Shells import Shell
 from slib.Commands import CommandError
 
 
-__all__ = ["BlockDevices", "CharacterDevices", "Directories", "Fifos", "Files", "Sockets", "SymbolicLinks"]
+DIRECTORY = 1
+CHARACTER_DEVICE = 2
+BLOCK_DEVICE = 3
+REGULAR_FILE = 4
+FIFO = 5
+SYMBOLIC_LINK = 6
+SOCKET = 7
+NO_TYPE = 99
 
 
 def FindFullDirectory(directory):
@@ -37,16 +44,6 @@ class FileSystemError(Error):
 
 # End FSObjectException
 
-
-
-DIRECTORY = 1
-CHARACTER_DEVICE = 2
-BLOCK_DEVICE = 3
-REGULAR_FILE = 4
-FIFO = 5
-SYMBOLIC_LINK = 6
-SOCKET = 7
-NO_TYPE = 99
 
 class FileSystemBaseObject(Object):
 	"""The FileSystemBaseObject class."""
@@ -421,6 +418,25 @@ def Difference(a,b):
 	return a.Difference(b)
 # End Difference
 
+
+
+__all__ = ["BlockDevices", 
+	"CharacterDevices",
+	"Directories",
+	"Fifos",
+	"Files",
+	"Sockets",
+	"SymbolicLinks",
+	"DIRECTORY",
+	"CHARACTER_DEVICE",
+	"BLOCK_DEVICE",
+	"REGULAR_FILE",
+	"FIFO",
+	"SYMBOLIC_LINK",
+	"SOCKET",
+	"NO_TYPE",
+	"FileSystemError"
+]
 
 
 import BlockDevices

@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 
-__all__ = ["Shells"]
-
 from slib.Objects import Object
 from slib.Errors import Error
 
@@ -62,5 +60,7 @@ class CommandBase(Object):
 	
 
 # End CommandBase
+
+__all__ = ["Shells", "CommandError"]
 
 import Shells
