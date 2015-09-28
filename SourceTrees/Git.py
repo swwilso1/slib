@@ -16,7 +16,7 @@ class GitTree(SourceTreeBaseObject):
 		self.__name = name
 	# End __init__
 
-	
+
 	@property
 	def name(self):
 		if self.__name:
@@ -27,7 +27,7 @@ class GitTree(SourceTreeBaseObject):
 					repository_directory = Directory(self.repository.split("://")[1])
 				else:
 					repository_directory = Directory(self.repository.split(":")[1])
-				
+
 				if re.search(r'\.', repository_directory.name):
 					return repository_directory.name.split(".")[0]
 				else:
@@ -35,9 +35,9 @@ class GitTree(SourceTreeBaseObject):
 			else:
 				return os.path.basename(self.repository)
 
-	# End name	
+	# End name
 
-	
+
 	@property
 	def local_path(self):
 		if self.path:
@@ -48,8 +48,8 @@ class GitTree(SourceTreeBaseObject):
 		return directory
 
 	# End local_path
-	
-	
+
+
 	def checkout(self):
 		if not self.local_path.parent.exists:
 			self.local_path.parent.create()
@@ -70,7 +70,7 @@ class GitTree(SourceTreeBaseObject):
 		command = "git clone " + self.repository + " " + self.name
 
 		self.shell.execute(command)
-		
+
 		if orig_branch != "master" and orig_branch != None:
 			try:
 				Object.logIfDryRun(self,"cd " + self.local_path.fullpath)
@@ -88,7 +88,7 @@ class GitTree(SourceTreeBaseObject):
 		os.chdir(currentDirectory)
 
 	# End checkout
-	
+
 
 	@property
 	def exists(self):
@@ -117,10 +117,10 @@ class GitTree(SourceTreeBaseObject):
 			command += " " + branch
 
 		self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
-		
+
 	# End update
 
 
@@ -147,12 +147,12 @@ class GitTree(SourceTreeBaseObject):
 			self.shell.execute(command)
 
 		self.__branch = str(branch)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End switch_to_branch
-	
+
 
 	def make_new_branch(self,branch):
 		if not Object.global_dry_run and not self.local_path.exists:
@@ -166,11 +166,11 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		command = "git branch " + str(branch)
 
 		self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
@@ -189,12 +189,12 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		command = "git checkout -b " + str(branch)
 		self.shell.execute(command)
-		
+
 		self.__branch = str(branch)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
@@ -208,7 +208,7 @@ class GitTree(SourceTreeBaseObject):
 		return name
 
 	# End __massageBranchName
-	
+
 
 
 	@property
@@ -224,13 +224,13 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		command = "git branch -a"
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
 
 		o = self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		branches = [ self.__massageBranchName(branch) for branch in o.split('\n') ]
@@ -252,13 +252,13 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		command = "git branch"
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
 
 		o = self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		if o:
@@ -282,17 +282,17 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		command = "git branch " + str(branch) + " " + str(remote) + "/" + str(branch)
 
 		self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch_from_remote
 
-	
+
 	def make_new_branch_from_remote_and_switch(self,branch,remote="origin"):
 		if not Object.global_dry_run and not self.local_path.exists:
 			return
@@ -305,17 +305,17 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-		
+
 		command = "git checkout -b " + str(branch) + " " + str(remote) + "/" + str(branch)
 		self.shell.execute(command)
-		
+
 		self.__branch = str(branch)
 
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch_from_remote_and_switch
-	
+
 
 	@property
 	def tags(self):
@@ -330,13 +330,13 @@ class GitTree(SourceTreeBaseObject):
 		except OSError as e:
 			if not Object.global_dry_run:
 				raise e
-	
+
 		command = "git tag"
 		if not self.shell.capture_output:
 			self.shell.capture_output = True
 
 		o = self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 		tags = [ tag for tag in o.split('\n') ]
@@ -352,13 +352,13 @@ class GitTree(SourceTreeBaseObject):
 
 
 	def __repr__(self):
-		
+
 		text = self.__class__.__name__ + "(" + repr(self.repository) + "," + repr(self.path) + ","
 		if self.branch != None:
 			text += repr(self.branch)
 		else:
 			text += " " + str(None)
-		
+
 		if self.name != None:
 			text += "," + repr(self.name)
 		else:
@@ -367,16 +367,16 @@ class GitTree(SourceTreeBaseObject):
 		if len(self.args[0]) > 0:
 			text += "," + repr(self.args)
 		text += ")"
-		return text			
+		return text
 
 	# End __repr__
-	
+
 # End GitTree
 
 
 def ConvertPathToGITTree(path):
 	currentDirectory = os.getcwd()
-	os.chdir(str(path))	
+	os.chdir(str(path))
 	shell = Shell()
 	shell.capture_output = True
 	# Calculate the repository
@@ -384,20 +384,20 @@ def ConvertPathToGITTree(path):
 	output = shell.execute(command)
 	name_repo = output.split(' ')[0]
 	repository = name_repo.split('\t')[1]
-	
+
 	# Calculate the branch
 	command = 'git branch'
 	output = shell.execute(command)
 	branch = output.split(' ')[1]
-	
+
 	os.chdir(currentDirectory)
 
 	# Calculate the path
 	thePath = os.path.dirname(str(path))
-	
+
 	# Calculate the name
 	name = os.path.basename(str(path))
-	
+
 	return GitTree(repository, thePath, branch, name)
 
 # End ConvertPathToGITTree

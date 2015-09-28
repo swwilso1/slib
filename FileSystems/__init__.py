@@ -47,7 +47,7 @@ class FileSystemError(Error):
 
 class FileSystemBaseObject(Object):
 	"""The FileSystemBaseObject class."""
-	
+
 	def __init__(self, name, **kwargs):
 		Object.__init__(self, **kwargs)
 		strname = str(name)
@@ -67,8 +67,8 @@ class FileSystemBaseObject(Object):
 			return self._path
 		return "."
 	# End path
-	
-			
+
+
 	@property
 	def fullpath(self):
 		if re.match(r'^/$', self.path):
@@ -84,7 +84,7 @@ class FileSystemBaseObject(Object):
 			return fsdata.st_mode
 		return 0
 	# End st_mode
-	
+
 	@property
 	def st_ino(self):
 		if not Object.global_dry_run:
@@ -100,7 +100,7 @@ class FileSystemBaseObject(Object):
 			return fsdata.st_dev
 		return 0
 	# End st_dev
-	
+
 	@property
 	def st_nlink(self):
 		if not Object.global_dry_run:
@@ -166,12 +166,12 @@ class FileSystemBaseObject(Object):
 	def characterSpecialDevice(self):
 		return stat.S_ISCHR(self.st_mode)
 	# End characterSpecialDevice
-	
+
 	@property
 	def blockSpecialDevice(self):
 		return stat.S_ISBLK(self.st_mode)
 	# End blockSpecialDevice
-	
+
 	@property
 	def regular(self):
 		return stat.S_ISREG(self.st_mode)
@@ -181,7 +181,7 @@ class FileSystemBaseObject(Object):
 	def fifo(self):
 		return stat.S_ISFIFO(self.st_mode)
 	# End fifo
-	
+
 	@property
 	def symbolicLink(self):
 		return stat.S_ISLNK(self.st_mode)
@@ -191,7 +191,7 @@ class FileSystemBaseObject(Object):
 	def socket(self):
 		return stat.S_ISSOCK(self.st_mode)
 	# End socket
-	
+
 	@property
 	def type(self):
 		if self.directory:
@@ -232,7 +232,7 @@ class FileSystemBaseObject(Object):
 		return False
 
 	# End hasExtension
-	
+
 
 	@property
 	def exists(self):
@@ -245,7 +245,7 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End ownerHasReadPermission
-	
+
 	@property
 	def ownerHasWritePermission(self):
 		if stat.S_IMODE(self.st_mode) & stat.S_IWUSR:
@@ -259,7 +259,7 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End ownerHasExecutePermission
-	
+
 	@property
 	def groupReadPermission(self):
 		if stat.S_IMODE(self.st_mode) & stat.S_IRGRP:
@@ -301,7 +301,7 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End otherExecutePermission
-	
+
 
 	@property
 	def canRead(self):
@@ -313,7 +313,7 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End canRead
-	
+
 	@property
 	def canWrite(self):
 		if os.getuid() == self.st_uid and self.ownerHasWritePermission:
@@ -324,7 +324,7 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End canWrite
-	
+
 	@property
 	def canExecute(self):
 		if os.getuid() == self.st_uid and self.ownerHasExecutePermission:
@@ -335,8 +335,8 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End canExecute
-	
-	
+
+
 	def Difference(self,other):
 		if self.__class__ != other.__class__:
 	    		raise FileSystemError("%s not a %s" % (str(other),str(self.__class__)))
@@ -345,7 +345,7 @@ class FileSystemBaseObject(Object):
 		o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
 		return o
 	# End Difference
-	
+
 
 	def ContentsSameQ(self,other):
 		if self.__class__ != other.__class__:
@@ -359,25 +359,25 @@ class FileSystemBaseObject(Object):
 		return True
 
 	# End ContentsSameQ
-	
+
 	def ContentsDifferentQ(self,other):
 		if not self.ContentsSameQ(other):
 			return True
 		return False
 	# End ContentsDifferentQ
-	
+
 
 	def __add__(self, other):
 		return self.__class__(self.fullpath + os.sep + str(other))
 
 	# End __add__
-	
-	
+
+
 	def __radd__(self, other):
 		return self.__class__(str(other) + os.sep + self.fullpath)
 
 	# End __radd__
-	
+
 
 	def __eq__(self, other):
 		if not type(self) == type(other):
@@ -386,12 +386,12 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End __eq__
-	
-	
+
+
 	def __str__(self):
 		return self.fullpath
 	# End __str__
-	
+
 	def __repr__(self):
 		return self.__class__.__name__ + "(" + self.path + os.sep + self.name + ")"
 	# End __repr__
@@ -420,7 +420,7 @@ def Difference(a,b):
 
 
 
-__all__ = ["BlockDevices", 
+__all__ = ["BlockDevices",
 	"CharacterDevices",
 	"Directories",
 	"Fifos",

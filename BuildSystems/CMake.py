@@ -6,6 +6,7 @@ import sys
 import types
 from slib.Objects import Object
 from slib.BuildSystems import BuildSystemBaseObject, BuildSystemError
+from slib.Commands import CommandError
 from slib.Commands.Shells import Shell
 from slib.FileSystems import FileSystemBaseObject, REGULAR_FILE
 from slib.FileSystems.Files import File
@@ -237,16 +238,19 @@ class CMakeSystem(BuildSystemBaseObject):
 
 		if not self.active_processors:
 			# Now try for make ProcessorCount
-			o = shell.execute(self.build_command + " ProcessorCount")
+			try:
+				o = shell.execute(self.build_command + " ProcessorCount")
 
-			if shell.exit_code == 0:
-				if re.search(r'ACTIVE_PROCESSORS', o):
-					lines = o.split("\n")
-					for line in lines:
-						match = re.search(r'^ACTIVE_PROCESSORS: (\d+)', line)
-						if match:
-							self.active_processors = match.group(1)
-							break
+				if shell.exit_code == 0:
+					if re.search(r'ACTIVE_PROCESSORS', o):
+						lines = o.split("\n")
+						for line in lines:
+							match = re.search(r'^ACTIVE_PROCESSORS: (\d+)', line)
+							if match:
+								self.active_processors = match.group(1)
+								break
+			except CommandError as e:
+				self.active_processors = 1
 
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -275,7 +279,7 @@ class CMakeSystem(BuildSystemBaseObject):
 			if kwargs['processors']:
 				command += " -j " + str(kwargs['processors'])
 		elif self.active_processors:
-			command += " -j " + self.active_processors
+			command += " -j " + str(self.active_processors)
 
 		if target:
 			command += " " + str(target)

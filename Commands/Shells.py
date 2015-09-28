@@ -20,31 +20,31 @@ class Shell(CommandBase):
 
 	def execute(self,command,return_value=0):
 		CommandBase.execute(self,command)
-		
+
 		if self.dry_run or Object.global_dry_run:
 			return
-		
+
 		if self.capture_output or Object.getClassVerbose(self):
 			capture_output = PIPE
 		else:
 			capture_output = None
-		
+
 		process = Process(str(command),stdout=capture_output, stderr=PIPE,shell=True)
-		
+
 		data,errors = process.communicate()
-			
+
 		self.exit_code = process.wait()
 
 		if self.exit_code != return_value:
 			raise CommandError("'%s' failed with error %d: %s" % (str(command), self.exit_code, errors))
-			
+
 
 		rvalue = data
 
 		if data != None:
 			if len(data) == 0:
 				rvalue = None
-				
+
 		if errors != None and len(errors) > 0:
 			if rvalue != None:
 				final_output = rvalue + "\n" + errors
@@ -52,12 +52,12 @@ class Shell(CommandBase):
 				final_output = errors
 		else:
 			final_output = rvalue
-		
+
 		Object.logIfVerbose(self,final_output,no_format=True)
-		
+
 		return rvalue
 
-	# End execute	
+	# End execute
 
 
 # End Shell

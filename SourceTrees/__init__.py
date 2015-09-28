@@ -27,13 +27,13 @@ class SourceTreeBaseObject(Object):
 			self.__branch = str(branch)
 		else:
 			self.__branch = branch
-			
+
 		self.path = str(path)
 		self.shell = Shell()
 		self.shell.capture_output = True
 
 		self.args = args
-		
+
 
 	# End __init__
 
@@ -42,7 +42,7 @@ class SourceTreeBaseObject(Object):
 		return self.__branch
 
 	# End branch
-	
+
 
 
 	@property
@@ -50,7 +50,7 @@ class SourceTreeBaseObject(Object):
 		pass
 
 	# End local_path
-	
+
 
 
 	def checkout(self):
@@ -65,45 +65,45 @@ class SourceTreeBaseObject(Object):
 
 	# End exists
 
-	
+
 	def update(self):
 		pass
 
 	# End update
-	
-	
+
+
 	@property
 	def root(self):
 		return self.repository
 
 	# End root
-	
-	
+
+
 	def switch_to_branch(self, branch):
 		pass
 
 	# End switch_to_branch
-	
+
 
 	def make_new_branch(self,branch):
 		pass
 
 	# End make_new_branch
-	
+
 
 	def make_new_branch_and_switch(self, branch):
 		pass
 
 	# End make_new_branch_and_switch
-	
+
 
 	@property
 	def branches(self):
 		pass
 
 	# End branches
-	
-	
+
+
 	@property
 	def tags(self):
 		pass
@@ -114,17 +114,17 @@ class SourceTreeBaseObject(Object):
 		pass
 
 	# End remove
-	
-	
+
+
 
 	def __str__(self):
 		return str(self.local_path)
 
 	# End __str__
-	
-	
+
+
 	def __repr__(self):
-		
+
 		text = self.__class__.__name__ + "(" + repr(self.repository) + "," + repr(self.path) + ","
 		if self.branch != None:
 			text += repr(self.branch)
@@ -134,10 +134,10 @@ class SourceTreeBaseObject(Object):
 		if len(self.args[0]) > 0:
 			text += "," + repr(self.args)
 		text += ")"
-		return text			
+		return text
 
 	# End __repr__
-	
+
 
 # End SourceTreeBaseObject
 

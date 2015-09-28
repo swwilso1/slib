@@ -32,7 +32,7 @@ class Directory(FileSystemBaseObject):
 		return Directory(self.path)
 
 	# End parent
-	
+
 
 	def __getObjectAccordingToClass(self,name,path):
 		e = FileSystemBaseObject(self.fullpath + os.sep + name)
@@ -55,7 +55,7 @@ class Directory(FileSystemBaseObject):
 		return obj
 
 	# End __getObjectAccordingToClass
-	
+
 
 
 	@property
@@ -67,14 +67,14 @@ class Directory(FileSystemBaseObject):
 
 		return entries
 	# End entries
-	
+
 
 	@property
 	def empty(self):
 		return len(self.entries) == 0
 
 	# End empty
-	
+
 
 
 	@property
@@ -128,7 +128,7 @@ class Directory(FileSystemBaseObject):
 				specials.append(obj)
 		return specials
 	# End characters
-	
+
 	@property
 	def blocks(self):
 		specials = []
@@ -144,7 +144,7 @@ class Directory(FileSystemBaseObject):
 				specials.append(obj)
 		return specials
 	# End blocks
-	
+
 	@property
 	def regulars(self):
 		regs = []
@@ -160,7 +160,7 @@ class Directory(FileSystemBaseObject):
 				regs.append(obj)
 		return regs
 	# End regulars
-	
+
 	@property
 	def fifos(self):
 		specials = []
@@ -218,7 +218,7 @@ class Directory(FileSystemBaseObject):
 			files.extend(d.all_files)
 		return files
 	# End all_files
-	
+
 	@property
 	def all_characters(self):
 		files = self.characters
@@ -254,7 +254,7 @@ class Directory(FileSystemBaseObject):
 			files.extend(d.all_fifos)
 		return files
 	# End all_fifos
-	
+
 	@property
 	def all_links(self):
 		files = self.links
@@ -272,7 +272,7 @@ class Directory(FileSystemBaseObject):
 			files.extend(d.all_sockets)
 		return files
 	# End all_sockets
-	
+
 	@property
 	def all_entries(self):
 		entries = self.entries
@@ -304,13 +304,13 @@ class Directory(FileSystemBaseObject):
 			os.makedirs(self.fullpath)
 
 	# End create
-	
+
 	def remove(self):
 		if os.path.exists(self.fullpath):
 			shutil.rmtree(self.fullpath)
 
 	# End remove
-	
+
 
 	def __getitem__(self,key):
 		if type(key) != StringType and type(key) != UnicodeType:
@@ -318,17 +318,17 @@ class Directory(FileSystemBaseObject):
 		obj = FileSystemBaseObject(key)
 		if not obj.exists:
 			raise KeyError(key)
-		
+
 		return self.__getObjectAccordingToClass(obj.name, obj.path)
 
 	# End __getitem__
-	
+
 
 	def __contains__(self,obj):
 		return self.has_key(obj)
 	# End __contains__
-	
-	
+
+
 	def has_key(self,key):
 		if type(key) != StringType and type(key) != UnicodeType:
 			return False
@@ -338,12 +338,12 @@ class Directory(FileSystemBaseObject):
 			return False
 
 		return True
-		
+
 	# End has_key
 
 	def keys(self):
 		return [ entry.fullpath for entry in self.entries ]
-	# End keys	
+	# End keys
 
 
 	def hasChild(self,child):
@@ -353,11 +353,11 @@ class Directory(FileSystemBaseObject):
 			if entry.directory:
 				if entry.hasChild(child):
 					return True
-		return False	
-			
+		return False
+
 	# End hasChild
-	
-	
+
+
 	def getChildren(self,child):
 		children = []
 		for entry in self.entries:
@@ -367,8 +367,8 @@ class Directory(FileSystemBaseObject):
 				children.extend(entry.getChildren(child))
 		return children
 	# End getChildren
-	
-	
+
+
 	def make_current_directory(self):
 		current_directory = os.getcwd()
 		try:
@@ -381,7 +381,7 @@ class Directory(FileSystemBaseObject):
 		return Directory(current_directory)
 
 	# End make_current_directory
-	
+
 
 # End Directory
 
