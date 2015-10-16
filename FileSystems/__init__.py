@@ -159,37 +159,58 @@ class FileSystemBaseObject(Object):
 
 	@property
 	def directory(self):
-		return stat.S_ISDIR(self.st_mode)
+		try:
+			return stat.S_ISDIR(self.st_mode)
+		except OSError as e:
+			return False
 	# End directory
 
 	@property
 	def characterSpecialDevice(self):
-		return stat.S_ISCHR(self.st_mode)
+		try:
+			return stat.S_ISCHR(self.st_mode)
+		except OSError as e:
+			return False
 	# End characterSpecialDevice
 
 	@property
 	def blockSpecialDevice(self):
-		return stat.S_ISBLK(self.st_mode)
+		try:
+			return stat.S_ISBLK(self.st_mode)
+		except OSError as e:
+			return False
 	# End blockSpecialDevice
 
 	@property
 	def regular(self):
-		return stat.S_ISREG(self.st_mode)
+		try:
+			return stat.S_ISREG(self.st_mode)
+		except OSError as e:
+			return False
 	# End regular
 
 	@property
 	def fifo(self):
-		return stat.S_ISFIFO(self.st_mode)
+		try:
+			return stat.S_ISFIFO(self.st_mode)
+		except OSError as e:
+			return False
 	# End fifo
 
 	@property
 	def symbolicLink(self):
-		return stat.S_ISLNK(self.st_mode)
+		try:
+			return stat.S_ISLNK(self.st_mode)
+		except OSError as e:
+			return False
 	# End symbolicLink
 
 	@property
 	def socket(self):
-		return stat.S_ISSOCK(self.st_mode)
+		try:
+			return stat.S_ISSOCK(self.st_mode)
+		except OSError as e:
+			return False
 	# End socket
 
 	@property
