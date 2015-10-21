@@ -211,6 +211,15 @@ class Directory(FileSystemBaseObject):
 
 
 	@property
+	def all_directories(self):
+		dirs = self.directories
+		for d in self.directories:
+			dirs.extend(d.all_directories)
+		return dirs
+	# End all_directories
+
+
+	@property
 	def all_files(self):
 		files = self.files
 		dirs = self.directories
