@@ -31,12 +31,12 @@ class CVSRepository(Object):
 		return None
 
 	# End method
-	
+
 
 	@property
 	def user(self):
 		# The user field will always have the form [user[:password]@]hostname
-		# Thus all the repository names with a user specification have to have a 
+		# Thus all the repository names with a user specification have to have a
 		# '@' character
 		if not re.search(r'@',self.__repository):
 			return None
@@ -46,7 +46,7 @@ class CVSRepository(Object):
 		a = re.match(r':.*?:([^@]*?):',self.__repository)
 		if a:
 			return a.group(1)
-		
+
 		# This match catches the following case:
 		# :method:user@...
 		a = re.match(r':.*?:(.*?)@',self.__repository)
@@ -58,7 +58,7 @@ class CVSRepository(Object):
 		a = re.match(r'(.*?):.*?@', self.__repository)
 		if a:
 			return a.group(1)
-		
+
 		# This match catches the following case:
 		# user@
 		a = re.match(r'(.*?)@', self.__repository)
@@ -68,8 +68,8 @@ class CVSRepository(Object):
 		return None
 
 	# End user
-	
-	
+
+
 	@property
 	def password(self):
 		# The password field is only present in the form: [user[:password]@]hostname
@@ -78,7 +78,7 @@ class CVSRepository(Object):
 			return None
 
 		# This match catches the following case:
-		# :method:user:password@		
+		# :method:user:password@
 		a = re.match(r':.*?:.*?:(.*?)@',self.__repository)
 		if a:
 			return a.group(1)
@@ -92,8 +92,8 @@ class CVSRepository(Object):
 		return None
 
 	# End password
-	
-	
+
+
 	@property
 	def hostname(self):
 		# This search matches the following cases:
@@ -104,25 +104,25 @@ class CVSRepository(Object):
 		a = re.search(r'@(.*?):',self.__repository)
 		if a:
 			return a.group(1)
-			
+
 		# This search matches the following case:
 		# :method:hostname:port
 		a = re.search(r':.*?:(.*?):\d{1,5}',self.__repository)
 		if a:
 			return a.group(1)
-		
+
 		# This search matches the following case:
 		# hostname:port
 		a = re.match(r'(.*?):\d{1,5}',self.__repository)
 		if a:
 			return a.group(1)
-		
+
 		# This search matches the following case:
 		# :method:hostname:/path
 		a = re.search(r':.*?:(.*?):\/.*',self.__repository)
 		if a:
 			return a.group(1)
-		
+
 		# This search matches the following case:
 		# hostname:/path
 		a = re.search(r'(.*?):\/.*', self.__repository)
@@ -132,8 +132,8 @@ class CVSRepository(Object):
 		return None
 
 	# End hostname
-	
-	
+
+
 	@property
 	def port(self):
 		# This search matches the following cases:
@@ -160,8 +160,8 @@ class CVSRepository(Object):
 		return None
 
 	# End port
-	
-	
+
+
 	@property
 	def path(self):
 		# This search matches the following cases:
@@ -209,19 +209,19 @@ class CVSRepository(Object):
 		return None
 
 	# End path
-	
-	
+
+
 	def __str__(self):
 		return self.__repository
 
 	# End __str__
-	
-	
+
+
 	def __repr__(self):
 		return self.__class__.__name__ + "(" + repr(self.__repository) + ")"
 
 	# End __repr__
-	
+
 
 # End CVSRepository
 
@@ -242,7 +242,7 @@ class CVSFileData(Object):
 		self.filepath = filepath
 	# End __init__
 
-	
+
 	@property
 	def fullpath(self):
 		if self.filepath:
@@ -250,7 +250,7 @@ class CVSFileData(Object):
 		else:
 			return str(self.name)
 	# End fullpath
-	
+
 	@property
 	def cvslocation(self):
 		if self.repository:
@@ -258,22 +258,22 @@ class CVSFileData(Object):
 		else:
 			return str(self.name)
 	# End cvslocation
-	
+
 
 
 	def __str__(self):
 		return str(self.name)
 	# End __str__
-	
+
 	def __repr__(self):
 		rvalue = self.__class__.__name__ + "(" + repr(self.name) + ", " + repr(self.version) + ", "
 		rvalue += repr(self.time) + ", " + repr(self.options) + ", "
-		rvalue += repr(self.tag) + ", " + repr(self.modified) + "," 
-		rvalue += repr(self.repository) + "," 
+		rvalue += repr(self.tag) + ", " + repr(self.modified) + ","
+		rvalue += repr(self.repository) + ","
 		rvalue += repr(self.filepath) + ")"
 		return rvalue
 	# End __repr__
-		
+
 # End CVSFileData
 
 
@@ -313,7 +313,7 @@ class CVSTreeData(Object):
 		self.files = []
 		self.directories = []
 		self.__LoadCVSData()
-		self.__filesIndex = -1 
+		self.__filesIndex = -1
 		self.__filesLength = len(self.files)
 	# End __init__
 
@@ -324,7 +324,7 @@ class CVSTreeData(Object):
 			svalue = normal + svalue
 		return svalue
 	# End __NormalizeTimeComponent
-	
+
 
 	def __PrepDate(self, path):
 		statinfo = os.stat(path)
@@ -349,7 +349,7 @@ class CVSTreeData(Object):
 			entrydata[4] = entrydata[4][:-1]
 
 		quotedname = re.sub(r'([^A-Za-z_0-9])', r'\\\1', entrydata[0])
-		
+
 		if not os.path.exists(path + os.sep + entrydata[0]):
 			return None
 
@@ -368,12 +368,12 @@ class CVSTreeData(Object):
 			if newdate != entrydata[2]:
 				modified = True;
 
-		
+
 		return (entrydata[0], entrydata[1], entrydata[2], entrydata[3], entrydata[4], modified)
 
 	# End __ParseData
 
-	
+
 	def __LoadFileData(self, path, data, loglines):
 		result = self.__ParseData(path, data, loglines)
 		if result == None:
@@ -391,7 +391,7 @@ class CVSTreeData(Object):
 			return
 		self.directories.append(CVSTreeData(path + os.path.sep + result[0]))
 	# End __LoadTreeData
-	
+
 
 	def __LoadCVSData(self):
 		if os.path.exists(self.path + os.path.sep + "CVS"):
@@ -400,9 +400,9 @@ class CVSTreeData(Object):
 			repodata = repofile.readlines()
 			if len(repodata) > 1:
 				raise BadRepositoryException()
-			
+
 			self.repository = repodata[0][:-1]
-			
+
 			entries_loglines = []
 
 			if os.path.exists(cvsdir + os.path.sep + "Entries.Log"):
@@ -413,11 +413,11 @@ class CVSTreeData(Object):
 			if os.path.exists(cvsdir + os.path.sep + "Entries"):
 				entriesfile = open(cvsdir + os.path.sep + "Entries")
 				entrieslines = entriesfile.readlines()
-			
+
 			for entry in entrieslines:
 				if re.search(r'^D$',entry):
 					continue
-					
+
 				if re.search(r'^\/', entry):
 					self.__LoadFileData(self.path, entry, entries_loglines)
 				elif re.search(r'^D',entry):
@@ -438,23 +438,23 @@ class CVSTreeData(Object):
 					self.__LoadTreeData(self.path, newentry)
 
 	# End __LoadCVSData
-		
-	
+
+
 	@property
 	def all_files(self):
 		files = []
 		for f in self.files:
 			f.filepath = self.path
 			files.append(f)
-		
+
 		for d in self.directories:
 			subfiles = d.all_files
 			files.extend(subfiles)
 
 		return files
-	# End all_files	
-	
-	
+	# End all_files
+
+
 	@property
 	def modfiles(self):
 		mods = []
@@ -464,8 +464,8 @@ class CVSTreeData(Object):
 				mods.append(f.fullpath)
 		return mods
 	# End modfiles
-	
-	
+
+
 	@property
 	def tags(self):
 		tags = {}
@@ -474,10 +474,10 @@ class CVSTreeData(Object):
 			if f.tag:
 				if not f.tag in tags:
 					tags[f.tag] = 1
-		
+
 		return tags.keys()
 	# End tags
-	
+
 
 	def __getitem__(self, key):
 		foundobjs = []
@@ -485,11 +485,11 @@ class CVSTreeData(Object):
 			if f.name == str(key):
 				f.filepath = self.path
 				foundobjs.append(f)
-		
+
 		for d in self.directories:
 			objs = d[key]
 			foundobjs.extend(objs)
-		
+
 		return foundobjs
 
 	# End __getitem__
@@ -500,29 +500,29 @@ class CVSTreeData(Object):
 		self.__myfilesIndex = 0
 		return self
 	# End __iter__
-	
-	
+
+
 	def next(self):
 		if self.__myfilesIndex == (len(self.__myfiles) - 1):
 			raise StopIteration
-		
+
 		self.__myfilesIndex += 1
 		return self.__myfiles[self.__myfilesIndex - 1]
 	# End next
-	
+
 
 
 	def __str__(self):
 		# return str(self.path)
 		return str(self.files) + "\n" + str(self.path) + "\n" + str(self.directories)
 	# End __str__
-	
+
 
 	def __repr__(self):
 		return self.__class__.__name__ + "(" + repr(self.path)  + ")"
 	# End __repr__
-	
-	
+
+
 
 # End CVSTreeData
 
@@ -540,7 +540,7 @@ class CVSModulePath(Object):
 		return names[0]
 
 	# End root
-	
+
 
 # End CVSModulePath
 
@@ -554,7 +554,7 @@ class CVSTree(SourceTreeBaseObject):
 		self.__name = name
 		self.__module = module
 		self.__branch = branch
-		
+
 		if kwargs.has_key("date"):
 			self.__date = kwargs["date"]
 		else:
@@ -562,7 +562,7 @@ class CVSTree(SourceTreeBaseObject):
 
 	# End __init__
 
-	
+
 	@property
 	def name(self):
 		if self.__name:
@@ -570,7 +570,7 @@ class CVSTree(SourceTreeBaseObject):
 		else:
 			return self.__module
 	# End name
-	
+
 
 	@property
 	def branch(self):
@@ -578,7 +578,7 @@ class CVSTree(SourceTreeBaseObject):
 			return self.__branch
 
 		cvstreedata = CVSTreeData(self.local_path.fullpath)
-		
+
 		tags = cvstreedata.tags
 
 		if len(tags) == 0:
@@ -587,7 +587,7 @@ class CVSTree(SourceTreeBaseObject):
 			return tags[0]
 
 	# End branch
-	
+
 
 
 	@property
@@ -604,34 +604,34 @@ class CVSTree(SourceTreeBaseObject):
 		return directory
 
 	# End local_path
-	
-	
+
+
 	@property
 	def date(self):
 		return self.__date
 
 	# End date
-	
+
 
 	@property
 	def checkout_command(self):
 		command = "cvs -d " + self.repository + " co"
-		
+
 		if self.__date:
 			command += " -D " + self.__date
-		
+
 		if self.__name:
 			command += " -d " + self.__name
-		
+
 		if self.branch:
 			command += " -r " + self.branch
-		
+
 		command += " " + self.__module
 
 		return command
 	# End checkout_command
-	
-	
+
+
 	@property
 	def local_source_path(self):
 		if self.__name:
@@ -640,16 +640,16 @@ class CVSTree(SourceTreeBaseObject):
 			return CVSModulePath(self.__module).root
 
 	# End local_source_path
-	
-	
+
+
 
 	def checkout(self):
 		path = Directory(self.path)
 		if not path.exists:
 			path.create()
-			
+
 		currentDirectory = os.getcwd()
-		
+
 		try:
 			Object.logIfDryRun(self,"cd " + path.fullpath)
 			os.chdir(path.fullpath)
@@ -672,13 +672,13 @@ class CVSTree(SourceTreeBaseObject):
 
 	# End exists
 
-	
+
 	def update(self):
 		if not Object.global_dry_run and not self.local_path.exists:
 			return
 
 		currentDirectory = os.getcwd()
-		
+
 		try:
 			Object.logIfDryRun(self,"cd " + self.local_path.fullpath)
 			os.chdir(self.local_path.fullpath)
@@ -688,21 +688,21 @@ class CVSTree(SourceTreeBaseObject):
 		command = "cvs update -dP"
 
 		self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End update
-	
-	
+
+
 	@property
 	def root(self):
 		cvsrepository = CVSRepository(self.repository)
 		return cvsrepository.hostname + ":" + cvsrepository.path
 
 	# End root
-	
-	
+
+
 	def switch_to_branch(self, branch):
 		if not Object.global_dry_run and not self.local_path.exists:
 			return
@@ -723,12 +723,12 @@ class CVSTree(SourceTreeBaseObject):
 			command += "-r " + str(branch)
 
 		self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End switch_to_branch
-	
+
 
 	def make_new_branch(self,branch):
 		if not Object.global_dry_run and not self.local_path.exists:
@@ -744,19 +744,19 @@ class CVSTree(SourceTreeBaseObject):
 		command = "cvs tag -b " + str(branch)
 
 		self.shell.execute(command)
-		
+
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
 
 	# End make_new_branch
-	
+
 
 	def make_new_branch_and_switch(self, branch):
 		self.make_new_branch(branch)
 		self.switch_to_branch(branch)
 
 	# End make_new_branch_and_switch
-	
+
 
 	# For CVS repositories, the branches method is problematic.  Branches are applied on a per/file basis
 	# so getting a true list of all available branches requires traversing the tree and running cvs status -v
@@ -792,14 +792,14 @@ class CVSTree(SourceTreeBaseObject):
 						branch = a.group(1)
 						if not branches.has_key(branch):
 							branches[branch] = True
-							
+
 				Object.logIfDryRun(self,"cd " + currentDirectory)
 				os.chdir(currentDirectory)
 		return branches.keys()
 
 	# End branches
-	
-	
+
+
 	@property
 	def tags(self):
 		if not self.exists:
@@ -822,14 +822,14 @@ class CVSTree(SourceTreeBaseObject):
 	# End remove
 
 	def __repr__(self):
-		
+
 		text = self.__class__.__name__ + "(" + repr(self.repository) + "," + repr(self.__module) + "," + repr(self.path) + ","
 
 		if self.branch != None:
 			text += repr(self.branch)
 		else:
 			text += " " + str(None)
-		
+
 		if self.__name != None:
 			text += "," + repr(self.__name)
 		else:
@@ -838,7 +838,7 @@ class CVSTree(SourceTreeBaseObject):
 		if len(self.args[0]) > 0:
 			text += "," + repr(self.args)
 		text += ")"
-		return text			
+		return text
 
 	# End __repr__
 
@@ -850,10 +850,10 @@ def CVSTreeArgs(tree_data):
 		tag = tree_data.tags[0]
 	else:
 		tag = None
-	
+
 	repository = "cvs.wolfram.com:/cvs"
 	module = tree_data.repository
-	
+
 	full_path = Directory(tree_data.path)
 
 	if re.search(tree_data.repository, tree_data.path):
@@ -864,9 +864,9 @@ def CVSTreeArgs(tree_data):
 		full_path = Directory(tree_data.path)
 		local_path = str(full_path.parent)
 		name = full_path.name
-		
 
-	
+
+
 	return (repository, module, local_path, tag, name)
 
 # End CVSTreeArgs
