@@ -96,7 +96,7 @@ class GitTree(SourceTreeBaseObject):
 	# End exists
 
 
-	def update(self):
+	def update(self, useRebase=False):
 		if not Object.global_dry_run and not self.local_path.exists:
 			return
 
@@ -109,6 +109,9 @@ class GitTree(SourceTreeBaseObject):
 				raise e
 
 		command = "git pull origin"
+
+		if useRebase:
+			command += " --rebase"
 
 		# Get the current branch
 		branch = self.branch
