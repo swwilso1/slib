@@ -358,6 +358,11 @@ class FileSystemBaseObject(Object):
 	# End canExecute
 
 
+	def remove(self):
+		if os.path.exists(self.fullpath):
+			os.remove(self.fullpath)
+
+
 	def Difference(self,other):
 		if self.__class__ != other.__class__:
 	    		raise FileSystemError("%s not a %s" % (str(other),str(self.__class__)))
