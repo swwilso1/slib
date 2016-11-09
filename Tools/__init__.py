@@ -30,7 +30,7 @@ class ToolBaseObject(Object):
 
 	# End __init__
 
-	
+
 	def execute(self, command):
 		shell = Shell()
 		try:
@@ -46,12 +46,12 @@ class ToolBaseObject(Object):
 		return ""
 
 	# End __str__
-	
+
 
 	def __repr__(self):
 		return self.__class__.__name__ + "()"
 	# End __repr__
-	
+
 
 # End ToolBaseObject
 

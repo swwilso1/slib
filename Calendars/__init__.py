@@ -42,13 +42,13 @@ class Format(Object):
 			return str(number)
 
 	# End number_as_string
-	
+
 
 	def __repr__(self):
 		return self.__class__.__name__ + "()"
 
 	# End __repr__
-	
+
 
 # End Format
 
@@ -87,11 +87,11 @@ class VerboseFormat(Format):
 
 		if ampm:
 			result += ' ' + ampm
-		
+
 		return result + ' ' + year
-		
+
 	# End __call__
-	
+
 # End VerboseFormat
 
 
@@ -104,7 +104,7 @@ class MonthDayYearWithSlashesFormat(Format):
 
 	# End __init__
 
-	
+
 	def __call__(self,time):
 		month = self.number_as_string(time.month)
 		day = self.number_as_string(time.day)
@@ -112,7 +112,7 @@ class MonthDayYearWithSlashesFormat(Format):
 		return month + "/" + day + "/" + year
 
 	# End __call__
-	
+
 # End MonthDayYearWithSlashesFormat
 
 
@@ -124,7 +124,7 @@ class MonthDayYearWithDashesFormat(Format):
 
 	# End __init__
 
-	
+
 	def __call__(self,time):
 		month = self.number_as_string(time.month)
 		day = self.number_as_string(time.day)
@@ -132,7 +132,7 @@ class MonthDayYearWithDashesFormat(Format):
 		return month + "-" + day + "-" + year
 
 	# End __call__
-	
+
 
 # End MonthDayYearWithDashesFormat
 
@@ -144,8 +144,8 @@ class DateTimeFormat(Format):
 		Format.__init__(self,**kwargs)
 
 	# End __init__
-	
-	
+
+
 	def __call__(self,time):
 		month = self.number_as_string(time.month)
 		day = self.number_as_string(time.day)
@@ -175,11 +175,11 @@ class DateTimeFormat(Format):
 
 		if ampm:
 			result += ' ' + ampm
-		
+
 		return result
 
 	# End __call__
-	
+
 
 # End DateTimeFormat
 
@@ -222,25 +222,25 @@ class DateDelta(Object):
 		return long(self.seconds)
 
 	# End __long__
-	
-	
+
+
 	def __float__(self):
 		return float(self.seconds)
 
 	# End __float__
-	
-	
+
+
 	def __complex__(self):
 		return complex(self.seconds)
 
 	# End __complex__
-	
-	
+
+
 	def __hex__(self):
 		return hex(self.seconds)
 
 	# End __hex__
-	
+
 	def __oct__(self):
 		return oct(self.seconds)
 
@@ -267,7 +267,7 @@ class DateDelta(Object):
 			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __le__
-	
+
 
 	def __gt__(self,other):
 		if isinstance(other,self.__class__):
@@ -323,7 +323,7 @@ class DateDelta(Object):
 
 	# End __sub__
 
-	
+
 	def __rsub__(self,other):
 		if isinstance(other,self.__class__):
 			return self.__class__(other.seconds - self.seconds)
@@ -342,7 +342,7 @@ class DateDelta(Object):
 			self.seconds -= other
 		else:
 			raise CalendarError("Unable to subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
-		
+
 		return self
 
 	# End __isub__
@@ -357,7 +357,7 @@ class DateDelta(Object):
 			raise CalendarError("Unable to add objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __add__
-	
+
 
 	def __radd__(self,other):
 		if isinstance(other,self.__class__):
@@ -368,7 +368,7 @@ class DateDelta(Object):
 			raise CalendarError("Unable to add objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __radd__
-	
+
 
 	def __iadd__(self,other):
 		if isinstance(other,self.__class__):
@@ -377,11 +377,11 @@ class DateDelta(Object):
 			self.seconds += other
 		else:
 			raise CalendarError("Unable to add objects of type %s and %s" % (self.__class__.__name__, type(other)))
-		
+
 		return self
 
 	# End __iadd__
-	
+
 
 	def __mul__(self,other):
 		if isinstance(other,self.__class__):
@@ -392,8 +392,8 @@ class DateDelta(Object):
 			raise CalendarError("Unable to multiply objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __mul__
-	
-	
+
+
 	def __rmul__(self,other):
 		if isinstance(other,self.__class__):
 			return self.__class__(self.seconds * other.seconds)
@@ -403,7 +403,7 @@ class DateDelta(Object):
 			raise CalendarError("Unable to multiply objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __rmul__
-	
+
 
 	def __imul__(self,other):
 		if isinstance(other,self.__class__):
@@ -412,7 +412,7 @@ class DateDelta(Object):
 			self.seconds *= other
 		else:
 			raise CalendarError("Unable to multiply objects of type %s and %s" % (self.__class__.__name__, type(other)))
-		
+
 		return self
 
 	# End __imul__
@@ -425,7 +425,7 @@ class DateDelta(Object):
 			return self.__class__(self.seconds / other)
 		else:
 			raise CalendarError("Unable to divide objects of type %s and %s" % (self.__class__.__name__, type(other)))
-		
+
 	# End __div__
 
 
@@ -439,7 +439,7 @@ class DateDelta(Object):
 
 	# End __rdiv__
 
-	
+
 	def __idiv__(self,other):
 		if isinstance(other,self.__class__):
 			self.seconds /= other.seconds
@@ -447,11 +447,11 @@ class DateDelta(Object):
 			self.seconds /= other
 		else:
 			raise CalendarError("Unable to divide objects of type %s and %s" % (self.__class__.__name__, type(other)))
-		
+
 		return self
 
 	# End __idiv__
-	
+
 
 	def __yearstring(self,years):
 		if years > 1 or years == 0:
@@ -460,8 +460,8 @@ class DateDelta(Object):
 			return str(years) + " Year"
 
 	# End __yearstring
-	
-	
+
+
 	def __daystring(self,days):
 		if days > 1 or days == 0:
 			return str(days) + " Days"
@@ -469,8 +469,8 @@ class DateDelta(Object):
 			return str(days) + " Day"
 
 	# End __daystring
-	
-	
+
+
 	def __hourstring(self,hours):
 		if hours > 1 or hours == 0:
 			return str(hours) + " Hours"
@@ -478,8 +478,8 @@ class DateDelta(Object):
 			return str(hours) + " Hour"
 
 	# End __hourstring
-	
-	
+
+
 	def __minutestring(self,minutes):
 		if minutes > 1 or minutes == 0:
 			return str(minutes) + " Minutes"
@@ -487,8 +487,8 @@ class DateDelta(Object):
 			return str(minutes) + " Minute"
 
 	# End __minutestring
-	
-	
+
+
 	def __secondstring(self,seconds):
 		if seconds > 1 or seconds == 0:
 			return str(seconds) + " Seconds"
@@ -496,10 +496,10 @@ class DateDelta(Object):
 			return str(seconds) + " Second"
 
 	# End __secondstring
-	
-	
-	
-	
+
+
+
+
 
 	def __str__(self):
 		years = int(self.seconds / YEAR)
@@ -509,7 +509,7 @@ class DateDelta(Object):
 		seconds = int((((self.seconds % YEAR) % DAY) % HOUR) % MINUTE)
 
 		result = ""
-		if years > 0:			
+		if years > 0:
 			return "%s %s %s %s %s" % (self.__yearstring(years), self.__daystring(days), \
 				self.__hourstring(hours), self.__minutestring(minutes), self.__secondstring(seconds))
 		elif days > 0:
@@ -522,8 +522,8 @@ class DateDelta(Object):
 		else:
 			return "%s" % (self.__secondstring(seconds))
 	# End __str__
-	
-	
+
+
 	def __repr__(self):
 		result = self.__class__.__name__ + "("
 		if self.seconds != 0:
@@ -531,8 +531,8 @@ class DateDelta(Object):
 		return result + ")"
 
 	# End __repr__
-	
-	
+
+
 
 # End DateDelta
 
@@ -558,7 +558,7 @@ class Date(Object):
 		else:
 			self.time = time.time()
 		self.timeframe = time.localtime
-		
+
 		if kwargs.has_key("format"):
 			self.__myformat = kwargs["format"]
 		else:
@@ -567,8 +567,8 @@ class Date(Object):
 		self.__formatter = Date.formats[self.__myformat]()
 
 	# End __init__
-	
-	
+
+
 	@property
 	def format(self):
 		return self.__myformat
@@ -581,15 +581,15 @@ class Date(Object):
 		self.__formatter = Date.formats[value]()
 
 	# End format
-	
-	
 
-	
+
+
+
 	def update_time_to_current_time(self):
 		self.time = time.time()
 
 	# End set_time_to_current_time
-	
+
 
 	@property
 	def use_local_time(self):
@@ -598,12 +598,12 @@ class Date(Object):
 		return False
 
 	# End use_local_type
-	
+
 	@use_local_time.setter
 	def use_local_time(self,value):
 		if value == True:
 			self.timeframe = time.localtime
-	
+
 	@property
 	def use_gm_time(self):
 		if self.timeframe == time.gmtime:
@@ -618,7 +618,7 @@ class Date(Object):
 			self.timeframe = time.gmtime
 
 	# End use_gm_time
-	
+
 
 	@property
 	def year(self):
@@ -626,56 +626,56 @@ class Date(Object):
 
 	# End year
 
-	
+
 	@property
 	def month(self):
 		return self.timeframe(self.time)[1]
 
 	# End month
-	
+
 	@property
 	def day(self):
 		return self.timeframe(self.time)[2]
 
 	# End day
-	
+
 	@property
 	def hour(self):
 		return self.timeframe(self.time)[3]
 
 	# End hour
-	
+
 	@property
 	def minute(self):
 		return self.timeframe(self.time)[4]
 
 	# End minute
-	
+
 	@property
 	def second(self):
 		return self.timeframe(self.time)[5]
 
 	# End second
-	
+
 	@property
 	def weekday(self):
 		return self.timeframe(self.time)[6]
 
 	# End weekday
-	
+
 	@property
 	def day_of_year(self):
 		return self.timeframe(self.time)[7]
 
 	# End day_of_year
-	
+
 	@property
 	def daylight_savings_time(self):
 		return self.timeframe(self.time)[8]
 
 	# End daylight_savings_time
 
-	
+
 	@property
 	def leapyear(self):
 	 	year = self.year
@@ -701,21 +701,21 @@ class Date(Object):
 		else:
 			return True
 	# End leapyear
-	
-	
+
+
 	@property
 	def timezone(self):
 		return time.tzname
 
 	# End timezone
-	
-	
+
+
 	@property
 	def tuple(self):
 		return (self.month, self.day, self.year)
 
 	# End tuple
-	
+
 	def __lt__(self,other):
 		if isinstance(other, self.__class__):
 			if self.time < other.time:
@@ -729,7 +729,7 @@ class Date(Object):
 			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __lt__
-	
+
 
 	def __le__(self,other):
 		if isinstance(other, self.__class__):
@@ -744,8 +744,8 @@ class Date(Object):
 			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __le__
-	
-	
+
+
 	def __gt__(self,other):
 		if isinstance(other, self.__class__):
 			if self.time > other.time:
@@ -804,7 +804,7 @@ class Date(Object):
 			raise CalendarError("Unable to compare objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __ne__
-	
+
 
 	def __int__(self):
 		return int(self.time)
@@ -816,31 +816,31 @@ class Date(Object):
 		return long(self.time)
 
 	# End __long__
-	
-	
+
+
 	def __float__(self):
 		return float(self.time)
 
 	# End __float__
-	
-	
+
+
 	def __complex__(self):
 		return complex(self.time)
 
 	# End __complex__
-	
-	
+
+
 	def __hex__(self):
 		return hex(self.time)
 
 	# End __hex__
-	
+
 	def __oct__(self):
 		return oct(self.time)
 
 	# End __oct__
-	
-	
+
+
 	def __add__(self,other):
 		if isinstance(other, self.__class__):
 			return self.__class__(self.time + other.time)
@@ -850,8 +850,8 @@ class Date(Object):
 			raise CalendarError("Cannot add objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __add__
-	
-	
+
+
 	def __radd__(self,other): # other + self
 		if isinstance(other, self.__class__):
 			return self.__class__(self.time + other.time)
@@ -870,12 +870,12 @@ class Date(Object):
 			self.time += other
 		else:
 			raise CalendarError("Cannot add objects of type %s and %s" % (self.__class__.__name__, type(other)))
-		
+
 		return self
 
 	# End __iadd__
 
-	
+
 	def __sub__(self,other):
 		if isinstance(other, self.__class__):
 			return DateDelta(self.time - other.time)
@@ -896,8 +896,8 @@ class Date(Object):
 			raise CalendarError("Cannot subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
 
 	# End __rsub__
-	
-	
+
+
 	def __isub__(self,other):
 		if isinstance(other, self.__class__):
 			self.time -= other.time
@@ -905,27 +905,27 @@ class Date(Object):
 			self.time -= other
 		else:
 			raise CalendarError("Cannot subtract objects of type %s and %s" % (self.__class__.__name__, type(other)))
-		
+
 		return self
 
 	# End __isub__
-	
-	
+
+
 	def __str__(self):
 		return self.__formatter(self)
 
 	# End __str__
-	
-	
+
+
 	def __repr__(self):
-		result = self.__class__.__name__ + "(" + str(self.time) 
+		result = self.__class__.__name__ + "(" + str(self.time)
 		if self.__myformat != VERBOSE_FORMAT:
 			result += ",format='" + self.__myformat + "'"
 		return result + ")"
 
 	# End __repr__
-	
-	
+
+
 	def __coerce__(self,other):
 		if isinstance(other,self.__class__):
 			return self,other
@@ -937,8 +937,8 @@ class Date(Object):
 			pass
 
 	# End __coerce__
-	
-	
+
+
 
 # End Date
 

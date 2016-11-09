@@ -18,19 +18,19 @@ class ZipTool(ToolBaseObject):
 		ToolBaseObject.__init__(self,**kwargs)
 
 	# End __init__
-	
-	
+
+
 	def zip_directory(self, directory, output_name):
 		folder = Directory(str(directory))
 		path = Directory(folder.path)
 		current_working_directory = path.make_current_directory()
-		
+
 		command = "zip -q -r " + str(output_name) + " " + folder.name
 		self.execute(command)
 
 		current_working_directory.make_current_directory()
 
 	# End zip_directory
-	
+
 
 # End ZipTool

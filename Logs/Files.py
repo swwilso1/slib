@@ -25,15 +25,15 @@ class File(LogBase):
 			self.logFile.close()
 
 	# End close
-	
+
 	def __output_string(self, format, *args):
 		date = Date(format=DATE_TIME_FORMAT)
 		newformat = "%s: %s" % (str(date), str(format))
 		return newformat % (args)
 
 	# End __write
-	
-	
+
+
 	def __call__(self, format, *args):
 		if self.logFile:
 			if self.logFile.closed:
@@ -47,8 +47,8 @@ class File(LogBase):
 			raise LogError("No associated log file, not yet opened")
 
 	# End __call__
-	
-	
+
+
 	def log(self,format,*args):
 		if self.logFile:
 			if self.logFile.closed:
@@ -79,13 +79,13 @@ class File(LogBase):
 			raise LogError("No associated log file, not yet opened")
 
 	# End log_without_format
-	
+
 
 	def log_with_level(self,level,format,*args):
 		if level >= self.level:
 			self.log(format,args)
 
 	# End logWithLevel
-	
+
 
 # End File

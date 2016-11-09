@@ -29,19 +29,19 @@ class LogBase(Object):
 		pass
 
 	# End __call__
-	
+
 
 
 	def log(self, format,*args):
 		pass
 
 	# End log
-	
+
 	def log_without_format(self, output):
 		pass
 
 	# End log_without_format
-	
+
 
 	def log_with_level(self, level, format, *args):
 		pass
@@ -52,7 +52,7 @@ class LogBase(Object):
 		pass
 
 	# End close
-	
+
 
 # End LogBase
 
