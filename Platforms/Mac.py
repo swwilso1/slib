@@ -22,7 +22,7 @@ class MacInspector(PlatformInspectorBaseObject):
 		shell = Shell(capture_output=True)
 
 		self._installedRam = shell.execute("sysctl hw.memsize | awk '{print $2; }'").strip()
-		
+
 		self._installedRam = long(self._installedRam)
 
 		Object.logIfVerbose(self,"sw_vers -productVersion")
@@ -33,14 +33,14 @@ class MacInspector(PlatformInspectorBaseObject):
 		Object.logIfVerbose(self,self._osVersion)
 
 		self._machineHardware = shell.execute("uname -m").strip()
-		
+
 		if re.search(r'x86_64', self._machineHardware):
 			self._systemID = "MacOSX-x86-64"
 		elif re.search(r'i386', self._machineHardware):
 			self._systemID = "MacOSX-x86"
 		elif re.search(r'ppc', self._machineHardware):
 			self._systemID = "MacOSX"
-		
+
 	# End __init__
 
 # End MacInspector

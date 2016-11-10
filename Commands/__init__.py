@@ -46,7 +46,7 @@ class CommandBase(Object):
 
 	def __repr__(self):
 		text = self.__class__.__name__ + "("
-		
+
 		keys = self.__dict__.keys()
 		length = len(keys)
 		for i in range(0,length):
@@ -57,7 +57,7 @@ class CommandBase(Object):
 		return text
 
 	# End __repr__
-	
+
 
 # End CommandBase
 

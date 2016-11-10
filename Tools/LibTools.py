@@ -15,18 +15,18 @@ class LibTool(ToolBaseObject):
 
 	def __init__(self, **kwargs):
 		ToolBaseObject.__init__(self,**kwargs)
-		
+
 	# End __init__
 
-	
+
 	def __make_command(self, output, input):
 		command = "libtool -o " + str(output)
 		for ifile in input:
 			command += " " + str(ifile)
-		
+
 		return command
 
-	# End __make_command	
+	# End __make_command
 
 
 	def join(self, output_file, input_files):
@@ -37,6 +37,6 @@ class LibTool(ToolBaseObject):
 		self.execute(command)
 
 	# End join
-	
+
 # End LibTool
 

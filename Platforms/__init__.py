@@ -50,7 +50,7 @@ class PlatformInspectorBaseObject(Object):
 		raise TypeError("Unable to delete installedRam")
 
 	# End installedRam.deleter
-	
+
 	@property
 	def os(self):
 		return self._os
@@ -70,7 +70,7 @@ class PlatformInspectorBaseObject(Object):
 		raise TypeError("Unable to delete os")
 
 	# End os.deleter
-	
+
 	@property
 	def osVersion(self):
 		return self._osVersion
@@ -90,7 +90,7 @@ class PlatformInspectorBaseObject(Object):
 		raise TypeError("Unable to delete osVersion")
 
 	# End osVersion.deleter
-	
+
 
 	@property
 	def osMajorVersion(self):
@@ -122,7 +122,7 @@ class PlatformInspectorBaseObject(Object):
 	@osMinorVersion.setter
 	def osMinorVersion(self,value):
 		raise TypeError("Unable to reset osMinorVersion")
-	
+
 	# End osMinorVersion.setter
 
 
@@ -151,7 +151,7 @@ class PlatformInspectorBaseObject(Object):
 		raise TypeError("Unable to reset osReleaseVersion")
 
 	# End osReleaseVersion.deleter
-	
+
 	@property
 	def systemID(self):
 		return self._systemID
@@ -171,8 +171,8 @@ class PlatformInspectorBaseObject(Object):
 		raise TypeError("Unable to delete systemID")
 
 	# End systemID.deleter
-	
-	
+
+
 	@property
 	def machineHardware(self):
 		return self._machineHardware
@@ -192,8 +192,8 @@ class PlatformInspectorBaseObject(Object):
 		raise TypeError("Unable to delete machineHardware")
 
 	# End machineHardware.deleter
-	
-	
+
+
 
 # End PlatformInspectorBaseObject
 

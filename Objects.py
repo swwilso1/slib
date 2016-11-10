@@ -8,8 +8,8 @@ class Object(object):
 
 	def __init__(self, **kwargs):
 		if kwargs.has_key("log"):
-			Object.log_object = kwargs["log"]	
-		
+			Object.log_object = kwargs["log"]
+
 		if kwargs.has_key("verbose"):
 			if type(kwargs["verbose"]) != types.BooleanType:
 				raise TypeError("verbose keyword value must be Boolean")
@@ -25,15 +25,15 @@ class Object(object):
 		Object.verbose = arg
 
 	# End setClassVerbose
-	
-	
+
+
 	def getClassVerbose(self):
 		if Object.__dict__.has_key("verbose"):
 			return Object.verbose
 		return False
-	
+
 	# End getClassVerbose
-	
+
 
 	def setClassLog(self, log):
 		Object.log_object = log
@@ -43,7 +43,7 @@ class Object(object):
 	def enableGlobalDryRun(self):
 		Object.global_dry_run = True
 
-	# End enableGlobalDryRun	
+	# End enableGlobalDryRun
 
 	def logIfVerbose(self, arg, **keyargs):
 		if Object.log_object and Object.getClassVerbose(self) and arg != None:
@@ -54,18 +54,18 @@ class Object(object):
 				if keyargs["no_format"]:
 					Object.log_object.log_without_format(str(arg))
 					needs_format = False
-			
+
 			if needs_format:
 				Object.log_object.log(str(arg))
 
 	# End logIfVerbose
-	
+
 	def logIfDryRun(self, arg):
 		if Object.log_object and Object.global_dry_run and arg != None:
 			Object.log_object.log(str(arg))
 
 	# End logIfDryRun
-	
-	
+
+
 
 # End Object
