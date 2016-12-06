@@ -103,6 +103,13 @@ class FileSystemBaseObject(Object):
 			return self.path + os.path.sep + self.name
 	# End fullpath
 
+
+	@property
+	def realpath(self):
+		return os.path.realpath(self.fullpath)
+	# End realpath
+
+
 	@property
 	def st_mode(self):
 		if not Object.global_dry_run:
@@ -226,7 +233,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def symbolicLink(self):
 		try:
-			return stat.S_ISLNK(self.st_mode)
+			return os.path.islink(self.fullpath)
 		except OSError as e:
 			return False
 	# End symbolicLink

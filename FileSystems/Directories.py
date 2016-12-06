@@ -68,12 +68,12 @@ class Directory(FileSystemBaseObject):
 			obj = CharacterDevice(self.fullpath + os.sep + name)
 		elif e.blockSpecialDevice:
 			obj = BlockDevice(self.fullpath + os.sep + name)
+		elif e.symbolicLink:
+			obj = SymbolicLink(self.fullpath + os.sep + name)
 		elif e.regular:
 			obj = File(self.fullpath + os.sep + name)
 		elif e.fifo:
 			obj = Fifo(self.fullpath + os.sep + name)
-		elif e.symbolicLink:
-			obj = SymbolicLink(self.fullpath + os.sep + name)
 		elif e.socket:
 			obj = Socket(self.fullpath + os.sep + name)
 		else:
