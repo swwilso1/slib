@@ -54,6 +54,19 @@ class File(FileSystemBaseObject):
 	# End contents
 
 
+
+	@property
+	def contentsAsString(self):
+		if not self.regular:
+			raise FileSystemError("%s not a regular file, no contents available" % (str(self.fullpath)))
+		if self.canRead:
+			f = open(self.fullpath, "r")
+			return f.read()
+		else:
+			raise FileSystemError("Current user does not have read permissions for %s" % (str(self.fullpath)))
+	# End contentsAsString
+
+
 	@property
 	def extension(self):
 		if self.name.count('.') > 0:
