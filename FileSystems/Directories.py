@@ -347,6 +347,14 @@ class Directory(FileSystemBaseObject):
 	# End remove
 
 
+	def removeContents(self):
+		if os.path.exists(self.fullpath):
+			theStuff = self.entries
+			for theObject in theStuff:
+				theObject.remove()
+	# End removeContents
+
+
 	def __getitem__(self,key):
 		if type(key) != StringType and type(key) != UnicodeType:
 			raise KeyError(key)
