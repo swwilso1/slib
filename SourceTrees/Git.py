@@ -26,6 +26,7 @@
 #
 ################################################################################
 
+import sys
 import os
 import re
 from slib.Objects import Object
@@ -48,6 +49,10 @@ class GitTree(SourceTreeBaseObject):
 		if self.__name:
 			return str(self.__name)
 		else:
+			if re.search(r'.*\/.*\.git$', self.repository):
+				self.__name = re.sub(r'.*\/(.*)\.git$',r'\1',self.repository)
+				return self.__name
+
 			if re.search(r':', self.repository):
 				if re.match(r'://', self.repository):
 					repository_directory = Directory(self.repository.split("://")[1])
