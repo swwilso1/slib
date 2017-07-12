@@ -158,4 +158,34 @@ class File(FileSystemBaseObject):
 				raise FileSystemError("Cannot open file %s for writing: %s" % (str(self.fullpath), str(e)))
 			f.writelines([" "])
 
+
+	def openForReading(self):
+		try:
+			f = open(self.fullpath, "r")
+		except IOError as e:
+			raise FileSystemError("Cannot open file %s for reading: %s" % (str(self.fullpath), str(e)))
+
+		return f
+	# End openForReading
+
+
+	def openForWriting(self):
+		try:
+			f = open(self.fullpath, "w")
+		except IOError as e:
+			raise FileSystemError("Cannot open file %s for writing: %s" % (str(self.fullpath), str(e)))
+
+		return f
+	# End openForWriting
+
+
+	def openForAppending(self):
+		try:
+			f = open(self.fullpath, "a")
+		except IOError as e:
+			raise FileSystemError("Cannot open file %s for appending: %s" % (str(self.fullpath), str(e)))
+
+		return f
+	# End openForAppending
+
 # End File
