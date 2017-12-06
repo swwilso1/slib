@@ -113,7 +113,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_mode(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_mode
 		return 0
 	# End st_mode
@@ -121,7 +121,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_ino(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_ino
 		return 0
 	# End st_ino
@@ -129,7 +129,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_dev(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_dev
 		return 0
 	# End st_dev
@@ -137,7 +137,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_nlink(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_nlink
 		return 0
 	# End st_nlink
@@ -145,7 +145,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_uid(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_uid
 		return 0
 	# End st_uid
@@ -153,7 +153,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_gid(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_gid
 		return 0
 	# End st_gid
@@ -161,7 +161,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_size(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_size
 		return 0
 	# End st_size
@@ -169,7 +169,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_atime(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_atime
 		return 0
 	# End st_atime
@@ -177,7 +177,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_mtime(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_mtime
 		return 0
 	# End st_ino
@@ -185,7 +185,7 @@ class FileSystemBaseObject(Object):
 	@property
 	def st_ctime(self):
 		if not Object.global_dry_run:
-			fsdata = os.stat(self.fullpath)
+			fsdata = os.lstat(self.fullpath)
 			return fsdata.st_ctime
 		return 0
 	# End st_ctime
@@ -264,6 +264,12 @@ class FileSystemBaseObject(Object):
 			return SOCKET
 		return NO_TYPE
 	# End type
+
+	@property
+	def target(self):
+		if self.type == SYMBOLIC_LINK:
+			return os.readlink(self.fullpath)
+		return None
 
 	@property
 	def hidden(self):
