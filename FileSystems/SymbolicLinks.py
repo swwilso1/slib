@@ -29,6 +29,7 @@
 from slib.Objects import Object
 from slib.FileSystems import FileSystemBaseObject
 from slib.FileSystems import FileSystemError
+import os
 
 
 class SymbolicLink(FileSystemBaseObject):
