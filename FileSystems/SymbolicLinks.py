@@ -28,6 +28,7 @@
 
 from slib.Objects import Object
 from slib.FileSystems import FileSystemBaseObject
+from slib.FileSystems import FileSystemError
 
 
 class SymbolicLink(FileSystemBaseObject):
@@ -37,5 +38,18 @@ class SymbolicLink(FileSystemBaseObject):
 		FileSystemBaseObject.__init__(self,name,**kwargs)
 
 	# End __init__
+
+
+	def link(self, target):
+
+		if self.exists:
+			self.remove()
+
+		try:
+			os.symlink(target, self.fullpath)
+		except OSError as e:
+			raise FileSystemError("Unable to create symbolic link: %s" % (str(e)))
+
+	# End link
 
 # End SymbolicLink
