@@ -47,6 +47,20 @@ SYMBOLIC_LINK = 6
 SOCKET = 7
 NO_TYPE = 99
 
+USER_READ     = 0x1
+USER_WRITE    = 0x2
+USER_EXECUTE  = 0x4
+GROUP_READ    = 0x8
+GROUP_READ    = 0x10
+GROUP_WRITE   = 0x20
+GROUP_EXECUTE = 0x40
+OTHER_READ    = 0x80
+OTHER_WRITE   = 0x100
+OTHER_EXECUTE = 0x200
+SETUID        = 0x400
+SETGID        = 0x800
+STICKYBIT     = 0x1000
+
 
 def FindFullDirectory(directory):
 	currentdirectory = os.getcwd()
@@ -364,6 +378,30 @@ class FileSystemBaseObject(Object):
 
 
 	@property
+	def hasSetUID(self):
+		if stat.S_IMODE(self.st_mode) & stat.S_ISUID:
+			return True
+		return False
+	# End hasSetUID
+
+
+	@property
+	def hasSetGID(self):
+		if stat.S_IMODE(self.st_mode) & stat.S_ISGID:
+			return True
+		return False
+	# End hasSetGID
+
+
+	@property
+	def hasStickyBit(self):
+		if stat.S_IMODE(self.st_mode) & stat.S_ISVTX:
+			return True
+		return False
+	# End hasStickyBit
+
+
+	@property
 	def canRead(self):
 		if os.getuid() == self.st_uid and self.ownerHasReadPermission:
 			return True
@@ -395,6 +433,43 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End canExecute
+
+
+	def setPermissions(self, permissions):
+
+		mode = 0
+
+		if (permissions & USER_READ) == USER_READ:
+			mode |= stat.S_IRUSR
+		if (permissions & USER_WRITE) == USER_WRITE:
+			mode |= stat.S_IWUSR
+		if (permissions & USER_EXECUTE) == USER_EXECUTE:
+			mode |= stat.S_IXUSR
+		if (permissions & GROUP_READ) == GROUP_READ:
+			mode |= stat.S_IRGRP
+		if (permissions & GROUP_WRITE) == GROUP_WRITE:
+			mode |= stat.S_IWGRP
+		if (permissions & GROUP_EXECUTE) == GROUP_EXECUTE:
+			mode |= stat.S_IXGRP
+		if (permissions & OTHER_READ) == OTHER_READ:
+			mode |= stat.S_IROTH
+		if (permissions & OTHER_WRITE) == OTHER_WRITE:
+			mode |= stat.S_IWOTH
+		if (permissions & OTHER_EXECUTE) == OTHER_EXECUTE:
+			mode |= stat.S_IXOTH
+		if (permissions & SETUID) == SETUID:
+			mode |= stat.S_ISUID
+		if (permissions & SETGID) == SETGID:
+			mode |= stat.S_ISGID
+		if (permissions & STICKYBIT) == STICKYBIT:
+			mode |= stat.S_ISVTX
+
+		try:
+			os.chmod(self.fullpath, mode)
+		except OSError as e:
+			raise FileSystemError("Unable to change permissions on file %s: %s" % (self.fullpath, str(e)))
+
+	# End setPermissions
 
 
 	def remove(self):
@@ -500,6 +575,18 @@ __all__ = ["BlockDevices",
 	"SYMBOLIC_LINK",
 	"SOCKET",
 	"NO_TYPE",
+	"USER_READ",
+	"USER_WRITE",
+	"USER_EXECUTE",
+	"GROUP_READ",
+	"GROUP_WRITE",
+	"GROUP_EXECUTE",
+	"OTHER_READ",
+	"OTHER_WRITE",
+	"OTHER_EXECUTE",
+	"SETUID",
+	"SETGID",
+	"STICKYBIT",
 	"FileSystemError"
 ]
 
