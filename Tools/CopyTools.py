@@ -25,6 +25,8 @@ class CopyTool(ToolBaseObject):
 			if kwargs["use_cmake"]:
 				self.copy_command = 'cmake -E copy'
 
+		self.use_escaped_characters = True
+
 	# End __init__
 
 
@@ -50,8 +52,9 @@ class CopyTool(ToolBaseObject):
 		for opt in options:
 			command += " " + str(opt)
 
-		source = self.__escapeDifficultCharacters(str(source))
-		destination = self.__escapeDifficultCharacters(str(destination))
+		if self.use_escaped_characters:
+			source = self.__escapeDifficultCharacters(str(source))
+			destination = self.__escapeDifficultCharacters(str(destination))
 
 		command += " " + str(source) + " " + str(destination)
 		self.execute(command)
@@ -65,10 +68,12 @@ class CopyTool(ToolBaseObject):
 		shell = Shell()
 		source_list = ""
 		for source in sources:
-			source = self.__escapeDifficultCharacters(str(source))
+			if self.use_escaped_characters:
+				source = self.__escapeDifficultCharacters(str(source))
 			source_list += str(source) + " "
 
-		destination = self.__escapeDifficultCharacters(str(destination))
+		if self.use_escaped_characters:
+			destination = self.__escapeDifficultCharacters(str(destination))
 
 		command = self.copy_command + " " + source_list + str(destination)
 		self.execute(command)
@@ -89,8 +94,9 @@ class CopyTool(ToolBaseObject):
 		for opt in options:
 			command += " " + str(opt)
 
-		source = self.__escapeDifficultCharacters(str(source))
-		destination = self.__escapeDifficultCharacters(str(destination))
+		if self.use_escaped_characters:
+			source = self.__escapeDifficultCharacters(str(source))
+			destination = self.__escapeDifficultCharacters(str(destination))
 
 		command += " " + str(source) + " " + str(destination)
 		self.execute(command)
