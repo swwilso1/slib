@@ -55,6 +55,12 @@ class ToolBaseObject(Object):
 
 # End ToolBaseObject
 
+__all__ = [
+	"CopyTools",
+	"LibTools",
+	"ZipTools",
+	"ToolError"
+]
 
 import CopyTools
 import LibTools
