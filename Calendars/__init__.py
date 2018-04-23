@@ -209,11 +209,31 @@ class DateTimeFormat(Format):
 
 # End DateTimeFormat
 
+
+class FileNameFormat(Format):
+	"""The FileNameFormat class."""
+
+	def __init__(self, **kwargs):
+		Format.__init__(self,**kwargs)
+	# End __init__
+
+	def __call__(self, time):
+		month = self.number_as_string(time.month)
+		day = self.number_as_string(time.day)
+		year = self.number_as_string(time.year)
+		hour = self.number_as_string(time.hour)
+		minute = self.number_as_string(time.minute)
+		second = self.number_as_string(time.second)
+
+		return year + day + month + hour + minute + second
+
+	# End __call__
+
 VERBOSE_FORMAT = "VerboseFormat"
 MONTH_DAY_YEAR_WITH_SLASHES_FORMAT = "MonthDayYearWithSlashesFormat"
 MONTH_DAY_YEAR_WITH_DASHES_FORMAT = "MonthDayYearWithDashesFormat"
 DATE_TIME_FORMAT = "DateTimeFormat"
-
+FILE_NAME_FORMAT = "FileNameFormat"
 
 MINUTE = 60
 HOUR = 3600
@@ -571,7 +591,8 @@ class Date(Object):
 		VERBOSE_FORMAT                     : VerboseFormat,
 		MONTH_DAY_YEAR_WITH_SLASHES_FORMAT : MonthDayYearWithSlashesFormat,
 		MONTH_DAY_YEAR_WITH_DASHES_FORMAT  : MonthDayYearWithDashesFormat,
-		DATE_TIME_FORMAT                   : DateTimeFormat
+		DATE_TIME_FORMAT                   : DateTimeFormat,
+		FILE_NAME_FORMAT                   : FileNameFormat
 	}
 
 	def __init__(self, intime=None, **kwargs):
