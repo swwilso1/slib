@@ -150,6 +150,22 @@ class ProcessBaseObject(Object):
 
 # End ProcessBaseObject
 
+class ProcessCommand(ProcessCommandBase):
+	"""The ProcessCommand class."""
+
+	def __init__(self, command):
+		ProcessCommandBase.__init__(self,command)
+
+	# End __init__
+
+	@property
+	def process_form(self):
+		return split(self.command)
+
+	# End process_form
+
+# End ProcessCommand
+
 
 useSubprocess = False
 usePopen2 = False
@@ -159,29 +175,12 @@ try:
 	useSubprocess = True
 except ImportError as e:
 	import popen2
+	import select
 	usePopen2 = True
 
 
 if useSubprocess:
 	from shlex import split
-
-	class ProcessCommand(ProcessCommandBase):
-		"""The ProcessCommand class."""
-
-		def __init__(self, command):
-			ProcessCommandBase.__init__(self,command)
-
-		# End __init__
-
-		@property
-		def process_form(self):
-			return split(self.command)
-
-		# End process_form
-
-
-	# End ProcessCommand
-
 
 	class Process(ProcessBaseObject):
 		"""The Process class."""
