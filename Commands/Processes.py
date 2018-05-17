@@ -151,8 +151,18 @@ class ProcessBaseObject(Object):
 # End ProcessBaseObject
 
 
-if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
+useSubprocess = False
+usePopen2 = False
+
+try:
 	import subprocess
+	useSubprocess = True
+except ImportError as e:
+	import popen2
+	usePopen2 = True
+
+
+if useSubprocess:
 	from shlex import split
 
 	class ProcessCommand(ProcessCommandBase):
@@ -277,9 +287,7 @@ if sys.version_info[0] >= 2 and sys.version_info[1] >= 6:
 
 	# End Process
 
-else:
-	# We have a version of Python < 2.6
-	import popen2
+elif usePopen2:
 	from shlex import split
 
 	class Process(ProcessBaseObject):
