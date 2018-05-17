@@ -310,7 +310,11 @@ class FileSystemBaseObject(Object):
 
 	@property
 	def exists(self):
-		return os.path.exists(self.fullpath)
+		try:
+			result = os.lstat(self.fullpath)
+		except OSError as e:
+			return False
+		return True;
 	# End exists
 
 	@property
@@ -473,7 +477,7 @@ class FileSystemBaseObject(Object):
 
 
 	def remove(self):
-		if os.path.exists(self.fullpath):
+		if self.exists:
 			os.remove(self.fullpath)
 
 
