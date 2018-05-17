@@ -343,9 +343,13 @@ elif usePopen2:
 				stdoutdata = ""
 				stderrdata = ""
 				while self.__process.poll() == -1:
-					stdoutdata += self.__process.fromchild.read()
+					result = select.select([self.__process.fromchild],[],[],0)
+					if len(result[0]) > 0:
+						stdoutdata += self.__process.fromchild.read()
 					if self.__process.childerr != None:
-						stderrdata += self.__process.childerr.read()
+						result = select.select([self.__process.childerr],[],[],0)
+						if len(result[0]) > 0:
+							stderrdata += self.__process.childerr.read()
 
 				return (stdoutdata, stderrdata)
 
