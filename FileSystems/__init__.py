@@ -32,6 +32,8 @@ import re
 import time
 import stat
 import types
+import hashlib
+
 from slib.Objects import Object
 from slib.Errors import Error
 from slib.Commands.Shells import Shell
@@ -316,6 +318,17 @@ class FileSystemBaseObject(Object):
 			return False
 		return True;
 	# End exists
+
+
+	@property
+	def checksum(self):
+		if self.regular:
+			sha256 = hashlib.sha256()
+			with open(self.fullpath, "rb") as f:
+				for chunk in iter(lambda: f.read(4096), b""):
+					sha256.update(chunk)
+			return sha256.hexdigest()
+		return ""
 
 	@property
 	def ownerHasReadPermission(self):
