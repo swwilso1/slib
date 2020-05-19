@@ -27,8 +27,8 @@
 ################################################################################
 
 import sys
-from slib.Objects import Object
-from slib.Errors import Error
+from .. Objects import Object
+from .. Errors import Error
 
 class ProcessError(Error):
 	"""The ProcessError class."""
@@ -76,14 +76,14 @@ class ProcessBaseObject(Object):
 
 	def __init__(self, args, **kwargs):
 		self.args = args
-		if kwargs.has_key("stdout"):
+		if 'stdout' in kwargs:
 			if kwargs["stdout"] == STDOUT:
 				raise ProcessError("stdout keyword can only be PIPE or None")
 			self._stdout = kwargs["stdout"]
 		else:
 			self._stdout = None
 
-		if kwargs.has_key("stderr"):
+		if 'stderr' in kwargs:
 			self._stderr = kwargs["stderr"]
 		else:
 			self._stderr = None
@@ -189,7 +189,7 @@ if useSubprocess:
 			ProcessBaseObject.__init__(self,args,**kwargs)
 
 			self.shell = False
-			if kwargs.has_key("shell"):
+			if 'shell' in kwargs:
 				if kwargs["shell"] == True:
 					self.shell = True
 
@@ -296,7 +296,7 @@ elif usePopen2:
 			ProcessBaseObject.__init__(self, args, **kwargs)
 
 			self.shell = True
-			if kwargs.has_key("shell"):
+			if 'shell' in kwargs:
 				if kwargs["shell"] == False:
 					self.shell = False
 					self.args = split(self.args)

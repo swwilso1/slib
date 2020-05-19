@@ -26,9 +26,9 @@
 #
 ################################################################################
 
-from slib.Objects import Object
-from slib.FileSystems import FileSystemBaseObject
-from slib.FileSystems import FileSystemError
+from .. Objects import Object
+from .. FileSystems import FileSystemBaseObject
+from .. FileSystems import FileSystemError
 import os
 
 

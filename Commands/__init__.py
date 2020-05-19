@@ -26,8 +26,8 @@
 #
 ################################################################################
 
-from slib.Objects import Object
-from slib.Errors import Error
+from .. Objects import Object
+from .. Errors import Error
 
 class CommandError(Error):
 	"""The CommandError class."""
@@ -49,12 +49,12 @@ class CommandBase(Object):
 		for key in kwargs:
 			self.__dict__[key] = kwargs[key]
 
-		if kwargs.has_key("dry_run"):
+		if 'dry_run' in kwargs:
 			self.dry_run = kwargs["dry_run"]
 		else:
 			self.dry_run = False
 
-		if kwargs.has_key("capture_output"):
+		if 'capture_output' in kwargs:
 			self.capture_output = kwargs["capture_output"]
 		else:
 			self.capture_output = False
@@ -89,4 +89,4 @@ class CommandBase(Object):
 
 __all__ = ["Shells", "CommandError"]
 
-import Shells
+from . import Shells

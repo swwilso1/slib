@@ -26,8 +26,8 @@
 #
 ################################################################################
 
-from slib.Objects import Object
-from slib.Errors import Error
+from .. Objects import Object
+from .. Errors import Error
 
 __all__ = ["Consoles", "Files"]
 
@@ -82,7 +82,5 @@ class LogBase(Object):
 
 # End LogBase
 
-import Consoles
-import Files
-
+from . import Consoles, Files
 

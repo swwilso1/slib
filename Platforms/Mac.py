@@ -33,9 +33,9 @@ import types
 
 __all__ = ["Mac"]
 
-from slib.Objects import Object
-from slib.Platforms import PlatformInspectorBaseObject, PlatformInspectionError
-from slib.Commands.Shells import Shell
+from .. Objects import Object
+from .. Platforms import PlatformInspectorBaseObject, PlatformInspectionError
+from .. Commands.Shells import Shell
 
 class MacInspector(PlatformInspectorBaseObject):
 	"""The MacInspector class."""

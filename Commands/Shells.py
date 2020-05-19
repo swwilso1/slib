@@ -28,9 +28,9 @@
 
 import sys, re
 
-from slib.Objects import Object
-from slib.Commands import CommandBase, CommandError
-from slib.Commands.Processes import Process, PIPE, STDOUT
+from .. Objects import Object
+from .. Commands import CommandBase, CommandError
+from .. Commands.Processes import Process, PIPE, STDOUT
 
 
 class Shell(CommandBase):
@@ -38,7 +38,7 @@ class Shell(CommandBase):
 
 	def __init__(self, **kwargs):
 		CommandBase.__init__(self, **kwargs)
-		if kwargs.has_key("raise_error_on_shell_error"):
+		if 'raise_error_on_shell_error' in kwargs:
 			self.raise_error_on_shell_error = kwargs["raise_error_on_shell_error"]
 		else:
 			self.raise_error_on_shell_error = True

@@ -32,9 +32,9 @@ import types
 
 __all__ = ["CMake"]
 
-from slib.Objects import Object
-from slib.Errors import Error, ArgumentError
-from slib.FileSystems.Directories import Directory
+from .. Objects import Object
+from .. Errors import Error, ArgumentError
+from .. FileSystems.Directories import Directory
 
 class BuildSystemError(Error):
 	"""The BuildSystemError class."""
@@ -61,7 +61,7 @@ class BuildSystemBaseObject(Object):
 		else:
 			self._build_parameters = {}
 
-		if kwargs.has_key("command_line_flags"):
+		if 'command_line_flags' in kwargs:
 			if type(kwargs['command_line_flags']) != types.ListType:
 				raise TypeError("command_line_flags must be a List")
 			self._commandLineFlags = kwargs['command_line_flags']
@@ -181,7 +181,7 @@ class BuildSystemBaseObject(Object):
 
 
 	def has_key(self, key):
-		return self._build_parameters.has_key(key)
+		return key in self._build_parameters
 
 	# End has_key
 
@@ -207,4 +207,4 @@ class BuildSystemBaseObject(Object):
 
 # End BuildSystemBaseObject
 
-import CMake
+from . import CMake

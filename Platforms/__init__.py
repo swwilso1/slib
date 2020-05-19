@@ -29,10 +29,9 @@
 import re
 import sys
 import types
-import exceptions
 import types
-from slib.Objects import Object
-from slib.Errors import Error, ArgumentError
+from .. Objects import Object
+from .. Errors import Error, ArgumentError
 
 class PlatformInspectionError(Error):
 	"""The PlatformInspectionError class."""
@@ -223,4 +222,4 @@ class PlatformInspectorBaseObject(Object):
 
 # End PlatformInspectorBaseObject
 
-import Mac
+from . import Mac

@@ -4,11 +4,11 @@ import os
 import re
 import sys
 import types
-from slib.Objects import Object
-from slib.Tools import ToolBaseObject, ToolError
-from slib.Commands import CommandError
-from slib.Commands.Shells import Shell
-from slib.FileSystems.Directories import Directory
+from .. Objects import Object
+from .. Tools import ToolBaseObject, ToolError
+from .. Commands import CommandError
+from .. Commands.Shells import Shell
+from .. FileSystems.Directories import Directory
 
 
 class ZipTool(ToolBaseObject):

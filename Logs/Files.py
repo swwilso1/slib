@@ -26,10 +26,10 @@
 #
 ################################################################################
 
-from slib.Objects import Object
-from slib.Logs import LogBase, LogError
-from slib.Calendars import Date
-from slib.Calendars import DATE_TIME_FORMAT
+from .. Objects import Object
+from .. Logs import LogBase, LogError
+from .. Calendars import Date
+from .. Calendars import DATE_TIME_FORMAT
 
 class File(LogBase):
 	"""The File class."""

@@ -30,13 +30,13 @@ import os
 import re
 import sys
 import types
-from slib.Objects import Object
-from slib.BuildSystems import BuildSystemBaseObject, BuildSystemError
-from slib.Commands import CommandError
-from slib.Commands.Shells import Shell
-from slib.FileSystems import FileSystemBaseObject, REGULAR_FILE
-from slib.FileSystems.Files import File
-from slib.FileSystems.Directories import Directory
+from .. Objects import Object
+from .. BuildSystems import BuildSystemBaseObject, BuildSystemError
+from .. Commands import CommandError
+from .. Commands.Shells import Shell
+from .. FileSystems import FileSystemBaseObject, REGULAR_FILE
+from .. FileSystems.Files import File
+from .. FileSystems.Directories import Directory
 
 class CMakeParameterParser(Object):
 	"""The CMakeParameterParser class."""
@@ -219,12 +219,12 @@ class CMakeSystem(BuildSystemBaseObject):
 
 	def __init__(self, working_directory, source_tree_directory, build_parameters = None, **kwargs):
 		BuildSystemBaseObject.__init__(self, working_directory, source_tree_directory, build_parameters, **kwargs)
-		if kwargs.has_key("generator"):
+		if 'generator' in kwargs:
 			self.generator = kwargs['generator']
 		else:
 			self.generator = None
 
-		if kwargs.has_key("binary"):
+		if 'binary' in kwargs:
 			self.binary = kwargs['binary']
 		else:
 			self.binary = "cmake"
@@ -301,7 +301,7 @@ class CMakeSystem(BuildSystemBaseObject):
 
 		command = self.build_command
 
-		if kwargs.has_key('processors'):
+		if 'processors' in kwargs:
 			if kwargs['processors']:
 				command += " -j " + str(kwargs['processors'])
 		elif self.active_processors:

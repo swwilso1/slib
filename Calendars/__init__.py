@@ -28,8 +28,8 @@
 
 import time
 import types
-from slib.Objects import Object
-from slib.Errors import Error
+from .. Objects import Object
+from .. Errors import Error
 
 class DateError(object):
 	"""The DateError class."""
@@ -606,7 +606,7 @@ class Date(Object):
 			self.time = time.time()
 		self.timeframe = time.localtime
 
-		if kwargs.has_key("format"):
+		if 'format' in kwargs:
 			self.__myformat = kwargs["format"]
 		else:
 			self.__myformat = VERBOSE_FORMAT
@@ -725,7 +725,7 @@ class Date(Object):
 
 	@property
 	def leapyear(self):
-	 	year = self.year
+		year = self.year
 		if year < 0:
 			year += 1
 			res = year % 4
@@ -980,7 +980,7 @@ class Date(Object):
 			return self,self.__class__(other.time)
 		try:
 			return self, self.__class__(other)
-		except ValueError, e:
+		except ValueError as e:
 			pass
 
 	# End __coerce__

@@ -34,10 +34,10 @@ import stat
 import types
 import hashlib
 
-from slib.Objects import Object
-from slib.Errors import Error
-from slib.Commands.Shells import Shell
-from slib.Commands import CommandError
+from .. Objects import Object
+from .. Errors import Error
+from .. Commands.Shells import Shell
+from .. Commands import CommandError
 
 
 DIRECTORY = 1
@@ -496,8 +496,8 @@ class FileSystemBaseObject(Object):
 
 	def Difference(self,other):
 		if self.__class__ != other.__class__:
-	    		raise FileSystemError("%s not a %s" % (str(other),str(self.__class__)))
-	    	shell = Shell()
+			raise FileSystemError("%s not a %s" % (str(other),str(self.__class__)))
+		shell = Shell()
 		shell.capture_output = True
 		o = shell.execute("diff " + self.fullpath + " " + other.fullpath)
 		return o
@@ -511,7 +511,7 @@ class FileSystemBaseObject(Object):
 		shell.capture_output = True
 		try:
 			shell.execute("diff " + self.fullpath + " " + other.fullpath)
-		except CommandError, e:
+		except CommandError as e:
 			return False
 		return True
 
@@ -607,14 +607,7 @@ __all__ = ["BlockDevices",
 	"FileSystemError"
 ]
 
-
-import BlockDevices
-import CharacterDevices
-import Directories
-import Fifos
-import Files
-import Sockets
-import SymbolicLinks
+from . import BlockDevices, CharacterDevices, Directories, Fifos, Files, Sockets, SymbolicLinks
 
 
 

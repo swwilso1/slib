@@ -26,11 +26,9 @@
 #
 ################################################################################
 
-from slib.Objects import Object
-import exceptions
+from . Objects import Object
 
-
-class Error(Object,exceptions.Exception):
+class Error(Object,BaseException):
 	"""The Error class."""
 
 	def __init__(self, value, **kwargs):

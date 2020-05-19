@@ -29,11 +29,11 @@
 import sys
 import os
 import re
-from slib.Objects import Object
-from slib.Commands import CommandError
-from slib.SourceTrees import SourceTreeBaseObject, SourceTreeError
-from slib.FileSystems.Directories import Directory
-from slib.Commands.Shells import Shell
+from .. Objects import Object
+from .. Commands import CommandError
+from .. SourceTrees import SourceTreeBaseObject, SourceTreeError
+from .. FileSystems.Directories import Directory
+from .. Commands.Shells import Shell
 
 class GitTree(SourceTreeBaseObject):
 	"""The GitTree class."""
@@ -112,8 +112,8 @@ class GitTree(SourceTreeBaseObject):
 			command = "git checkout -b " + orig_branch + " origin/" + orig_branch
 			try:
 				self.shell.execute(command)
-			except CommandError, e:
-				print "Unable to switch to branch %s: %s" % (self.branch, e)
+			except CommandError as e:
+				print("Unable to switch to branch %s: %s" % (self.branch, e))
 
 		Object.logIfDryRun(self,"cd " + currentDirectory)
 		os.chdir(currentDirectory)
@@ -175,7 +175,7 @@ class GitTree(SourceTreeBaseObject):
 		command = "git checkout " + str(branch)
 		try:
 			self.shell.execute(command)
-		except CommandError, e:
+		except CommandError as e:
 			# Instead try getting the branch from the origin:
 			command = "git checkout -b " + str(branch) + " origin/" + str(branch)
 			self.shell.execute(command)

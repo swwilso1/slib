@@ -4,10 +4,10 @@ import os
 import re
 import sys
 import types
-from slib.Objects import Object
-from slib.Tools import ToolBaseObject, ToolError
-from slib.Commands import CommandError
-from slib.Commands.Shells import Shell
+from .. Objects import Object
+from .. Tools import ToolBaseObject, ToolError
+from .. Commands import CommandError
+from .. Commands.Shells import Shell
 
 
 class CopyTool(ToolBaseObject):
@@ -21,7 +21,7 @@ class CopyTool(ToolBaseObject):
 		else:
 			self.copy_command = 'cp'
 
-		if kwargs.has_key("use_cmake"):
+		if 'use_cmake' in kwargs:
 			if kwargs["use_cmake"]:
 				self.copy_command = 'cmake -E copy'
 

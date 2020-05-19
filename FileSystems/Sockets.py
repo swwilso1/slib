@@ -26,8 +26,8 @@
 #
 ################################################################################
 
-from slib.Objects import Object
-from slib.FileSystems import FileSystemBaseObject
+from .. Objects import Object
+from .. FileSystems import FileSystemBaseObject
 
 class Socket(FileSystemBaseObject):
 	"""The Socket class."""

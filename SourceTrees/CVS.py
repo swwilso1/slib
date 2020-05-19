@@ -29,11 +29,11 @@
 import os
 import re
 import time
-from slib.Objects import Object
-from slib.SourceTrees import SourceTreeBaseObject, SourceTreeError
-from slib.Commands.Shells import Shell
-from slib.FileSystems import DIRECTORY
-from slib.FileSystems.Directories import Directory
+from .. Objects import Object
+from .. SourceTrees import SourceTreeBaseObject, SourceTreeError
+from .. Commands.Shells import Shell
+from .. FileSystems import DIRECTORY
+from .. FileSystems.Directories import Directory
 
 class CVSRepository(Object):
 	"""The CVSRepository class."""
@@ -581,7 +581,7 @@ class CVSTree(SourceTreeBaseObject):
 		self.__module = module
 		self.__branch = branch
 
-		if kwargs.has_key("date"):
+		if 'date' in kwargs:
 			self.__date = kwargs["date"]
 		else:
 			self.__date = None
@@ -816,7 +816,7 @@ class CVSTree(SourceTreeBaseObject):
 					if re.search(r'branch', line):
 						a = re.search(r'\t(.*?) ',line)
 						branch = a.group(1)
-						if not branches.has_key(branch):
+						if not branch in branches:
 							branches[branch] = True
 
 				Object.logIfDryRun(self,"cd " + currentDirectory)

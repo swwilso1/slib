@@ -28,15 +28,15 @@
 
 import os
 import shutil
-from slib.Objects import Object
-from slib.FileSystems import FileSystemBaseObject
-from slib.FileSystems import FindFullDirectory
-from BlockDevices import BlockDevice
-from CharacterDevices import CharacterDevice
-from Fifos import Fifo
-from Files import File
-from SymbolicLinks import SymbolicLink
-from Sockets import Socket
+from .. Objects import Object
+from .. FileSystems import FileSystemBaseObject
+from .. FileSystems import FindFullDirectory
+from . BlockDevices import BlockDevice
+from . CharacterDevices import CharacterDevice
+from . Fifos import Fifo
+from . Files import File
+from . SymbolicLinks import SymbolicLink
+from . Sockets import Socket
 from types import *
 
 
@@ -45,7 +45,7 @@ class Directory(FileSystemBaseObject):
 
 	def __init__(self, name, **kwargs):
 		dirname = str(name)
-		if kwargs.has_key('autofind'):
+		if 'autofind' in kwargs:
 			if kwargs['autofind']:
 				dirname = FindFullDirectory(dirname)
 		FileSystemBaseObject.__init__(self, dirname, **kwargs)
@@ -325,7 +325,7 @@ class Directory(FileSystemBaseObject):
 		extensions = {}
 		for entry in allEntries:
 			if entry.hasExtension:
-				if not extensions.has_key(entry.extension):
+				if not entry.extension in extensions:
 					extensions[entry.extension] = True
 		return extensions.keys()
 

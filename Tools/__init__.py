@@ -6,10 +6,10 @@ import types
 
 __all__ = ["CopyTools", "LibTools", "ZipTools"]
 
-from slib.Objects import Object
-from slib.Errors import Error, ArgumentError
-from slib.Commands import CommandError
-from slib.Commands.Shells import Shell
+from .. Objects import Object
+from .. Errors import Error, ArgumentError
+from .. Commands import CommandError
+from .. Commands.Shells import Shell
 
 class ToolError(Error):
 	"""The ToolError class."""
@@ -62,8 +62,6 @@ __all__ = [
 	"ToolError"
 ]
 
-import CopyTools
-import LibTools
-import ZipTools
+from . import CopyTools, LibTools, ZipTools
 
 

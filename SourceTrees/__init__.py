@@ -27,9 +27,9 @@
 ################################################################################
 
 
-from slib.Objects import Object
-from slib.Errors import Error
-from slib.Commands.Shells import Shell
+from .. Objects import Object
+from .. Errors import Error
+from .. Commands.Shells import Shell
 
 __all__ = ["CVS", "Git", "Mercurial"]
 
@@ -169,6 +169,4 @@ class SourceTreeBaseObject(Object):
 # End SourceTreeBaseObject
 
 
-import CVS
-import Git
-import Mercurial
+from . import CVS, Git, Mercurial

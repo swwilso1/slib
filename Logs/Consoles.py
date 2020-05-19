@@ -26,10 +26,10 @@
 #
 ################################################################################
 
-from slib.Objects import Object
-from slib.Logs import LogBase
-from slib.Calendars import Date
-from slib.Calendars import DATE_TIME_FORMAT
+from .. Objects import Object
+from .. Logs import LogBase
+from .. Calendars import Date
+from .. Calendars import DATE_TIME_FORMAT
 
 class Console(LogBase):
 	"""The Console class."""
@@ -42,7 +42,7 @@ class Console(LogBase):
 	def __write(self, format, *args):
 		date = Date(format=DATE_TIME_FORMAT)
 		newformat = "%s: %s" % (str(date), str(format))
-		print newformat % (args)
+		print(newformat % (args))
 
 	# End __write
 
@@ -61,7 +61,7 @@ class Console(LogBase):
 	def log_without_format(self, output):
 		date = Date(format=DATE_TIME_FORMAT)
 		newoutput = "%s: %s" % (str(date), str(output))
-		print newoutput
+		print(newoutput)
 
 	# End log_without_format
 

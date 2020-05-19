@@ -26,5 +26,5 @@
 #
 ################################################################################
 
-from slib.Objects import Object
+from .. Objects import Object
 
