@@ -103,6 +103,15 @@ class FileSystemBaseObject(Object):
 			self._path = None
 	# End __init__
 
+
+	@property
+	def basename(self):
+		if self.hasExtension:
+			return self.name.split('.')[0]
+		return self.name
+	# End basename
+
+
 	@property
 	def path(self):
 		if self._path:
@@ -543,6 +552,11 @@ class FileSystemBaseObject(Object):
 			return True
 		return False
 	# End __eq__
+
+
+	def __lt__(self, other):
+		return self.name < other.name
+	# End __lt__
 
 
 	def __str__(self):

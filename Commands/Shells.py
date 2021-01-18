@@ -73,7 +73,7 @@ class Shell(CommandBase):
 
 		if errors != None and len(errors) > 0:
 			if rvalue != None:
-				final_output = rvalue + "\n" + errors
+				final_output = str(rvalue) + "\n" + str(errors)
 			else:
 				final_output = errors
 		else:
